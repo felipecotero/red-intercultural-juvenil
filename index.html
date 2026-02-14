@@ -9,7 +9,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="assets/data.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@300;400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800;900&display=swap');
         
         :root {
             --color-primary: #ff6b35;
@@ -24,12 +24,12 @@
         }
 
         body {
-            font-family: 'Archivo', sans-serif;
+            font-family: 'Work Sans', sans-serif;
             overflow-x: hidden;
         }
 
         h1, h2, h3 {
-            font-family: 'Archivo Black', sans-serif;
+            font-family: 'Work Sans', sans-serif;
             font-weight: 900;
         }
 
@@ -75,13 +75,19 @@
 
         /* Card de organización en mapa */
         .org-popup {
-            min-width: 250px;
+            min-width: 280px;
+            text-align: center;
         }
 
         .org-popup img {
-            max-width: 80px;
-            max-height: 80px;
+            max-width: 100px;
+            max-height: 100px;
             object-fit: contain;
+            display: block;
+            margin: 0 auto 10px;
+            background: white;
+            padding: 8px;
+            border-radius: 8px;
         }
 
         /* Carrusel de aforismos */
@@ -125,10 +131,14 @@
         }
 
         .org-logo {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
             object-fit: contain;
             margin: 0 auto 1rem;
+            display: block;
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
         }
 
         /* Navegación flotante */
