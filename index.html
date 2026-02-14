@@ -241,7 +241,7 @@
             position: relative;
             overflow: hidden;
             border-radius: 15px;
-            height: 320px;
+            aspect-ratio: 4 / 3;
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
@@ -977,7 +977,7 @@
             startAlbumCoverSlideshows(albums);
         }
 
-        // Slideshow en portadas de cada álbum
+        // Slideshow en portadas de cada álbum (solo se activa en hover/rollover con crossfade)
         function startAlbumCoverSlideshows(albums) {
             Object.keys(albums).forEach(key => {
                 const album = albums[key];
@@ -996,8 +996,10 @@
                 
                 let activeBg = bgEl;
                 let inactiveBg = bg2;
+                let hoverInterval = null;
                 
-                setInterval(() => {
+                // Función de crossfade
+                function doCrossfade() {
                     idx = (idx + 1) % album.photos.length;
                     inactiveBg.style.backgroundImage = `url('${album.photos[idx]}')`;
                     inactiveBg.style.transition = 'none';
@@ -1014,7 +1016,23 @@
                     
                     // Intercambiar capas
                     [activeBg, inactiveBg] = [inactiveBg, activeBg];
-                }, 4000);
+                }
+                
+                // Solo iniciar rotación al hacer hover (rollover)
+                card.addEventListener('mouseenter', () => {
+                    // Hacer primer crossfade inmediato al entrar
+                    doCrossfade();
+                    // Continuar rotando cada 3 segundos mientras se mantiene el hover
+                    hoverInterval = setInterval(doCrossfade, 3000);
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    // Detener rotación al salir
+                    if (hoverInterval) {
+                        clearInterval(hoverInterval);
+                        hoverInterval = null;
+                    }
+                });
             });
         }
 
