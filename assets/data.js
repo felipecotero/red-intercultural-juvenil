@@ -16,7 +16,7 @@ const organizaciones = [
         poblacion: ["Indígenas", "Mestizos", "Afro"],
         instagram: "https://www.youtube.com/@CORPORACIONYUKUTA",
         youtube: "https://www.youtube.com/@CORPORACIONYUKUTA",
-        logo: "https://drive.google.com/uc?id=10b8dpR023oxCpZGlDIv7sfD-xNQR9d41",
+        logo: "assets/logos_orgs/PNG/Yukuta_Corplogo - CORPORACION YUKUTA.png",
         lat: 3.8653,
         lng: -67.9239
     },
@@ -38,7 +38,7 @@ const organizaciones = [
         facebook: "https://www.facebook.com/share/1DGRa3abS4/",
         instagram: "https://www.instagram.com/teatrofahrenheit451",
         youtube: "https://youtube.com/@corporacionculturalfahrenh1861",
-        logo: "https://drive.google.com/uc?id=1oqJnelpTGqZRSugQQW6R1ki-vMX0SD-1",
+        logo: "assets/logos_orgs/PNG/IMG-20260122-WA0009 - Corporación Cultural Fahrenheit.png",
         lat: 4.8639,
         lng: -74.0580
     },
@@ -62,7 +62,7 @@ const organizaciones = [
         instagram: "https://www.instagram.com/odec.ong/",
         tiktok: "https://www.tiktok.com/@odec_ong",
         twitter: "https://x.com/odec_ong",
-        logo: "https://drive.google.com/uc?id=1cfJaW-IIWJClD-99NkMvEfBHbyyjq9cR",
+        logo: "assets/logos_orgs/PNG/Logo_ODEC.png - ODEC Organización.png",
         lat: 10.6078,
         lng: -75.1561
     },
@@ -86,7 +86,7 @@ const organizaciones = [
         instagram: "https://www.instagram.com/ccodigoestilocrew",
         youtube: "https://youtube.com/@fundacioncodigoestilocrew1873",
         tiktok: "https://www.tiktok.com/@codigoestilocrew",
-        logo: "https://drive.google.com/uc?id=13kroLQD8i5yCOe5q2ozi8-WpTj7HJsS2",
+        logo: "assets/logos_orgs/PNG/LOFO CODIGO PNG - Corporaciòn Código Estilo Crew.png",
         lat: 4.5389,
         lng: -75.6814
     },
@@ -107,7 +107,7 @@ const organizaciones = [
         poblacion: ["Indígenas", "Afro", "Campesino"],
         web: "WWW.THEGIANTSCO.COM",
         instagram: "https://www.instagram.com/thegiantsco",
-        logo: "https://drive.google.com/uc?id=1ZDjc45K2G6yjtByq7TQbIVCdWvCrYpSo",
+        logo: "assets/logos_orgs/PNG/4. tipografia y simbolo 2 - negro y transparente - The Giants Co.png",
         lat: 3.4516,
         lng: -76.5320
     },
@@ -128,7 +128,7 @@ const organizaciones = [
         poblacion: ["Indígenas", "Mestizos"],
         facebook: "https://www.facebook.com/MingaKamentsa",
         instagram: "https://www.instagram.com/mingakamentsa/",
-        logo: "https://drive.google.com/uc?id=1x62YFlSEhw2_gbH206u5Q2l2enj0mvjG",
+        logo: "assets/logos_orgs/PNG/logo fondo blanco-100 - Minga Muralista Kamentsa.png",
         lat: 1.1522,
         lng: -76.9094
     },
@@ -151,7 +151,7 @@ const organizaciones = [
         facebook: "https://www.facebook.com/lacrewpgs/",
         instagram: "https://www.instagram.com/crewpeligrosos/",
         youtube: "https://www.youtube.com/results?search_query=crew+peligrosos",
-        logo: "https://drive.google.com/uc?id=19DMnSnqxH36ZWN1JykMCyn-TCuZTVBU-",
+        logo: "assets/logos_orgs/PNG/LOGO ELEMENTS - CORPORACION ELEMENTS.png",
         lat: 6.2476,
         lng: -75.5658
     },
@@ -173,7 +173,7 @@ const organizaciones = [
         facebook: "https://www.facebook.com/calina.cumbay",
         instagram: "https://www.instagram.com/calinacumbay.corp",
         tiktok: "https://www.tiktok.com/@calinacumbay.corp",
-        logo: "https://drive.google.com/uc?id=1gGlR8n0MznPzScTw9Ucn99X2A5WU1UJJ",
+        logo: "assets/logos_orgs/PNG/Logo_Calina_Cumbay - Hans Trujillo Vargas.png",
         lat: 5.0311,
         lng: -74.8989
     },
@@ -196,7 +196,7 @@ const organizaciones = [
         instagram: "https://www.instagram.com/nuevoestilodance",
         youtube: "https://www.youtube.com/@NUEVOESTILODANCE",
         tiktok: "https://www.tiktok.com/@nuevoestilodance2026",
-        logo: "https://drive.google.com/uc?id=19kuWDXstOfgapKbJc-kkUQ9OMjy7ONVN",
+        logo: "assets/logos_orgs/PNG/LOGO NED 2024 - NUEVO ESTILO DANCE.png",
         lat: 3.3703,
         lng: -76.5225
     },
@@ -218,7 +218,7 @@ const organizaciones = [
         facebook: "https://www.facebook.com/share/1D7Lojxtv1/",
         instagram: "https://www.instagram.com/corpo_emergiendo/",
         youtube: "https://www.youtube.com/@corporacionemergiendomaniz616",
-        logo: "https://drive.google.com/uc?id=1v_wroQ1uXW2RzJFKjBTNWGVwUV1Vc_h7",
+        logo: "assets/logos_orgs/PNG/emergiendo - Emergiendo Manizales.png",
         lat: 5.0700,
         lng: -75.5138
     },
@@ -237,7 +237,7 @@ const organizaciones = [
         beneficiarios: 52,
         sectores: ["Audiovisual"],
         poblacion: ["Indígenas", "Mestizos", "Afro"],
-        logo: "https://drive.google.com/uc?id=1gFYnGrZgTSdosfazJN3I0icFwGt4v_tf",
+        logo: "",
         lat: -3.7674,
         lng: -70.3833
     },
@@ -260,7 +260,7 @@ const organizaciones = [
         facebook: "https://www.facebook.com/la.enredadera.colectiva",
         instagram: "https://www.instagram.com/la.enredadera.colectiva",
         youtube: "https://www.youtube.com/la.enredadera.colectiva",
-        logo: "https://drive.google.com/uc?id=1X66FIGlHmdpjRcw2-9iijGL4BwJQKpRk",
+        logo: "assets/logos_orgs/PNG/LOGO LA ENREDADERA _Mesa de trabajo 1 copia 8 - Manuela Guadalupe.png",
         lat: 5.7167,
         lng: -72.9333
     },
@@ -281,7 +281,7 @@ const organizaciones = [
         poblacion: ["Mestizos", "Campesino"],
         facebook: "https://www.facebook.com/arreglandoelpaisorg/",
         instagram: "https://www.instagram.com/arreglandoelpaisorg/",
-        logo: "https://drive.google.com/uc?id=1B2n5h7fwdVT0_XswhMRTy_hVZ1nXChXU",
+        logo: "assets/logos_orgs/PNG/LOGO ARP - Arreglando El País.png",
         lat: 1.8534,
         lng: -76.0502
     },
@@ -305,7 +305,7 @@ const organizaciones = [
         instagram: "https://www.instagram.com/linderosdepaz/",
         youtube: "https://www.youtube.com/@linderosdepaz",
         tiktok: "https://www.tiktok.com/@linderosdepaz",
-        logo: "https://drive.google.com/uc?id=1uqztbCHA-sTRf2ZpQ3CBdMGAY0Plkqxy",
+        logo: "assets/logos_orgs/PNG/Liinderos de paz IMG_1112 - flor hurtado.png",
         lat: 4.5684,
         lng: -74.1265
     },
@@ -327,7 +327,7 @@ const organizaciones = [
         web: "www.corporacionkhuyay.com",
         facebook: "https://www.facebook.com/corporacionkhuyay/",
         instagram: "https://www.instagram.com/khuyay.co/",
-        logo: "https://drive.google.com/uc?id=1gHRDjypajDztQVfhd6MfviTqFiYrt0Qx",
+        logo: "assets/logos_orgs/PNG/Khu Yay logo fondo claro - Natalia Cano.png",
         lat: 4.8133,
         lng: -75.6961
     },
@@ -349,7 +349,7 @@ const organizaciones = [
         facebook: "https://www.facebook.com/share/17uALUEqPg/",
         instagram: "https://www.instagram.com/fun_ambientalistasdecorazon",
         youtube: "https://youtube.com/@fundacionambientalistasdec6866",
-        logo: "https://drive.google.com/uc?id=15SqnwnnTaajymscKWvQnMR6zrtX-KpG5",
+        logo: "assets/logos_orgs/PNG/logo - Fundación Ambientalistas de Corazón Colombia.png",
         lat: 4.9628,
         lng: -73.9122
     },
@@ -413,7 +413,7 @@ const organizaciones = [
         web: "www.corporacionvidapaz.org",
         facebook: "https://www.facebook.com/corporacionvidapaz",
         twitter: "https://twitter.com/corporacionvidapaz",
-        logo: "https://drive.google.com/uc?id=1cXe_pL2L-Zwm0-x53Xh6dlsH-EzV1nsI",
+        logo: "assets/logos_orgs/PNG/logo corporacion - Corporacion Vida-Paz.png",
         lat: 2.5650,
         lng: -72.6417
     },
@@ -433,7 +433,7 @@ const organizaciones = [
         sectores: ["Audiovisual", "Multidisciplinar"],
         poblacion: ["Afro"],
         instagram: "https://www.instagram.com/influencers_etnicos/",
-        logo: "https://drive.google.com/uc?id=1i3JL10tKyP2NdymIPQO3gqZo06zj-SkJ",
+        logo: "assets/logos_orgs/PNG/LOGO INFLUENCERS ETNICOS (1) - Ashanty Lawhier.png",
         lat: 10.3483,
         lng: -75.3683
     },
@@ -456,7 +456,7 @@ const organizaciones = [
         facebook: "https://www.facebook.com/Reydelaselvaoficial/",
         instagram: "https://www.instagram.com/reyes_dela_selva/",
         tiktok: "https://www.tiktok.com/@reyesdelaselvarap",
-        logo: "https://drive.google.com/uc?id=1bZ6pOWQT7Dym3cYoaCQ8zBFZqEnyFK15",
+        logo: "assets/logos_orgs/PNG/Logo Reyes de la Selva (1) - Rey de la Selva.png",
         lat: 5.6947,
         lng: -76.6611
     },
@@ -478,7 +478,7 @@ const organizaciones = [
         facebook: "https://www.facebook.com/share/1BwKxG4WhJ/",
         instagram: "https://www.instagram.com/parchemosporyacopi",
         tiktok: "https://www.tiktok.com/@parchemos.por.yacopi",
-        logo: "https://drive.google.com/uc?id=14ZTNpRw0srQ0xx7cHRTQEnWdv12aJZEd",
+        logo: "assets/logos_orgs/PNG/Logo Parchemos Por Yacopi  - Jaimar Velasquez Quitian.png",
         lat: 5.4605,
         lng: -74.3456
     },
@@ -500,7 +500,7 @@ const organizaciones = [
         web: "https://www.facebook.com/share/1Bty71uetd/",
         facebook: "https://www.facebook.com/share/1Bty71uetd/",
         instagram: "https://www.instagram.com/macizo_arteycultura",
-        logo: "https://drive.google.com/uc?id=1-EtwFxb-Bv8XlueOV8GAuF9P93gNfnim",
+        logo: "assets/logos_orgs/PNG/Macizo Arte y Cultura.png",
         lat: 1.8534,
         lng: -76.0502
     },
@@ -522,7 +522,7 @@ const organizaciones = [
         facebook: "https://www.facebook.com/share/19aJPB2krK/",
         instagram: "https://www.instagram.com/musiqulturasai",
         youtube: "https://youtube.com/@musiqulturasai",
-        logo: "https://drive.google.com/uc?id=1X4gxTVsLLxYYcN6PFD1fkUf_69-WKOox",
+        logo: "assets/logos_orgs/PNG/Musicultura estefani.png",
         lat: 12.5847,
         lng: -81.7006
     },
@@ -544,7 +544,7 @@ const organizaciones = [
         web: "https://selvaadentro.com/",
         instagram: "https://www.instagram.com/selva.adentro.festival",
         youtube: "https://www.youtube.com/@selvaadentrofestival",
-        logo: "https://drive.google.com/uc?id=146HvubnBXrhF4FRVTRvh5hjqRh69wcsk",
+        logo: "assets/logos_orgs/PNG/Logo Red-Cepela- - Colectivos Red Cepela.png",
         lat: 6.2476,
         lng: -75.5658
     },
@@ -565,7 +565,7 @@ const organizaciones = [
         poblacion: ["Ninguna"],
         instagram: "https://www.instagram.com/alternativ__o",
         youtube: "https://www.youtube.com/@alternativo",
-        logo: "https://drive.google.com/uc?id=1_PNf5_iKrhUa7phEYPWdlbm54g1s8a1v",
+        logo: "assets/logos_orgs/PNG/Logo_Alternativo1 - Jessica Alexandra Pérez Arias.png",
         lat: 4.6826,
         lng: -74.1469
     },
@@ -588,7 +588,7 @@ const organizaciones = [
         instagram: "https://www.instagram.com/kombilesami",
         youtube: "https://www.youtube.com/@kombilesami",
         tiktok: "https://www.tiktok.com/@kombilesami",
-        logo: "https://drive.google.com/uc?id=1PxTCH1VQhFyTbsIglMNTiLMZuBAbGlHe",
+        logo: "assets/logos_orgs/PNG/LOGOTIPO KOMBILESA_Mesa de trabajo 1 copia 22 - Afroneto Music.png",
         lat: 10.3483,
         lng: -75.3683
     }
