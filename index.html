@@ -262,6 +262,44 @@
             z-index: 2;
         }
 
+        /* Hacer slideshow clicable */
+        #inicio::before,
+        #inicio::after {
+            cursor: pointer;
+        }
+
+        /* Estilos para galería */
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            height: 300px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-item .caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+            padding: 1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
         /* Responsive helpers */
         @media (max-width: 639px) {
             h1 {
@@ -360,15 +398,6 @@
             <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-gray-900">Galería Visual</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="gallery-grid">
                 <!-- La galería se cargará dinámicamente aquí -->
-                <div class="bg-gray-200 rounded-xl h-64 flex items-center justify-center">
-                    <p class="text-gray-500">Imagen 1</p>
-                </div>
-                <div class="bg-gray-200 rounded-xl h-64 flex items-center justify-center">
-                    <p class="text-gray-500">Imagen 2</p>
-                </div>
-                <div class="bg-gray-200 rounded-xl h-64 flex items-center justify-center">
-                    <p class="text-gray-500">Imagen 3</p>
-                </div>
             </div>
         </div>
     </section>
@@ -671,7 +700,55 @@
             });
         }
 
-        // Cargar aforismos
+        // Cargar galería
+        function loadGallery() {
+            const grid = document.getElementById('gallery-grid');
+            
+            grid.innerHTML = fotosOrgs.map((foto, index) => `
+                <div class="gallery-item" onclick="goToMapFromGallery('${foto}')">
+                    <img src="${foto}" alt="Foto ${index + 1}" loading="lazy">
+                    <div class="caption">${getOrgNameFromPhoto(foto)}</div>
+                </div>
+            `).join('');
+        }
+
+        // Extraer nombre de organización de la foto
+        function getOrgNameFromPhoto(photoPath) {
+            const filename = photoPath.split('/').pop();
+            if (filename.includes('CUMBRE_CASA_CULTURAL')) {
+                return 'Cumbre Casa Cultural';
+            } else if (filename.includes('GUAQUE_SOPO')) {
+                return 'Guaque Sopó 2025';
+            }
+            return 'Red Intercultural Juvenil';
+        }
+
+        // Navegar al mapa desde galería o slideshow
+        function goToMapFromGallery(photoPath) {
+            // Navegar a la sección del mapa
+            window.location.hash = '#mapa';
+            
+            // Scroll suave al mapa
+            setTimeout(() => {
+                document.getElementById('mapa').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+
+        // Hacer slideshow clicable
+        function makeSlideShowClickable() {
+            const inicioSection = document.getElementById('inicio');
+            inicioSection.style.cursor = 'pointer';
+            
+            inicioSection.addEventListener('click', (e) => {
+                // Solo si se hace clic en el fondo, no en el contenido
+                if (e.target === inicioSection || e.target.tagName === 'SECTION') {
+                    const currentPhoto = fotosOrgs[currentPhotoIndex];
+                    if (currentPhoto) {
+                        goToMapFromGallery(currentPhoto);
+                    }
+                }
+            });
+        }
         function loadAforismos() {
             const track = document.getElementById('carousel-track');
             
@@ -752,7 +829,9 @@
             preloadImages();
             setRandomBackground();
             startPhotoRotation();
+            makeSlideShowClickable();
             loadAforismos();
+            loadGallery();
             loadDirectorio();
             initMap();
         });
