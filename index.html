@@ -250,11 +250,15 @@
 
         #inicio::before {
             z-index: 0;
+            background-image: var(--bg-image-before, none);
+            opacity: var(--opacity-before, 1);
         }
 
         #inicio::after {
             z-index: 1;
             opacity: 0;
+            background-image: var(--bg-image-after, none);
+            opacity: var(--opacity-after, 0);
         }
 
         #inicio > div {
@@ -704,20 +708,6 @@
                 setRandomBackground(true);
             }, 3000);
         }
-
-        // Aplicar estilo de fondo dinámico con doble capa
-        const style = document.createElement('style');
-        style.textContent = `
-            #inicio::before {
-                background-image: var(--bg-image-before, none);
-                opacity: var(--opacity-before, 1);
-            }
-            #inicio::after {
-                background-image: var(--bg-image-after, none);
-                opacity: var(--opacity-after, 0);
-            }
-        `;
-        document.head.appendChild(style);
 
         // Inicializar mapa
         function initMap() {
