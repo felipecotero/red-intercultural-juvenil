@@ -236,36 +236,168 @@
             cursor: pointer;
         }
 
-        /* Estilos para galería */
-        .gallery-item {
+        /* Estilos para álbumes de galería */
+        .album-card {
             position: relative;
             overflow: hidden;
             border-radius: 15px;
-            height: 300px;
+            height: 320px;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .gallery-item:hover {
-            transform: scale(1.05);
+        .album-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
         }
 
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .gallery-item .caption {
+        .album-card .album-bg {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: opacity 2s ease-in-out;
+        }
+
+        .album-card .album-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.1) 100%);
+            z-index: 1;
+        }
+
+        .album-card .album-info {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 1.5rem;
+            z-index: 2;
             color: white;
-            padding: 1rem;
-            font-size: 0.875rem;
-            font-weight: 600;
+        }
+
+        .album-card .album-info h3 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .album-card .album-info p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .album-card .album-count {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            z-index: 2;
+        }
+
+        /* Modal lightbox */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-image-container {
+            position: relative;
+            width: 90vw;
+            height: 75vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem; right: 1.5rem;
+            color: white;
+            font-size: 2.5rem;
+            cursor: pointer;
+            z-index: 10000;
+            background: rgba(255,255,255,0.1);
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+            border: none;
+        }
+
+        .modal-close:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 3rem;
+            cursor: pointer;
+            background: rgba(255,255,255,0.1);
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+            border: none;
+            z-index: 10000;
+        }
+
+        .modal-nav:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .modal-nav.prev { left: 1.5rem; }
+        .modal-nav.next { right: 1.5rem; }
+
+        .modal-info {
+            color: white;
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .modal-album-title {
+            color: white;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 639px) {
+            .modal-nav { width: 45px; height: 45px; font-size: 2rem; }
+            .modal-nav.prev { left: 0.5rem; }
+            .modal-nav.next { right: 0.5rem; }
+            .modal-close { top: 0.5rem; right: 0.5rem; width: 40px; height: 40px; font-size: 1.8rem; }
         }
 
         /* Responsive helpers */
@@ -369,11 +501,24 @@
     <section id="galeria" class="bg-gray-50">
         <div class="max-w-7xl mx-auto">
             <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-gray-900">Galería Visual</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="gallery-grid">
-                <!-- La galería se cargará dinámicamente aquí -->
+            <p class="text-center text-gray-500 mb-8 -mt-8">Haz clic en un álbum para ver las fotos</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="gallery-grid">
+                <!-- Los álbumes se cargarán dinámicamente aquí -->
             </div>
         </div>
     </section>
+
+    <!-- Modal Lightbox para álbumes -->
+    <div class="modal-overlay" id="album-modal">
+        <button class="modal-close" onclick="closeAlbumModal()">&times;</button>
+        <button class="modal-nav prev" onclick="prevPhoto()">&#8249;</button>
+        <button class="modal-nav next" onclick="nextPhoto()">&#8250;</button>
+        <div class="modal-album-title" id="modal-album-title"></div>
+        <div class="modal-image-container">
+            <img id="modal-image" src="" alt="">
+        </div>
+        <div class="modal-info" id="modal-info"></div>
+    </div>
 
     <!-- SECCIÓN 4: MANIFIESTO -->
     <section id="manifiesto" class="bg-gradient-to-br from-teal-500 to-green-600 text-white">
@@ -775,17 +920,173 @@
             });
         }
 
-        // Cargar galería
+        // Agrupar fotos por organización
+        function getAlbums() {
+            const albums = {};
+            const albumNames = {
+                'CUMBRE_CASA_CULTURAL': 'Cumbre Casa Cultural',
+                'MALOKA_JOVEN_2025': 'Maloka Joven 2025',
+                'GUAQUE_SOPO_2025': 'Guaque Sopó 2025'
+            };
+            
+            fotosOrgs.forEach(foto => {
+                const filename = foto.split('/').pop();
+                // Extraer nombre de org quitando el número inicial
+                const match = filename.match(/^\d+_(.+)\.jpg$/i);
+                if (match) {
+                    const key = match[1];
+                    if (!albums[key]) {
+                        albums[key] = {
+                            name: albumNames[key] || key.replace(/_/g, ' '),
+                            photos: []
+                        };
+                    }
+                    albums[key].photos.push(foto);
+                }
+            });
+            return albums;
+        }
+
+        // Variables del modal
+        let currentAlbumPhotos = [];
+        let currentPhotoIndex = 0;
+        let modalAutoplay = null;
+
+        // Cargar galería como álbumes
         function loadGallery() {
             const grid = document.getElementById('gallery-grid');
+            const albums = getAlbums();
             
-            grid.innerHTML = fotosOrgs.map((foto, index) => `
-                <div class="gallery-item" onclick="goToMapFromGallery('${foto}')">
-                    <img src="${foto}" alt="Foto ${index + 1}" loading="lazy">
-                    <div class="caption">${getOrgNameFromPhoto(foto)}</div>
-                </div>
-            `).join('');
+            grid.innerHTML = Object.keys(albums).map((key, idx) => {
+                const album = albums[key];
+                const coverPhoto = album.photos[0];
+                return `
+                    <div class="album-card" onclick="openAlbum('${key}')" id="album-${idx}">
+                        <div class="album-bg" style="background-image: url('${coverPhoto}'); opacity: 1;" data-album-key="${key}"></div>
+                        <div class="album-overlay"></div>
+                        <div class="album-count">📷 ${album.photos.length} fotos</div>
+                        <div class="album-info">
+                            <h3>${album.name}</h3>
+                            <p>Clic para ver el álbum</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Iniciar slideshows en portadas de álbumes
+            startAlbumCoverSlideshows(albums);
         }
+
+        // Slideshow en portadas de cada álbum
+        function startAlbumCoverSlideshows(albums) {
+            Object.keys(albums).forEach(key => {
+                const album = albums[key];
+                if (album.photos.length <= 1) return;
+                
+                let idx = 0;
+                const bgEl = document.querySelector(`[data-album-key="${key}"]`);
+                if (!bgEl) return;
+                const card = bgEl.parentElement;
+                
+                // Crear segunda capa para crossfade
+                const bg2 = document.createElement('div');
+                bg2.className = 'album-bg';
+                bg2.style.opacity = '0';
+                card.insertBefore(bg2, bgEl.nextSibling);
+                
+                let activeBg = bgEl;
+                let inactiveBg = bg2;
+                
+                setInterval(() => {
+                    idx = (idx + 1) % album.photos.length;
+                    inactiveBg.style.backgroundImage = `url('${album.photos[idx]}')`;
+                    inactiveBg.style.transition = 'none';
+                    inactiveBg.style.opacity = '0';
+                    inactiveBg.offsetHeight; // reflow
+                    inactiveBg.style.transition = 'opacity 2s ease-in-out';
+                    
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            inactiveBg.style.opacity = '1';
+                            activeBg.style.opacity = '0';
+                        });
+                    });
+                    
+                    // Intercambiar capas
+                    [activeBg, inactiveBg] = [inactiveBg, activeBg];
+                }, 4000);
+            });
+        }
+
+        // Abrir álbum en modal
+        function openAlbum(albumKey) {
+            const albums = getAlbums();
+            const album = albums[albumKey];
+            if (!album) return;
+            
+            currentAlbumPhotos = album.photos;
+            currentPhotoIndex = 0;
+            
+            document.getElementById('modal-album-title').textContent = album.name;
+            updateModalImage();
+            document.getElementById('album-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Autoplay cada 5 segundos
+            modalAutoplay = setInterval(() => {
+                currentPhotoIndex = (currentPhotoIndex + 1) % currentAlbumPhotos.length;
+                updateModalImage();
+            }, 5000);
+        }
+
+        // Actualizar imagen en modal
+        function updateModalImage() {
+            const img = document.getElementById('modal-image');
+            img.style.opacity = '0';
+            setTimeout(() => {
+                img.src = currentAlbumPhotos[currentPhotoIndex];
+                img.onload = () => { img.style.opacity = '1'; };
+            }, 300);
+            document.getElementById('modal-info').textContent = 
+                `${currentPhotoIndex + 1} / ${currentAlbumPhotos.length}`;
+        }
+
+        // Navegación del modal
+        function nextPhoto() {
+            currentPhotoIndex = (currentPhotoIndex + 1) % currentAlbumPhotos.length;
+            updateModalImage();
+            resetAutoplay();
+        }
+
+        function prevPhoto() {
+            currentPhotoIndex = (currentPhotoIndex - 1 + currentAlbumPhotos.length) % currentAlbumPhotos.length;
+            updateModalImage();
+            resetAutoplay();
+        }
+
+        function resetAutoplay() {
+            if (modalAutoplay) clearInterval(modalAutoplay);
+            modalAutoplay = setInterval(() => {
+                currentPhotoIndex = (currentPhotoIndex + 1) % currentAlbumPhotos.length;
+                updateModalImage();
+            }, 5000);
+        }
+
+        // Cerrar modal
+        function closeAlbumModal() {
+            document.getElementById('album-modal').classList.remove('active');
+            document.body.style.overflow = '';
+            if (modalAutoplay) clearInterval(modalAutoplay);
+            modalAutoplay = null;
+        }
+
+        // Cerrar modal con Escape o clic fuera
+        document.addEventListener('keydown', (e) => {
+            if (!document.getElementById('album-modal').classList.contains('active')) return;
+            if (e.key === 'Escape') closeAlbumModal();
+            if (e.key === 'ArrowRight') nextPhoto();
+            if (e.key === 'ArrowLeft') prevPhoto();
+        });
 
         // Extraer nombre de organización de la foto
         function getOrgNameFromPhoto(photoPath) {
