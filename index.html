@@ -234,8 +234,7 @@
             overflow: hidden;
         }
 
-        #inicio::before,
-        #inicio::after {
+        #inicio::before {
             content: '';
             position: absolute;
             top: 0;
@@ -245,20 +244,8 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            transition: opacity 1.5s ease-in-out;
-        }
-
-        #inicio::before {
             z-index: 0;
-            background-image: var(--bg-image-before, none);
-            opacity: var(--opacity-before, 1);
-        }
-
-        #inicio::after {
-            z-index: 1;
-            opacity: 0;
-            background-image: var(--bg-image-after, none);
-            opacity: var(--opacity-after, 0);
+            transition: opacity 1.5s ease-in-out;
         }
 
         #inicio > div {
@@ -267,8 +254,7 @@
         }
 
         /* Hacer slideshow clicable */
-        #inicio::before,
-        #inicio::after {
+        #inicio {
             cursor: pointer;
         }
 
@@ -686,21 +672,23 @@
             const randomPhoto = getNextPhoto();
             currentPhotoPath = randomPhoto;
             
+            // Crear un elemento de estilo dinámico para el ::before
+            const styleId = 'dynamic-bg-style';
+            let styleEl = document.getElementById(styleId);
+            if (!styleEl) {
+                styleEl = document.createElement('style');
+                styleEl.id = styleId;
+                document.head.appendChild(styleEl);
+            }
+            
             if (fade && imagesPreloaded) {
-                if (useBeforeLayer) {
-                    inicioSection.style.setProperty('--bg-image-before', `url('${randomPhoto}')`);
-                    inicioSection.style.setProperty('--opacity-after', '0');
-                    inicioSection.style.setProperty('--opacity-before', '1');
-                } else {
-                    inicioSection.style.setProperty('--bg-image-after', `url('${randomPhoto}')`);
-                    inicioSection.style.setProperty('--opacity-before', '0');
-                    inicioSection.style.setProperty('--opacity-after', '1');
-                }
-                useBeforeLayer = !useBeforeLayer;
+                // Fade out primero
+                styleEl.textContent = `#inicio::before { background-image: url('${randomPhoto}'); opacity: 0; }`;
+                setTimeout(() => {
+                    styleEl.textContent = `#inicio::before { background-image: url('${randomPhoto}'); opacity: 1; }`;
+                }, 50);
             } else {
-                inicioSection.style.setProperty('--bg-image-before', `url('${randomPhoto}')`);
-                inicioSection.style.setProperty('--opacity-before', '1');
-                inicioSection.style.setProperty('--opacity-after', '0');
+                styleEl.textContent = `#inicio::before { background-image: url('${randomPhoto}'); opacity: 1; }`;
             }
         }
 
