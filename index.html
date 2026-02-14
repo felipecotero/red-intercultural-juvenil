@@ -560,23 +560,38 @@
     </section>
 
     <script>
-        // Array de fotos de organizaciones
+        // Array de fotos de organizaciones (44 fotos totales)
         const fotosOrgs = [
             'assets/photos_orgs/01_CUMBRE_CASA_CULTURAL.jpg',
+            'assets/photos_orgs/01_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/02_CUMBRE_CASA_CULTURAL.jpg',
+            'assets/photos_orgs/02_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/03_CUMBRE_CASA_CULTURAL.jpg',
+            'assets/photos_orgs/03_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/04_CUMBRE_CASA_CULTURAL.jpg',
+            'assets/photos_orgs/04_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/05_CUMBRE_CASA_CULTURAL.jpg',
+            'assets/photos_orgs/05_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/06_CUMBRE_CASA_CULTURAL.jpg',
+            'assets/photos_orgs/06_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/07_CUMBRE_CASA_CULTURAL.jpg',
+            'assets/photos_orgs/07_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/08_CUMBRE_CASA_CULTURAL.jpg',
+            'assets/photos_orgs/08_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/09_CUMBRE_CASA_CULTURAL.jpg',
+            'assets/photos_orgs/09_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/10_CUMBRE_CASA_CULTURAL.jpg',
+            'assets/photos_orgs/10_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/11_CUMBRE_CASA_CULTURAL.jpg',
+            'assets/photos_orgs/11_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/12_CUMBRE_CASA_CULTURAL.jpg',
+            'assets/photos_orgs/12_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/13_CUMBRE_CASA_CULTURAL.jpg',
+            'assets/photos_orgs/13_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/14_CUMBRE_CASA_CULTURAL.jpg',
+            'assets/photos_orgs/14_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/15_GUAQUE_SOPO_2025.jpg',
+            'assets/photos_orgs/15_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/16_GUAQUE_SOPO_2025.jpg',
             'assets/photos_orgs/17_GUAQUE_SOPO_2025.jpg',
             'assets/photos_orgs/18_GUAQUE_SOPO_2025.jpg',
@@ -593,7 +608,57 @@
             'assets/photos_orgs/29_GUAQUE_SOPO_2025.jpg'
         ];
 
-        // Precarga de todas las imágenes
+        // Sistema de shuffle sin repeticiones
+        let shuffledPhotos = [];
+        let currentShuffleIndex = 0;
+
+        // Sistema de shuffle sin repeticiones
+        let shuffledPhotos = [];
+        let currentShuffleIndex = 0;
+
+        // Crear nuevo shuffle
+        function createShuffle() {
+            shuffledPhotos = [...fotosOrgs];
+            // Algoritmo Fisher-Yates para mezclar
+            for (let i = shuffledPhotos.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledPhotos[i], shuffledPhotos[j]] = [shuffledPhotos[j], shuffledPhotos[i]];
+            }
+            currentShuffleIndex = 0;
+        }
+
+        // Obtener siguiente foto del shuffle
+        function getNextPhoto() {
+            if (currentShuffleIndex >= shuffledPhotos.length) {
+                createShuffle();
+            }
+            const photo = shuffledPhotos[currentShuffleIndex];
+            currentShuffleIndex++;
+            return photo;
+        }
+
+        // Mapeo de nombres de fotos a organizaciones
+        function getOrgFromPhoto(photoPath) {
+            const filename = photoPath.split('/').pop().toUpperCase();
+            
+            // Buscar organización por nombre en la foto
+            if (filename.includes('CASA_CULTURAL')) {
+                // Buscar Casa Cultural en las organizaciones
+                return organizaciones.find(org => 
+                    org.nombre && org.nombre.toLowerCase().includes('casa cultural')
+                );
+            } else if (filename.includes('MALOKA')) {
+                return organizaciones.find(org => 
+                    org.nombre && org.nombre.toLowerCase().includes('maloka')
+                );
+            } else if (filename.includes('GUAQUE') || filename.includes('SOPO')) {
+                return organizaciones.find(org => 
+                    org.nombre && (org.nombre.toLowerCase().includes('guaque') || org.municipio.toLowerCase().includes('sopó'))
+                );
+            }
+            
+            return null;
+        }
         let imagesPreloaded = false;
         const preloadedImages = [];
         
@@ -606,24 +671,16 @@
             imagesPreloaded = true;
         }
 
-        // Función para seleccionar foto aleatoria con crossfade real
-        let currentPhotoIndex = -1;
-        let useBeforeLayer = true; // Alternar entre ::before y ::after
+        // Función para seleccionar foto con sistema de shuffle
+        let currentPhotoPath = null;
+        let useBeforeLayer = true;
         
         function setRandomBackground(fade = false) {
             const inicioSection = document.getElementById('inicio');
-            let randomIndex;
-            
-            // Asegurar que no se repita la misma foto
-            do {
-                randomIndex = Math.floor(Math.random() * fotosOrgs.length);
-            } while (randomIndex === currentPhotoIndex && fotosOrgs.length > 1);
-            
-            currentPhotoIndex = randomIndex;
-            const randomPhoto = fotosOrgs[randomIndex];
+            const randomPhoto = getNextPhoto();
+            currentPhotoPath = randomPhoto;
             
             if (fade && imagesPreloaded) {
-                // Crossfade real alternando capas
                 if (useBeforeLayer) {
                     inicioSection.style.setProperty('--bg-image-before', `url('${randomPhoto}')`);
                     inicioSection.style.setProperty('--opacity-after', '0');
@@ -635,7 +692,6 @@
                 }
                 useBeforeLayer = !useBeforeLayer;
             } else {
-                // Primera carga
                 inicioSection.style.setProperty('--bg-image-before', `url('${randomPhoto}')`);
                 inicioSection.style.setProperty('--opacity-before', '1');
                 inicioSection.style.setProperty('--opacity-after', '0');
@@ -666,6 +722,7 @@
         // Inicializar mapa
         function initMap() {
             const map = L.map('map').setView([4.5709, -74.2973], 6); // Colombia centrada
+            window.mapInstance = map; // Guardar referencia global
             
             // Usar un tile layer colorido y gratuito
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -725,12 +782,24 @@
 
         // Navegar al mapa desde galería o slideshow
         function goToMapFromGallery(photoPath) {
+            const org = getOrgFromPhoto(photoPath);
+            
             // Navegar a la sección del mapa
             window.location.hash = '#mapa';
             
             // Scroll suave al mapa
             setTimeout(() => {
                 document.getElementById('mapa').scrollIntoView({ behavior: 'smooth' });
+                
+                // Si encontramos la organización, abrir su popup en el mapa
+                if (org && org.lat && org.lng) {
+                    setTimeout(() => {
+                        // Buscar el marcador correspondiente y hacer zoom
+                        if (window.mapInstance) {
+                            window.mapInstance.setView([org.lat, org.lng], 12);
+                        }
+                    }, 500);
+                }
             }, 100);
         }
 
@@ -742,9 +811,8 @@
             inicioSection.addEventListener('click', (e) => {
                 // Solo si se hace clic en el fondo, no en el contenido
                 if (e.target === inicioSection || e.target.tagName === 'SECTION') {
-                    const currentPhoto = fotosOrgs[currentPhotoIndex];
-                    if (currentPhoto) {
-                        goToMapFromGallery(currentPhoto);
+                    if (currentPhotoPath) {
+                        goToMapFromGallery(currentPhotoPath);
                     }
                 }
             });
@@ -826,6 +894,7 @@
             });
             
             // Inicializar todo
+            createShuffle();
             preloadImages();
             setRandomBackground();
             startPhotoRotation();
