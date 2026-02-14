@@ -208,7 +208,7 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(10px);
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -220,6 +220,12 @@
 
         nav a:hover {
             color: var(--color-primary);
+        }
+
+        /* Logo RIJ en nav */
+        nav .text-3xl {
+            line-height: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
         /* Responsive helpers */
@@ -261,7 +267,17 @@
     <nav class="py-4">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center">
-                <h1 class="text-2xl font-bold text-gray-900">RIJ</h1>
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2">
+                        <span class="text-3xl font-black" style="color: #f7931e;">R</span>
+                        <span class="text-3xl font-black" style="color: #ed1c24;">I</span>
+                        <span class="text-3xl font-black" style="color: #2e3192;">J</span>
+                    </div>
+                    <div class="hidden md:block text-sm font-bold leading-tight">
+                        <div>RED INTERCULTURAL</div>
+                        <div>JUVENIL</div>
+                    </div>
+                </div>
                 <ul class="hidden md:flex space-x-6 text-sm font-medium">
                     <li><a href="#inicio" class="hover:text-orange-500">Inicio</a></li>
                     <li><a href="#aforismos" class="hover:text-orange-500">Aforismos</a></li>
