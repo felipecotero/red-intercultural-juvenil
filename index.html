@@ -245,24 +245,12 @@
             background-position: center;
             background-repeat: no-repeat;
             z-index: 0;
-            opacity: 0.5;
+            transition: opacity 1s ease-in-out;
         }
 
         #inicio > div {
             position: relative;
             z-index: 1;
-        }
-
-        /* Overlay oscuro para mejor contraste */
-        #inicio::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.3));
-            z-index: 0;
         }
 
         /* Responsive helpers */
@@ -568,21 +556,41 @@
         ];
 
         // Función para seleccionar foto aleatoria
-        function setRandomBackground() {
+        let currentPhotoIndex = -1;
+        
+        function setRandomBackground(fade = false) {
             const inicioSection = document.getElementById('inicio');
-            const randomIndex = Math.floor(Math.random() * fotosOrgs.length);
+            let randomIndex;
+            
+            // Asegurar que no se repita la misma foto
+            do {
+                randomIndex = Math.floor(Math.random() * fotosOrgs.length);
+            } while (randomIndex === currentPhotoIndex && fotosOrgs.length > 1);
+            
+            currentPhotoIndex = randomIndex;
             const randomPhoto = fotosOrgs[randomIndex];
             
-            // Verificar si la imagen existe antes de aplicarla
-            const img = new Image();
-            img.onload = function() {
+            if (fade) {
+                // Efecto de disolvencia
+                inicioSection.style.setProperty('--bg-opacity', '0');
+                setTimeout(() => {
+                    inicioSection.style.setProperty('--bg-image', `url('${randomPhoto}')`);
+                    setTimeout(() => {
+                        inicioSection.style.setProperty('--bg-opacity', '1');
+                    }, 50);
+                }, 500);
+            } else {
+                // Sin efecto en la primera carga
                 inicioSection.style.setProperty('--bg-image', `url('${randomPhoto}')`);
-            };
-            img.onerror = function() {
-                // Si la imagen no existe, usar el gradiente por defecto
-                console.log('Foto no encontrada:', randomPhoto);
-            };
-            img.src = randomPhoto;
+                inicioSection.style.setProperty('--bg-opacity', '1');
+            }
+        }
+
+        // Cambiar foto cada 3 segundos
+        function startPhotoRotation() {
+            setInterval(() => {
+                setRandomBackground(true);
+            }, 3000);
         }
 
         // Aplicar estilo de fondo dinámico
@@ -590,6 +598,7 @@
         style.textContent = `
             #inicio::before {
                 background-image: var(--bg-image, none);
+                opacity: var(--bg-opacity, 1);
             }
         `;
         document.head.appendChild(style);
@@ -710,6 +719,7 @@
             
             // Inicializar todo
             setRandomBackground();
+            startPhotoRotation();
             loadAforismos();
             loadDirectorio();
             initMap();
