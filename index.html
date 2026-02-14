@@ -686,35 +686,35 @@
             }
             
             if (fade && imagesPreloaded) {
-                // Alternar entre ::before y ::after para el efecto crossfade
+                // Alternar entre ::before y ::after - la nueva foto tapa la anterior
                 if (useBeforeLayer) {
-                    // Primero cargar la nueva foto en ::before (que está en opacity 0)
-                    // y mantener ::after visible
+                    // Cargar nueva foto en ::before con opacity 0
+                    // ::after mantiene la foto anterior visible
                     styleEl.textContent = `
-                        #inicio::before { background-image: url('${randomPhoto}'); opacity: 0; }
-                        #inicio::after { opacity: 1; }
+                        #inicio::before { background-image: url('${randomPhoto}'); opacity: 0; z-index: 1; }
+                        #inicio::after { opacity: 1; z-index: 0; }
                     `;
                     // Pequeño delay para asegurar que la imagen se cargó
                     setTimeout(() => {
-                        // Ahora hacer el crossfade: ::before sube, ::after baja
+                        // Nueva foto (::before) hace fade in tapando la anterior
                         styleEl.textContent = `
-                            #inicio::before { background-image: url('${randomPhoto}'); opacity: 1; }
-                            #inicio::after { opacity: 0; }
+                            #inicio::before { background-image: url('${randomPhoto}'); opacity: 1; z-index: 1; }
+                            #inicio::after { opacity: 1; z-index: 0; }
                         `;
                     }, 50);
                 } else {
-                    // Primero cargar la nueva foto en ::after (que está en opacity 0)
-                    // y mantener ::before visible
+                    // Cargar nueva foto en ::after con opacity 0
+                    // ::before mantiene la foto anterior visible
                     styleEl.textContent = `
-                        #inicio::after { background-image: url('${randomPhoto}'); opacity: 0; }
-                        #inicio::before { opacity: 1; }
+                        #inicio::after { background-image: url('${randomPhoto}'); opacity: 0; z-index: 1; }
+                        #inicio::before { opacity: 1; z-index: 0; }
                     `;
                     // Pequeño delay para asegurar que la imagen se cargó
                     setTimeout(() => {
-                        // Ahora hacer el crossfade: ::after sube, ::before baja
+                        // Nueva foto (::after) hace fade in tapando la anterior
                         styleEl.textContent = `
-                            #inicio::after { background-image: url('${randomPhoto}'); opacity: 1; }
-                            #inicio::before { opacity: 0; }
+                            #inicio::after { background-image: url('${randomPhoto}'); opacity: 1; z-index: 1; }
+                            #inicio::before { opacity: 1; z-index: 0; }
                         `;
                     }, 50);
                 }
