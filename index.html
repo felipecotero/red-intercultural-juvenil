@@ -688,17 +688,35 @@
             if (fade && imagesPreloaded) {
                 // Alternar entre ::before y ::after para el efecto crossfade
                 if (useBeforeLayer) {
-                    // Cambiar ::before, hacer fade de ::after
+                    // Primero cargar la nueva foto en ::before (que está en opacity 0)
+                    // y mantener ::after visible
                     styleEl.textContent = `
-                        #inicio::before { background-image: url('${randomPhoto}'); opacity: 1; }
-                        #inicio::after { opacity: 0; }
+                        #inicio::before { background-image: url('${randomPhoto}'); opacity: 0; }
+                        #inicio::after { opacity: 1; }
                     `;
+                    // Pequeño delay para asegurar que la imagen se cargó
+                    setTimeout(() => {
+                        // Ahora hacer el crossfade: ::before sube, ::after baja
+                        styleEl.textContent = `
+                            #inicio::before { background-image: url('${randomPhoto}'); opacity: 1; }
+                            #inicio::after { opacity: 0; }
+                        `;
+                    }, 50);
                 } else {
-                    // Cambiar ::after, hacer fade de ::before
+                    // Primero cargar la nueva foto en ::after (que está en opacity 0)
+                    // y mantener ::before visible
                     styleEl.textContent = `
-                        #inicio::after { background-image: url('${randomPhoto}'); opacity: 1; }
-                        #inicio::before { opacity: 0; }
+                        #inicio::after { background-image: url('${randomPhoto}'); opacity: 0; }
+                        #inicio::before { opacity: 1; }
                     `;
+                    // Pequeño delay para asegurar que la imagen se cargó
+                    setTimeout(() => {
+                        // Ahora hacer el crossfade: ::after sube, ::before baja
+                        styleEl.textContent = `
+                            #inicio::after { background-image: url('${randomPhoto}'); opacity: 1; }
+                            #inicio::before { opacity: 0; }
+                        `;
+                    }, 50);
                 }
                 useBeforeLayer = !useBeforeLayer;
             } else {
