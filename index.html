@@ -234,28 +234,6 @@
             overflow: hidden;
         }
 
-        #inicio::before,
-        #inicio::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            transition: opacity 3s ease-in-out;
-        }
-
-        #inicio::before {
-            z-index: 0;
-        }
-
-        #inicio::after {
-            z-index: 1;
-        }
-
         #inicio > div {
             position: relative;
             z-index: 2;
@@ -361,9 +339,14 @@
         </div>
     </nav>
 
-    <!-- SECCIÓN 1: TÍTULO RIJ -->
-    <section id="inicio" class="bg-gradient-to-br from-gray-600 via-gray-500 to-gray-400 text-white pt-24 pb-16 relative">
-        <div class="max-w-7xl mx-auto text-center fade-in">
+    <!-- SECCIÓN 1: INTRO/PORTADA CON SLIDESHOW -->
+    <section id="inicio" class="h-screen flex items-center justify-center text-white relative overflow-hidden">
+        <!-- Capas de fondo para slideshow con crossfade -->
+        <div id="bg-layer-1" class="absolute inset-0 bg-cover bg-center transition-opacity duration-[3000ms] ease-in-out" style="z-index: 0; opacity: 1;"></div>
+        <div id="bg-layer-2" class="absolute inset-0 bg-cover bg-center transition-opacity duration-[3000ms] ease-in-out" style="z-index: 1; opacity: 0;"></div>
+        
+        <!-- Contenido sobre el slideshow -->
+        <div class="max-w-7xl mx-auto text-center fade-in relative z-10">
             <div class="mb-2" style="margin-top: -80px;">
                 <img src="assets/logos/RIJ_COMP_NEG.png" alt="Red Intercultural Juvenil" class="w-full drop-shadow-2xl">
             </div>
@@ -376,6 +359,10 @@
                 <div class="bg-white/20 backdrop-blur px-8 py-4 rounded-full font-black text-lg md:text-xl" style="font-family: 'Work Sans', sans-serif;">Una Red</div>
             </div>
         </div>
+    </section>
+
+    <!-- SECCIÓN TÍTULO RIJ (backup - se puede remover después) -->
+    <section id="titulo-rij" class="bg-gradient-to-br from-gray-600 via-gray-500 to-gray-400 text-white pt-24 pb-16 relative hidden">\n        <div class="max-w-7xl mx-auto text-center fade-in">\n            <div class="mb-2" style="margin-top: -80px;">\n                <img src="assets/logos/RIJ_COMP_NEG.png" alt="Red Intercultural Juvenil" class="w-full drop-shadow-2xl">\n            </div>\n            <p class="text-2xl md:text-3xl font-light max-w-4xl mx-auto mb-12 px-4" style="margin-top: -60px; font-style: italic; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">\n                Tejiendo identidades, fortaleciendo territorios\n            </p>\n            <div class="flex justify-center gap-6 flex-wrap px-4">\n                <div class="bg-white/20 backdrop-blur px-8 py-4 rounded-full font-black text-lg md:text-xl" style="font-family: 'Work Sans', sans-serif;">27 Organizaciones</div>\n                <div class="bg-white/20 backdrop-blur px-8 py-4 rounded-full font-black text-lg md:text-xl" style="font-family: 'Work Sans', sans-serif;">15 Departamentos</div>\n                <div class="bg-white/20 backdrop-blur px-8 py-4 rounded-full font-black text-lg md:text-xl" style="font-family: 'Work Sans', sans-serif;">Una Red</div>\n            </div>\n        </div>
     </section>
 
     <!-- SECCIÓN 2: AFORISMOS (Carrusel) -->
@@ -672,59 +659,46 @@
         let useBeforeLayer = true;
         
         function setRandomBackground(fade = false) {
-            const inicioSection = document.getElementById('inicio');
+            const layer1 = document.getElementById('bg-layer-1');
+            const layer2 = document.getElementById('bg-layer-2');
             const randomPhoto = getNextPhoto();
             currentPhotoPath = randomPhoto;
             
-            // Crear elemento de estilo dinámico si no existe
-            const styleId = 'dynamic-bg-style';
-            let styleEl = document.getElementById(styleId);
-            if (!styleEl) {
-                styleEl = document.createElement('style');
-                styleEl.id = styleId;
-                document.head.appendChild(styleEl);
-            }
-            
             if (fade && imagesPreloaded) {
-                // Alternar entre capas para verdadero crossfade
+                // Alternar entre capas - la nueva foto aparece encima con fade in
                 if (useBeforeLayer) {
-                    // Cargar nueva foto en ::before (debajo, opacity 0)
-                    // ::after tiene la foto actual visible
-                    styleEl.textContent = `
-                        #inicio::before { background-image: url('${randomPhoto}'); opacity: 0; z-index: 0; }
-                        #inicio::after { opacity: 1; z-index: 1; }
-                    `;
-                    // Pequeño delay para que se cargue la imagen
+                    // Cargar nueva foto en layer2 (arriba, invisible)
+                    layer2.style.backgroundImage = `url('${randomPhoto}')`;
+                    layer2.style.opacity = '0';
+                    layer2.style.zIndex = '1';
+                    layer1.style.zIndex = '0';
+                    
+                    // Pequeño delay para asegurar que la imagen se cargó
                     setTimeout(() => {
-                        // Crossfade: ::before sube a 1, ::after baja a 0
-                        styleEl.textContent = `
-                            #inicio::before { background-image: url('${randomPhoto}'); opacity: 1; z-index: 0; }
-                            #inicio::after { opacity: 0; z-index: 1; }
-                        `;
-                    }, 50);
+                        // Hacer fade in de layer2 - layer1 queda visible debajo
+                        layer2.style.opacity = '1';
+                    }, 100);
                 } else {
-                    // Cargar nueva foto en ::after (debajo, opacity 0)
-                    // ::before tiene la foto actual visible
-                    styleEl.textContent = `
-                        #inicio::after { background-image: url('${randomPhoto}'); opacity: 0; z-index: 0; }
-                        #inicio::before { opacity: 1; z-index: 1; }
-                    `;
-                    // Pequeño delay para que se cargue la imagen
+                    // Cargar nueva foto en layer1 (arriba, invisible)
+                    layer1.style.backgroundImage = `url('${randomPhoto}')`;
+                    layer1.style.opacity = '0';
+                    layer1.style.zIndex = '1';
+                    layer2.style.zIndex = '0';
+                    
+                    // Pequeño delay para asegurar que la imagen se cargó
                     setTimeout(() => {
-                        // Crossfade: ::after sube a 1, ::before baja a 0
-                        styleEl.textContent = `
-                            #inicio::after { background-image: url('${randomPhoto}'); opacity: 1; z-index: 0; }
-                            #inicio::before { opacity: 0; z-index: 1; }
-                        `;
-                    }, 50);
+                        // Hacer fade in de layer1 - layer2 queda visible debajo
+                        layer1.style.opacity = '1';
+                    }, 100);
                 }
                 useBeforeLayer = !useBeforeLayer;
             } else {
                 // Primera carga sin fade
-                styleEl.textContent = `
-                    #inicio::before { background-image: url('${randomPhoto}'); opacity: 1; }
-                    #inicio::after { opacity: 0; }
-                `;
+                layer1.style.backgroundImage = `url('${randomPhoto}')`;
+                layer1.style.opacity = '1';
+                layer1.style.zIndex = '0';
+                layer2.style.opacity = '0';
+                layer2.style.zIndex = '1';
             }
         }
 
