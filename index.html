@@ -75,21 +75,19 @@
         #map {
             height: 400px;
             width: 100%;
-            border-radius: 10px;
+            border-radius: 0;
             box-shadow: 0 10px 40px rgba(0,0,0,0.2);
         }
 
         @media (min-width: 768px) {
             #map {
                 height: 500px;
-                border-radius: 15px;
             }
         }
 
         @media (min-width: 1024px) {
             #map {
                 height: 600px;
-                border-radius: 20px;
             }
         }
 
@@ -365,11 +363,13 @@
 
     <!-- SECCIÓN 5: MAPA DE TERRITORIALIZACIÓN -->
     <section id="mapa" class="bg-blue-50">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-gray-900">Mapa de Nodos</h2>
-            <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">
-                Visualiza la presencia territorial de las organizaciones que conforman la Red Intercultural Juvenil
-            </p>
+        <div class="w-full">
+            <div class="max-w-7xl mx-auto px-4 mb-8">
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-6 text-gray-900">Mapa de Nodos</h2>
+                <p class="text-center text-gray-600 max-w-2xl mx-auto">
+                    Visualiza la presencia territorial de las organizaciones que conforman la Red Intercultural Juvenil
+                </p>
+            </div>
             <div id="map"></div>
         </div>
     </section>
