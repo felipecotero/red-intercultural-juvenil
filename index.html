@@ -234,7 +234,8 @@
             overflow: hidden;
         }
 
-        #inicio::before {
+        #inicio::before,
+        #inicio::after {
             content: '';
             position: absolute;
             top: 0;
@@ -244,8 +245,15 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            transition: opacity 3s ease-in-out;
+        }
+
+        #inicio::before {
             z-index: 0;
-            transition: opacity 1.5s ease-in-out;
+        }
+
+        #inicio::after {
+            z-index: 1;
         }
 
         #inicio > div {
@@ -668,7 +676,7 @@
             const randomPhoto = getNextPhoto();
             currentPhotoPath = randomPhoto;
             
-            // Crear un elemento de estilo dinámico para el ::before
+            // Crear elemento de estilo dinámico si no existe
             const styleId = 'dynamic-bg-style';
             let styleEl = document.getElementById(styleId);
             if (!styleEl) {
@@ -678,21 +686,35 @@
             }
             
             if (fade && imagesPreloaded) {
-                // Fade out primero
-                styleEl.textContent = `#inicio::before { background-image: url('${randomPhoto}'); opacity: 0; }`;
-                setTimeout(() => {
-                    styleEl.textContent = `#inicio::before { background-image: url('${randomPhoto}'); opacity: 1; }`;
-                }, 50);
+                // Alternar entre ::before y ::after para el efecto crossfade
+                if (useBeforeLayer) {
+                    // Cambiar ::before, hacer fade de ::after
+                    styleEl.textContent = `
+                        #inicio::before { background-image: url('${randomPhoto}'); opacity: 1; }
+                        #inicio::after { opacity: 0; }
+                    `;
+                } else {
+                    // Cambiar ::after, hacer fade de ::before
+                    styleEl.textContent = `
+                        #inicio::after { background-image: url('${randomPhoto}'); opacity: 1; }
+                        #inicio::before { opacity: 0; }
+                    `;
+                }
+                useBeforeLayer = !useBeforeLayer;
             } else {
-                styleEl.textContent = `#inicio::before { background-image: url('${randomPhoto}'); opacity: 1; }`;
+                // Primera carga sin fade
+                styleEl.textContent = `
+                    #inicio::before { background-image: url('${randomPhoto}'); opacity: 1; }
+                    #inicio::after { opacity: 0; }
+                `;
             }
         }
 
-        // Cambiar foto cada 3 segundos
+        // Cambiar foto cada 5 segundos
         function startPhotoRotation() {
             setInterval(() => {
                 setRandomBackground(true);
-            }, 3000);
+            }, 5000);
         }
 
         // Inicializar mapa
