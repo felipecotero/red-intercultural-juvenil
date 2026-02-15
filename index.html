@@ -184,16 +184,22 @@
         #manifiesto {
             display: block;
             padding: 0;
+            position: relative;
         }
 
         .manifiesto-sticky {
             position: sticky;
-            top: 0;
-            height: 100vh;
+            /* top se establece vía JS para quedar justo debajo del nav+banner */
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
-            overflow: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .manifiesto-content {
+            padding: 3rem 0 4rem;
+            width: 100%;
         }
 
         .manifiesto-titulo {
@@ -641,14 +647,16 @@
 
     <!-- SECCIÓN 4: MANIFIESTO - WORD BY WORD SCROLL -->
     <section id="manifiesto" class="relative bg-zinc-900 text-white">
-        <div class="manifiesto-sticky">
+        <div class="manifiesto-sticky" id="manifiesto-sticky">
             <div class="absolute inset-0 opacity-20" style="background-image: url('https://www.transparenttextures.com/patterns/asphalt-dark.png');"></div>
             <div class="absolute top-0 right-0 w-96 h-96 bg-pink-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
             <div class="absolute bottom-0 left-0 w-96 h-96 bg-cyan-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style="animation-delay: 1s;"></div>
 
-            <div class="max-w-5xl mx-auto px-6 relative z-10">
-                <div class="manifiesto-titulo" id="manifiesto-titulo"></div>
-                <div class="manifiesto-cuerpo" id="manifiesto-cuerpo"></div>
+            <div class="manifiesto-content">
+                <div class="max-w-5xl mx-auto px-6 relative z-10">
+                    <div class="manifiesto-titulo" id="manifiesto-titulo"></div>
+                    <div class="manifiesto-cuerpo" id="manifiesto-cuerpo"></div>
+                </div>
             </div>
         </div>
     </section>
@@ -1408,6 +1416,7 @@
         // ========== MANIFIESTO WORD-BY-WORD SCROLL ==========
         function initManifiestoTypewriter() {
             const section = document.getElementById('manifiesto');
+            const stickyEl = document.getElementById('manifiesto-sticky');
             const tituloEl = document.getElementById('manifiesto-titulo');
             const cuerpoEl = document.getElementById('manifiesto-cuerpo');
 
@@ -1425,58 +1434,66 @@
             const allWords = section.querySelectorAll('.mw');
             const totalWords = allWords.length;
 
-            // Altura de sección: ~35px de scroll por palabra
-            const scrollPerWord = 35;
-            const sectionHeight = Math.max(totalWords * scrollPerWord + window.innerHeight, window.innerHeight * 3);
-            section.style.minHeight = sectionHeight + 'px';
+            // Posicionar sticky justo debajo del nav+banner
+            function setStickyPosition() {
+                const nav = document.getElementById('main-nav');
+                const banner = document.getElementById('aforismos-banner');
+                const topOffset = (nav ? nav.offsetHeight : 0) + (banner ? banner.offsetHeight : 0);
+                stickyEl.style.top = topOffset + 'px';
+                stickyEl.style.height = 'calc(100vh - ' + topOffset + 'px)';
+            }
+            setStickyPosition();
+
+            // Altura de sección: suficiente scroll para revelar todas las palabras
+            // ~40px de scroll por palabra, mínimo 3 viewports
+            const scrollPerWord = 40;
+            function calcSectionHeight() {
+                const h = Math.max(totalWords * scrollPerWord + window.innerHeight, window.innerHeight * 3);
+                section.style.minHeight = h + 'px';
+            }
+            calcSectionHeight();
 
             let maxWordsRevealed = 0;
-            let sectionHasLeft = false;
 
             function update() {
                 const rect = section.getBoundingClientRect();
                 const vh = window.innerHeight;
 
-                // ¿La sección está completamente fuera del viewport?
+                // Si la sección salió completamente del viewport -> resetear
                 if (rect.bottom < 0 || rect.top > vh) {
-                    // Sección salió del viewport -> resetear
                     if (maxWordsRevealed > 0) {
-                        sectionHasLeft = true;
                         maxWordsRevealed = 0;
                         allWords.forEach(w => w.classList.remove('vis'));
                     }
                     return;
                 }
 
-                sectionHasLeft = false;
-
-                // Trigger: sección entra en el tercio inferior de la pantalla
-                // Es decir, rect.top < vh * 2/3 (el top de la sección ya pasó el tercio inferior)
+                // Trigger: el top de la sección llega al tercio inferior (2/3 del vh)
                 const triggerPoint = vh * (2 / 3);
                 if (rect.top > triggerPoint) {
-                    return; // Aún no ha llegado al tercio inferior
+                    return; // Aún no ha llegado
                 }
 
-                // Cuánto scroll hemos hecho desde el trigger
-                const scrollFromTrigger = Math.max(0, triggerPoint - rect.top);
-                const scrollableRange = section.offsetHeight - vh * 0.33;
-                const progress = Math.min(1, scrollFromTrigger / (scrollableRange * 0.85));
+                // Progreso: desde el trigger hasta que termine el scroll de la sección
+                const scrollFromTrigger = triggerPoint - rect.top;
+                const scrollRange = section.offsetHeight - vh + triggerPoint;
+                const progress = Math.min(1, scrollFromTrigger / (scrollRange * 0.85));
 
                 const wordsToReveal = Math.floor(progress * totalWords);
 
-                // Solo avanzar, nunca retroceder (hasta que la sección salga del viewport)
+                // Solo avanzar, nunca retroceder mientras la sección esté visible
                 if (wordsToReveal > maxWordsRevealed) {
                     maxWordsRevealed = wordsToReveal;
                 }
 
                 // Aplicar visibilidad
-                allWords.forEach((w, i) => {
+                for (let i = 0; i < totalWords; i++) {
                     if (i < maxWordsRevealed) {
-                        w.classList.add('vis');
+                        allWords[i].classList.add('vis');
                     } else {
-                        w.classList.remove('vis');
+                        allWords[i].classList.remove('vis');
                     }
-                });
+                }
             }
 
             let ticking = false;
@@ -1491,8 +1508,8 @@
             }, { passive: true });
 
             window.addEventListener('resize', function() {
-                const newHeight = Math.max(totalWords * scrollPerWord + window.innerHeight, window.innerHeight * 3);
-                section.style.minHeight = newHeight + 'px';
+                setStickyPosition();
+                calcSectionHeight();
             });
 
             update();
