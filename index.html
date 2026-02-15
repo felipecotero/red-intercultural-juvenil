@@ -224,8 +224,8 @@
 
         .manifiesto-cuerpo {
             font-weight: 400;
-            font-size: clamp(0.95rem, 1.5vw, 1.25rem);
-            line-height: 1.35;
+            font-size: clamp(1.1rem, 2.2vw, 2rem);
+            line-height: 1.5;
             text-align: left;
             color: rgba(255, 255, 255, 0.92);
         }
@@ -295,10 +295,10 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(255, 255, 255, 0.98);
+            background: rgba(20, 20, 30, 0.95);
             backdrop-filter: blur(10px);
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
 
         /* Asegurar que el botón hamburguesa no se salga */
@@ -315,14 +315,16 @@
             padding: 0.5rem;
             margin-left: 0.5rem;
             z-index: 1001;
+            color: white;
         }
 
         nav a {
+            color: rgba(255, 255, 255, 0.85);
             transition: color 0.3s ease;
         }
 
         nav a:hover {
-            color: var(--color-primary);
+            color: var(--color-accent);
         }
 
         /* Logo RIJ en nav */
@@ -339,25 +341,55 @@
             cursor: pointer;
         }
 
-        /* Estilos para álbumes de galería */
-        .album-card {
+        /* Estilos para álbumes de galería - Panal hexagonal */
+        .honeycomb {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .hex-wrap {
+            width: 280px;
+            margin: -20px 10px;
             position: relative;
-            overflow: hidden;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            aspect-ratio: 16 / 9;
+        }
+
+        /* Filas impares se desplazan */
+        .hex-wrap:nth-child(4n+3),
+        .hex-wrap:nth-child(4n+4) {
+            margin-left: 150px;
         }
 
         @media (max-width: 639px) {
-            .album-card {
-                aspect-ratio: 4 / 3;
+            .hex-wrap {
+                width: 220px;
+                margin: -15px 5px;
+            }
+            .hex-wrap:nth-child(4n+3),
+            .hex-wrap:nth-child(4n+4) {
+                margin-left: 5px;
+            }
+            .honeycomb {
+                padding: 0 0.5rem;
             }
         }
 
+        .album-card {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease, filter 0.3s ease;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            aspect-ratio: 1 / 1.15;
+        }
+
         .album-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            transform: scale(1.08);
+            filter: brightness(1.1);
+            z-index: 5;
         }
 
         .album-card .album-bg {
@@ -572,16 +604,16 @@
                 <div class="flex items-center flex-shrink-0">
                     <img src="assets/logos/RIJ_SIGLA.png" alt="Red Intercultural Juvenil" class="h-12 md:h-16">
                 </div>
-                <ul class="hidden md:flex space-x-5 text-xs font-medium">
-                    <li><a href="#inicio" class="hover:text-orange-500">Inicio</a></li>
-                    <li><a href="#galeria" class="hover:text-orange-500">Galería</a></li>
-                    <li><a href="#manifiesto" class="hover:text-orange-500">Manifiesto</a></li>
-                    <li><a href="#mapa" class="hover:text-orange-500">Mapa</a></li>
-                    <li><a href="#directorio" class="hover:text-orange-500">Directorio</a></li>
-                    <li><a href="#articulaciones" class="hover:text-orange-500">Articulaciones</a></li>
-                    <li><a href="#salvaguarda" class="hover:text-orange-500">Salvaguarda</a></li>
-                    <li><a href="#envolvente" class="hover:text-orange-500">Envolvente</a></li>
-                    <li><a href="#contacto" class="hover:text-orange-500">Contacto</a></li>
+                <ul class="hidden md:flex space-x-5 text-xs font-medium text-white/85">
+                    <li><a href="#inicio" class="hover:text-yellow-400">Inicio</a></li>
+                    <li><a href="#galeria" class="hover:text-yellow-400">Galería</a></li>
+                    <li><a href="#manifiesto" class="hover:text-yellow-400">Manifiesto</a></li>
+                    <li><a href="#mapa" class="hover:text-yellow-400">Mapa</a></li>
+                    <li><a href="#directorio" class="hover:text-yellow-400">Directorio</a></li>
+                    <li><a href="#articulaciones" class="hover:text-yellow-400">Articulaciones</a></li>
+                    <li><a href="#salvaguarda" class="hover:text-yellow-400">Salvaguarda</a></li>
+                    <li><a href="#envolvente" class="hover:text-yellow-400">Envolvente</a></li>
+                    <li><a href="#contacto" class="hover:text-yellow-400">Contacto</a></li>
                 </ul>
                 <button id="menu-toggle" class="md:hidden">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -611,13 +643,13 @@
             <div class="mb-2" style="margin-top: -80px;">
                 <img src="assets/logos/RIJ_COMP_NEG.png" alt="Red Intercultural Juvenil" class="w-full drop-shadow-2xl">
             </div>
-            <p class="text-2xl md:text-3xl font-light max-w-4xl mx-auto mb-12 px-4" style="margin-top: -60px; font-style: italic; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+            <p class="text-2xl md:text-3xl font-light max-w-4xl mx-auto mb-6 px-4" style="margin-top: -100px; font-style: italic; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
                 Tejiendo identidades, fortaleciendo territorios
             </p>
-            <div class="flex justify-center gap-6 flex-wrap px-4">
-                <div class="bg-white/20 backdrop-blur px-8 py-4 rounded-full font-black text-lg md:text-xl" style="font-family: 'Work Sans', sans-serif;">27 Organizaciones</div>
-                <div class="bg-white/20 backdrop-blur px-8 py-4 rounded-full font-black text-lg md:text-xl" style="font-family: 'Work Sans', sans-serif;">15 Departamentos</div>
-                <div class="bg-white/20 backdrop-blur px-8 py-4 rounded-full font-black text-lg md:text-xl" style="font-family: 'Work Sans', sans-serif;">Una Red</div>
+            <div class="flex justify-center gap-4 flex-wrap px-4" style="margin-top: -10px;">
+                <div class="bg-white/20 backdrop-blur px-6 py-3 rounded-full font-black text-base md:text-lg" style="font-family: 'Work Sans', sans-serif;">27 Organizaciones</div>
+                <div class="bg-white/20 backdrop-blur px-6 py-3 rounded-full font-black text-base md:text-lg" style="font-family: 'Work Sans', sans-serif;">15 Departamentos</div>
+                <div class="bg-white/20 backdrop-blur px-6 py-3 rounded-full font-black text-base md:text-lg" style="font-family: 'Work Sans', sans-serif;">Una Red</div>
             </div>
         </div>
     </section>
@@ -1129,33 +1161,22 @@
             const grid = document.getElementById('gallery-grid');
             const albums = getAlbums();
             const albumKeys = Object.keys(albums);
-            const count = albumKeys.length;
             
-            // Determinar columnas según cantidad de álbumes
-            let gridClass = '';
-            if (count <= 2) {
-                gridClass = 'grid grid-cols-1 lg:grid-cols-' + count + ' gap-6';
-            } else if (count <= 4) {
-                gridClass = 'grid grid-cols-1 sm:grid-cols-2 gap-6';
-            } else if (count <= 9) {
-                gridClass = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6';
-            } else {
-                gridClass = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6';
-            }
-            
-            grid.className = gridClass;
+            grid.className = 'honeycomb';
             
             grid.innerHTML = albumKeys.map((key, idx) => {
                 const album = albums[key];
                 const coverPhoto = album.photos[0];
                 return `
-                    <div class="album-card" onclick="openAlbum('${key}')" id="album-${idx}">
-                        <div class="album-bg" style="background-image: url('${coverPhoto}'); opacity: 1;" data-album-key="${key}"></div>
-                        <div class="album-overlay"></div>
-                        <div class="album-count">📷 ${album.photos.length} fotos</div>
-                        <div class="album-info">
-                            <h3>${album.name}</h3>
-                            <p>Clic para ver el álbum</p>
+                    <div class="hex-wrap">
+                        <div class="album-card" onclick="openAlbum('${key}')" id="album-${idx}">
+                            <div class="album-bg" style="background-image: url('${coverPhoto}'); opacity: 1;" data-album-key="${key}"></div>
+                            <div class="album-overlay"></div>
+                            <div class="album-count">📷 ${album.photos.length} fotos</div>
+                            <div class="album-info">
+                                <h3>${album.name}</h3>
+                                <p>Clic para ver el álbum</p>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -1554,18 +1575,19 @@
             // Toggle menú móvil
             const menuToggle = document.getElementById('menu-toggle');
             const mobileMenu = document.createElement('div');
-            mobileMenu.className = 'hidden md:hidden absolute top-full left-0 right-0 bg-white shadow-lg py-4';
+            mobileMenu.className = 'hidden md:hidden absolute top-full left-0 right-0 shadow-lg py-4';
+            mobileMenu.style.background = 'rgba(20, 20, 30, 0.95)';
             mobileMenu.innerHTML = `
                 <ul class="flex flex-col space-y-2 px-4">
-                    <li><a href="#inicio" class="block py-2 hover:text-orange-500">Inicio</a></li>
-                    <li><a href="#galeria" class="block py-2 hover:text-orange-500">Galería</a></li>
-                    <li><a href="#manifiesto" class="block py-2 hover:text-orange-500">Manifiesto</a></li>
-                    <li><a href="#mapa" class="block py-2 hover:text-orange-500">Mapa</a></li>
-                    <li><a href="#directorio" class="block py-2 hover:text-orange-500">Directorio</a></li>
-                    <li><a href="#articulaciones" class="block py-2 hover:text-orange-500">Articulaciones</a></li>
-                    <li><a href="#salvaguarda" class="block py-2 hover:text-orange-500">Salvaguarda</a></li>
-                    <li><a href="#envolvente" class="block py-2 hover:text-orange-500">Envolvente</a></li>
-                    <li><a href="#contacto" class="block py-2 hover:text-orange-500">Contacto</a></li>
+                    <li><a href="#inicio" class="block py-2 text-white/85 hover:text-yellow-400">Inicio</a></li>
+                    <li><a href="#galeria" class="block py-2 text-white/85 hover:text-yellow-400">Galería</a></li>
+                    <li><a href="#manifiesto" class="block py-2 text-white/85 hover:text-yellow-400">Manifiesto</a></li>
+                    <li><a href="#mapa" class="block py-2 text-white/85 hover:text-yellow-400">Mapa</a></li>
+                    <li><a href="#directorio" class="block py-2 text-white/85 hover:text-yellow-400">Directorio</a></li>
+                    <li><a href="#articulaciones" class="block py-2 text-white/85 hover:text-yellow-400">Articulaciones</a></li>
+                    <li><a href="#salvaguarda" class="block py-2 text-white/85 hover:text-yellow-400">Salvaguarda</a></li>
+                    <li><a href="#envolvente" class="block py-2 text-white/85 hover:text-yellow-400">Envolvente</a></li>
+                    <li><a href="#contacto" class="block py-2 text-white/85 hover:text-yellow-400">Contacto</a></li>
                 </ul>
             `;
             
