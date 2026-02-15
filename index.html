@@ -744,56 +744,76 @@
     </section>
 
     <script>
-        // Array de fotos de organizaciones (57 fotos totales)
+        // Array de fotos de organizaciones (77 fotos totales)
         const fotosOrgs = [
             'assets/photos_orgs/01_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/01_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/01_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/01_RED_CEPELA_2025.jpg',
             'assets/photos_orgs/02_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/02_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/02_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/02_RED_CEPELA_2025.jpg',
             'assets/photos_orgs/03_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/03_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/03_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/03_RED_CEPELA_2025.jpg',
             'assets/photos_orgs/04_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/04_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/04_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/04_RED_CEPELA_2025.jpg',
             'assets/photos_orgs/05_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/05_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/05_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/05_RED_CEPELA_2025.jpg',
             'assets/photos_orgs/06_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/06_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/06_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/06_RED_CEPELA_2025.jpg',
             'assets/photos_orgs/07_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/07_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/07_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/07_RED_CEPELA_2025.jpg',
             'assets/photos_orgs/08_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/08_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/08_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/08_RED_CEPELA_2025.jpg',
             'assets/photos_orgs/09_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/09_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/09_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/09_RED_CEPELA_2025.jpg',
             'assets/photos_orgs/10_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/10_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/10_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/10_RED_CEPELA_2025.jpg',
             'assets/photos_orgs/11_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/11_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/11_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/11_RED_CEPELA_2025.jpg',
             'assets/photos_orgs/12_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/12_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/12_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/12_RED_CEPELA_2025.jpg',
             'assets/photos_orgs/13_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/13_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/13_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/13_RED_CEPELA_2025.jpg',
             'assets/photos_orgs/14_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/14_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/14_RED_CEPELA_2025.jpg',
             'assets/photos_orgs/15_GUAQUE_SOPO_2025.jpg',
             'assets/photos_orgs/15_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/15_RED_CEPELA_2025.jpg',
             'assets/photos_orgs/16_GUAQUE_SOPO_2025.jpg',
+            'assets/photos_orgs/16_RED_CEPELA_2025.jpg',
             'assets/photos_orgs/17_GUAQUE_SOPO_2025.jpg',
+            'assets/photos_orgs/17_RED_CEPELA_2025.jpg',
             'assets/photos_orgs/18_GUAQUE_SOPO_2025.jpg',
+            'assets/photos_orgs/18_RED_CEPELA_2025.jpg',
             'assets/photos_orgs/19_GUAQUE_SOPO_2025.jpg',
+            'assets/photos_orgs/19_RED_CEPELA_2025.jpg',
             'assets/photos_orgs/20_GUAQUE_SOPO_2025.jpg',
+            'assets/photos_orgs/20_RED_CEPELA_2025.jpg',
             'assets/photos_orgs/21_GUAQUE_SOPO_2025.jpg',
             'assets/photos_orgs/22_GUAQUE_SOPO_2025.jpg',
             'assets/photos_orgs/23_GUAQUE_SOPO_2025.jpg',
@@ -837,6 +857,10 @@
             if (filename.includes('CODIGO_ESTILO_CREW')) {
                 return organizaciones.find(org => 
                     org.nombre && org.nombre.toLowerCase().includes('código estilo')
+                );
+            } else if (filename.includes('RED_CEPELA')) {
+                return organizaciones.find(org => 
+                    org.nombre && org.nombre.toLowerCase().includes('cepela')
                 );
             } else if (filename.includes('CASA_CULTURAL')) {
                 return organizaciones.find(org => 
@@ -1008,7 +1032,8 @@
                 'CODIGO_ESTILO_CREW_2025': 'Código Estilo Crew 2025',
                 'CUMBRE_CASA_CULTURAL': 'Cumbre Casa Cultural',
                 'MALOKA_JOVEN_2025': 'Maloka Joven 2025',
-                'GUAQUE_SOPO_2025': 'Guaque Sopó 2025'
+                'GUAQUE_SOPO_2025': 'Guaque Sopó 2025',
+                'RED_CEPELA_2025': 'Red Cepela 2025'
             };
             
             fotosOrgs.forEach(foto => {
@@ -1209,6 +1234,8 @@
             const filename = photoPath.split('/').pop();
             if (filename.includes('CODIGO_ESTILO_CREW')) {
                 return 'Código Estilo Crew 2025';
+            } else if (filename.includes('RED_CEPELA')) {
+                return 'Red Cepela 2025';
             } else if (filename.includes('CUMBRE_CASA_CULTURAL')) {
                 return 'Cumbre Casa Cultural';
             } else if (filename.includes('MALOKA_JOVEN')) {
