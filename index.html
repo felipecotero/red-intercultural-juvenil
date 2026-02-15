@@ -119,48 +119,65 @@
             }
         }
 
-        /* Franja amarilla de aforismos rotantes */
+        /* Franja amarilla de aforismos - flash style */
         .aforismos-banner {
             background-color: var(--color-accent);
-            overflow: hidden;
             position: fixed;
-            top: 0;
             left: 0;
             width: 100%;
             z-index: 999;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .aforismos-banner .marquee-track {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            text-align: right;
+            padding: 0.6rem 1.5rem;
+            min-height: 3.2rem;
             display: flex;
-            animation: marquee 40s linear infinite;
-            white-space: nowrap;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-end;
         }
 
-        .aforismos-banner .marquee-item {
-            flex-shrink: 0;
-            padding: 0.4rem 2rem;
-            font-weight: 700;
-            font-size: 0.85rem;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
+        .aforismo-flash {
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+            text-align: right;
         }
 
-        .aforismos-banner .marquee-item::after {
-            content: '✦';
-            color: var(--color-primary);
-            font-size: 0.7rem;
+        .aforismo-flash.visible {
+            opacity: 1;
         }
 
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+        .aforismo-frase {
+            font-family: 'Work Sans', sans-serif;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #1a1a1a;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
         }
 
-        .aforismos-banner:hover .marquee-track {
-            animation-play-state: paused;
+        .aforismo-org {
+            font-family: 'Work Sans', sans-serif;
+            font-weight: 400;
+            font-size: 0.75rem;
+            font-style: italic;
+            color: #555;
+            margin-top: 0.15rem;
+        }
+
+        .aforismo-org::before {
+            content: '— ';
+        }
+
+        @media (max-width: 639px) {
+            .aforismo-frase {
+                font-size: 0.95rem;
+            }
+            .aforismo-org {
+                font-size: 0.65rem;
+            }
+            .aforismos-banner {
+                padding: 0.5rem 1rem;
+            }
         }
 
         /* Tarjetas de directorio */
@@ -268,9 +285,15 @@
             position: relative;
             overflow: hidden;
             border-radius: 15px;
-            aspect-ratio: 4 / 3;
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            aspect-ratio: 16 / 9;
+        }
+
+        @media (max-width: 639px) {
+            .album-card {
+                aspect-ratio: 4 / 3;
+            }
         }
 
         .album-card:hover {
@@ -307,6 +330,15 @@
             margin-bottom: 0.25rem;
         }
 
+        @media (min-width: 1024px) {
+            .album-card .album-info h3 {
+                font-size: 1.75rem;
+            }
+            .album-card .album-info p {
+                font-size: 1rem;
+            }
+        }
+
         .album-card .album-info p {
             font-size: 0.85rem;
             opacity: 0.8;
@@ -323,6 +355,13 @@
             font-weight: 700;
             color: white;
             z-index: 2;
+        }
+
+        @media (min-width: 1024px) {
+            .album-card .album-count {
+                font-size: 0.9rem;
+                padding: 0.4rem 1rem;
+            }
         }
 
         /* Modal lightbox */
@@ -447,9 +486,6 @@
                 padding-left: 0.75rem;
                 padding-right: 0.75rem;
             }
-            nav img.h-12 {
-                height: 2.5rem;
-            }
         }
 
         /* Mejorar legibilidad en móviles */
@@ -470,21 +506,14 @@
 </head>
 <body class="bg-white text-gray-900">
 
-    <!-- Franja amarilla de aforismos rotantes -->
-    <div class="aforismos-banner" id="aforismos-banner">
-        <div class="marquee-track" id="marquee-track">
-            <!-- Se carga dinámicamente -->
-        </div>
-    </div>
-
-    <!-- Navegación Fija -->
-    <nav class="py-3" id="main-nav">
+    <!-- Navegación Fija (compacta) -->
+    <nav class="py-1" id="main-nav">
         <div class="max-w-7xl mx-auto px-4">
             <div class="nav-inner">
                 <div class="flex items-center flex-shrink-0">
                     <img src="assets/logos/RIJ_SIGLA.png" alt="Red Intercultural Juvenil" class="h-12 md:h-16">
                 </div>
-                <ul class="hidden md:flex space-x-6 text-sm font-medium">
+                <ul class="hidden md:flex space-x-5 text-xs font-medium">
                     <li><a href="#inicio" class="hover:text-orange-500">Inicio</a></li>
                     <li><a href="#galeria" class="hover:text-orange-500">Galería</a></li>
                     <li><a href="#manifiesto" class="hover:text-orange-500">Manifiesto</a></li>
@@ -503,6 +532,14 @@
             </div>
         </div>
     </nav>
+
+    <!-- Franja amarilla de aforismos (debajo del nav) -->
+    <div class="aforismos-banner" id="aforismos-banner">
+        <div class="aforismo-flash" id="aforismo-flash">
+            <div class="aforismo-frase" id="aforismo-frase"></div>
+            <div class="aforismo-org" id="aforismo-org"></div>
+        </div>
+    </div>
 
     <!-- SECCIÓN 1: INTRO/PORTADA CON SLIDESHOW -->
     <section id="inicio" class="h-screen flex items-center justify-center text-white relative overflow-hidden" style="background-color: #333;">
@@ -528,10 +565,10 @@
 
     <!-- SECCIÓN 3: GALERÍA -->
     <section id="galeria" class="bg-gray-50">
-        <div class="max-w-7xl mx-auto">
+        <div class="max-w-7xl mx-auto w-full">
             <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-gray-900">Galería Visual</h2>
             <p class="text-center text-gray-500 mb-8 -mt-8">Haz clic en un álbum para ver las fotos</p>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="gallery-grid">
+            <div id="gallery-grid">
                 <!-- Los álbumes se cargarán dinámicamente aquí -->
             </div>
         </div>
@@ -981,12 +1018,28 @@
         let currentPhotoIndex = 0;
         let modalAutoplay = null;
 
-        // Cargar galería como álbumes
+        // Cargar galería como álbumes - grid responsivo según cantidad
         function loadGallery() {
             const grid = document.getElementById('gallery-grid');
             const albums = getAlbums();
+            const albumKeys = Object.keys(albums);
+            const count = albumKeys.length;
             
-            grid.innerHTML = Object.keys(albums).map((key, idx) => {
+            // Determinar columnas según cantidad de álbumes
+            let gridClass = '';
+            if (count <= 2) {
+                gridClass = 'grid grid-cols-1 lg:grid-cols-' + count + ' gap-6';
+            } else if (count <= 4) {
+                gridClass = 'grid grid-cols-1 sm:grid-cols-2 gap-6';
+            } else if (count <= 9) {
+                gridClass = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6';
+            } else {
+                gridClass = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6';
+            }
+            
+            grid.className = gridClass;
+            
+            grid.innerHTML = albumKeys.map((key, idx) => {
                 const album = albums[key];
                 const coverPhoto = album.photos[0];
                 return `
@@ -1187,27 +1240,64 @@
         }
         function loadAforismos() {
             const track = document.getElementById('marquee-track');
-            if (!track) return;
-            
-            // Duplicar para efecto infinito de marquesina
-            const allAforismos = [...aforismos, ...aforismos];
-            
-            track.innerHTML = allAforismos.map(frase => `
-                <span class="marquee-item">"${frase}"</span>
-            `).join('');
+            // Already removed marquee - use flash system instead
+            shuffleAforismos();
+            // Show first one immediately
+            const item = aforismosShuffled[aforismoIndex];
+            aforismoIndex++;
+            document.getElementById('aforismo-frase').textContent = '\u201c' + item.frase + '\u201d';
+            document.getElementById('aforismo-org').textContent = item.org;
+            document.getElementById('aforismo-flash').classList.add('visible');
 
-            // Ajustar la posición del nav debajo del banner
+            // Rotate every 5 seconds
+            aforismoInterval = setInterval(showNextAforismo, 5000);
+
             adjustNavPosition();
         }
 
+        // ========== AFORISMOS FLASH ==========
+        let aforismoIndex = 0;
+        let aforismosShuffled = [];
+        let aforismoInterval = null;
+
+        function shuffleAforismos() {
+            aforismosShuffled = [...aforismos];
+            for (let i = aforismosShuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [aforismosShuffled[i], aforismosShuffled[j]] = [aforismosShuffled[j], aforismosShuffled[i]];
+            }
+            aforismoIndex = 0;
+        }
+
+        function showNextAforismo() {
+            if (aforismoIndex >= aforismosShuffled.length) {
+                shuffleAforismos();
+            }
+            const item = aforismosShuffled[aforismoIndex];
+            aforismoIndex++;
+
+            const flashEl = document.getElementById('aforismo-flash');
+            const fraseEl = document.getElementById('aforismo-frase');
+            const orgEl = document.getElementById('aforismo-org');
+
+            // Fade out
+            flashEl.classList.remove('visible');
+
+            setTimeout(() => {
+                fraseEl.textContent = '\u201c' + item.frase + '\u201d';
+                orgEl.textContent = item.org;
+                // Fade in
+                flashEl.classList.add('visible');
+            }, 800);
+        }
+
         function adjustNavPosition() {
-            const banner = document.getElementById('aforismos-banner');
             const nav = document.getElementById('main-nav');
-            if (banner && nav) {
-                const bannerHeight = banner.offsetHeight;
-                nav.style.top = bannerHeight + 'px';
-                // Ajustar padding-top del body para compensar banner + nav
-                document.body.style.paddingTop = (bannerHeight + nav.offsetHeight) + 'px';
+            const banner = document.getElementById('aforismos-banner');
+            if (nav && banner) {
+                const navHeight = nav.offsetHeight;
+                banner.style.top = navHeight + 'px';
+                document.body.style.paddingTop = (navHeight + banner.offsetHeight) + 'px';
             }
         }
 

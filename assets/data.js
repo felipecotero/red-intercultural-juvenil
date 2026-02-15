@@ -594,32 +594,32 @@ const organizaciones = [
     }
 ];
 
-// Aforismos recopilados
+// Aforismos recopilados con organización
 const aforismos = [
-    "Ayuuu",
-    "Juntos somos más fuertes",
-    "El arte es compartir, no competir",
-    "CODIGO TRANSFORMA VIDAS",
-    "Formar líderes hoy para transformar comunidades mañana",
-    "Como cultura de Paz pensamos en una sola familia cultural",
-    "HIP HOP - MOVIMIENTO CONSCIENTE",
-    "La paz empieza cuando las diferencias se unen",
-    "Transformando mentes con la danza urbana",
-    "Pintamos lo que el silencio calla",
-    "De la oralidad a lo audiovisual, revivimos la memoria ancestral",
-    "Creciendo como maleza",
-    "Paz, liderazgo, transformación",
-    "El arte es compartir, no competir: construimos paz creando juntos",
-    "Pintar - Juntar - Crear",
-    "Conocer para conservar - Camina sin dejar rastro",
-    "Hasta que todo sea como lo soñamos",
-    "En la diversidad construimos convivencia y paz",
-    "Trabajemos por la vida, la paz y el desarrollo sostenible",
-    "La palabra, la memoria y la identidad son herramientas de paz",
-    "Aquí los conflictos se resuelven en un 4x4: rima, respeto y paz",
-    "El Macizo somos todos",
-    "Soy joven, soy paz, yo puedo ser capaz",
-    "La común-unidad como la cohesión de propuestas individuales con un fin colectivo"
+    { frase: "Ayuuu", org: "Corporación Yukuta" },
+    { frase: "Juntos somos más fuertes", org: "Corporación Cultural Fahrenheit 451" },
+    { frase: "El arte es compartir, no competir", org: "ODEC" },
+    { frase: "CODIGO TRANSFORMA VIDAS", org: "Código Estilo Crew" },
+    { frase: "Formar líderes hoy para transformar comunidades mañana", org: "The Giants Community" },
+    { frase: "Como cultura de Paz pensamos en una sola familia cultural", org: "Minga Muralista Kamentsa" },
+    { frase: "HIP HOP - MOVIMIENTO CONSCIENTE", org: "Elements" },
+    { frase: "La paz empieza cuando las diferencias se unen", org: "Calina Cumbay" },
+    { frase: "Transformando mentes con la danza urbana", org: "Nuevo Estilo Dance" },
+    { frase: "Pintamos lo que el silencio calla", org: "Emergiendo" },
+    { frase: "De la oralidad a lo audiovisual, revivimos la memoria ancestral", org: "Comunicación Visual Sin Fronteras" },
+    { frase: "Creciendo como maleza", org: "La Enredadera Colectiva" },
+    { frase: "Paz, liderazgo, transformación", org: "Arreglando el País" },
+    { frase: "El arte es compartir, no competir: construimos paz creando juntos", org: "Linderos de Paz" },
+    { frase: "Pintar - Juntar - Crear", org: "Khuyay" },
+    { frase: "Conocer para conservar - Camina sin dejar rastro", org: "Ambientalistas de Corazón" },
+    { frase: "Hasta que todo sea como lo soñamos", org: "Futuro de la Guajira" },
+    { frase: "En la diversidad construimos convivencia y paz", org: "Manglaria Diversa" },
+    { frase: "Trabajemos por la vida, la paz y el desarrollo sostenible", org: "Vida-Paz" },
+    { frase: "La palabra, la memoria y la identidad son herramientas de paz", org: "Influencers Étnicos" },
+    { frase: "Aquí los conflictos se resuelven en un 4x4: rima, respeto y paz", org: "Reyes de la Selva" },
+    { frase: "El Macizo somos todos", org: "Macizo Arte y Cultura" },
+    { frase: "Soy joven, soy paz, yo puedo ser capaz", org: "Kombilesa Mí" },
+    { frase: "La común-unidad como la cohesión de propuestas individuales con un fin colectivo", org: "Alternativo" }
 ];
 
 // Exportar datos
