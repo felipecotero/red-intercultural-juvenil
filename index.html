@@ -301,7 +301,7 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(20, 20, 30, 0.95);
+            background: rgba(88, 28, 135, 0.95);
             backdrop-filter: blur(10px);
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
@@ -666,32 +666,32 @@
             background: none !important;
         }
         .cluster-rij {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            background: rgba(106,76,147,0.92);
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: rgba(88,28,135,0.92);
             border: 3px solid #ff6b35;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+            box-shadow: 0 3px 14px rgba(0,0,0,0.4);
         }
         .cluster-rij img {
-            width: 28px;
-            height: 28px;
+            width: 34px;
+            height: 34px;
             object-fit: contain;
         }
         .cluster-rij .cluster-count {
             position: absolute;
-            bottom: -6px;
-            right: -6px;
+            bottom: -7px;
+            right: -7px;
             background: #ff6b35;
             color: white;
-            font-size: 0.7rem;
+            font-size: 0.72rem;
             font-weight: 800;
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -701,19 +701,21 @@
 
         /* Custom org marker */
         .org-marker {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            overflow: hidden;
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            overflow: visible;
             border: 2.5px solid #ff6b35;
             background: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .org-marker img {
-            width: 100%;
-            height: 100%;
+            width: 42px;
+            height: 42px;
             object-fit: contain;
-            padding: 3px;
         }
 
         /* Social icon SVG links */
@@ -742,6 +744,9 @@
 
         /* Override default cluster styles */
         .leaflet-default-icon-path { display: none; }
+        .leaflet-tile-pane {
+            filter: saturate(1.8) hue-rotate(280deg) brightness(0.92) contrast(1.15);
+        }
         .marker-cluster div { display: none; }
     </style>
 </head>
@@ -844,17 +849,16 @@
     </section>
 
     <!-- SECCIÓN 5: MAPA DE TERRITORIALIZACIÓN -->
-    <section id="mapa" class="bg-zinc-900">
+    <section id="mapa" class="bg-gradient-to-br from-purple-950 via-fuchsia-950 to-violet-950">
         <div class="w-full">
             <div class="max-w-7xl mx-auto px-4 mb-4">
                 <!-- Buscador del mapa -->
                 <div class="relative max-w-xl mx-auto mb-4">
-                    <input type="text" id="map-search" placeholder="Buscar organización..." class="w-full px-5 py-3 rounded-full bg-zinc-800 text-white border border-zinc-600 focus:border-orange-500 focus:outline-none placeholder-zinc-400 text-sm" autocomplete="off">
-                    <div id="map-search-results" class="absolute z-50 left-0 right-0 mt-1 bg-zinc-800 rounded-xl shadow-2xl border border-zinc-600 hidden max-h-60 overflow-y-auto"></div>
+                    <input type="text" id="map-search" placeholder="Buscar organización..." class="w-full px-5 py-3 rounded-full bg-white/10 text-white border border-white/20 focus:border-orange-400 focus:outline-none placeholder-white/50 text-sm backdrop-blur" autocomplete="off">
+                    <div id="map-search-results" class="absolute z-50 left-0 right-0 mt-1 bg-violet-950 rounded-xl shadow-2xl border border-white/15 hidden max-h-60 overflow-y-auto"></div>
                 </div>
                 <!-- Filtros por sector -->
                 <div class="flex flex-wrap justify-center gap-2 mb-4" id="map-filters">
-                    <button class="filter-btn active" data-sector="all">Todas</button>
                     <button class="filter-btn" data-sector="Audiovisual">Audiovisual</button>
                     <button class="filter-btn" data-sector="Sonoro">Sonoro</button>
                     <button class="filter-btn" data-sector="Letras">Letras</button>
@@ -881,7 +885,6 @@
             </div>
             <!-- Filtros por sector -->
             <div class="flex flex-wrap justify-center gap-2 mb-8" id="dir-filters">
-                <button class="filter-btn-dir active" data-sector="all">Todas</button>
                 <button class="filter-btn-dir" data-sector="Audiovisual">Audiovisual</button>
                 <button class="filter-btn-dir" data-sector="Sonoro">Sonoro</button>
                 <button class="filter-btn-dir" data-sector="Letras">Letras</button>
@@ -1340,8 +1343,8 @@
             const map = L.map('map').setView([4.5709, -74.2973], 6);
             window.mapInstance = map;
             
-            // CartoDB Dark Matter - estilo oscuro con colores vibrantes
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            // CartoDB Voyager como base, con filtro CSS para tonos vibrantes
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
                 attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://openstreetmap.org">OpenStreetMap</a>',
                 maxZoom: 20,
                 subdomains: 'abcd'
@@ -1372,9 +1375,9 @@
                 const icon = L.divIcon({
                     html: '<div class="org-marker">' + (hasLogo ? '<img src="' + org.logo + '" alt="' + org.nombre + '" onerror="this.src=\'assets/logos/RIJ_SIGLA.png\'">' : '<img src="assets/logos/RIJ_SIGLA.png" alt="RIJ">') + '</div>',
                     className: '',
-                    iconSize: [40, 40],
-                    iconAnchor: [20, 20],
-                    popupAnchor: [0, -22]
+                    iconSize: [48, 48],
+                    iconAnchor: [24, 24],
+                    popupAnchor: [0, -26]
                 });
                 
                 const marker = L.marker([org.lat, org.lng], { icon: icon });
@@ -1449,12 +1452,18 @@
                 }
             });
 
-            // Filters
+            // Filters - toggle behavior
             document.querySelectorAll('#map-filters .filter-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    document.querySelectorAll('#map-filters .filter-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    currentMapFilter = this.dataset.sector;
+                    if (this.classList.contains('active')) {
+                        // Deselect - show all
+                        this.classList.remove('active');
+                        currentMapFilter = 'all';
+                    } else {
+                        document.querySelectorAll('#map-filters .filter-btn').forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        currentMapFilter = this.dataset.sector;
+                    }
                     updateMapMarkers();
                 });
             });
@@ -2045,12 +2054,18 @@
                 }
             });
 
-            // Filters
+            // Filters - toggle behavior
             document.querySelectorAll('#dir-filters .filter-btn-dir').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    document.querySelectorAll('#dir-filters .filter-btn-dir').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    currentDirFilter = this.dataset.sector;
+                    if (this.classList.contains('active')) {
+                        // Deselect - show all
+                        this.classList.remove('active');
+                        currentDirFilter = 'all';
+                    } else {
+                        document.querySelectorAll('#dir-filters .filter-btn-dir').forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        currentDirFilter = this.dataset.sector;
+                    }
                     updateDirectorio();
                 });
             });
@@ -2062,7 +2077,7 @@
             const menuToggle = document.getElementById('menu-toggle');
             const mobileMenu = document.createElement('div');
             mobileMenu.className = 'hidden md:hidden absolute top-full left-0 right-0 shadow-lg py-4';
-            mobileMenu.style.background = 'rgba(20, 20, 30, 0.95)';
+            mobileMenu.style.background = 'rgba(88, 28, 135, 0.95)';
             mobileMenu.innerHTML = `
                 <ul class="flex flex-col space-y-2 px-4">
                     <li><a href="#inicio" class="block py-2 text-white/85 hover:text-yellow-400">Inicio</a></li>
