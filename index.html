@@ -7,6 +7,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
     <script src="assets/data.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800;900&display=swap');
@@ -241,10 +244,12 @@
 
         /* Tarjetas de directorio */
         .org-card {
-            background: white;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 15px;
             padding: 1rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             height: 100%;
             display: flex;
@@ -260,7 +265,8 @@
 
         .org-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 30px rgba(255,107,53,0.2);
+            border-color: rgba(255,107,53,0.3);
         }
 
         .org-logo {
@@ -612,6 +618,131 @@
                 padding: 2rem 1rem;
             }
         }
+
+        /* Filter buttons */
+        .filter-btn, .filter-btn-dir {
+            padding: 0.35rem 0.9rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1.5px solid rgba(255,255,255,0.25);
+            background: transparent;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-btn:hover, .filter-btn-dir:hover {
+            border-color: #ff6b35;
+            color: #ff6b35;
+        }
+        .filter-btn.active, .filter-btn-dir.active {
+            background: #ff6b35;
+            border-color: #ff6b35;
+            color: white;
+        }
+
+        /* Search results dropdown */
+        .search-result-item {
+            padding: 0.6rem 1rem;
+            cursor: pointer;
+            color: white;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: background 0.15s;
+        }
+        .search-result-item:hover {
+            background: rgba(255,107,53,0.3);
+        }
+        .search-result-item .sr-name {
+            font-weight: 700;
+        }
+        .search-result-item .sr-loc {
+            font-size: 0.7rem;
+            opacity: 0.6;
+        }
+
+        /* Cluster icon override */
+        .marker-cluster-custom {
+            background: none !important;
+        }
+        .cluster-rij {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: rgba(106,76,147,0.92);
+            border: 3px solid #ff6b35;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+        }
+        .cluster-rij img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+        }
+        .cluster-rij .cluster-count {
+            position: absolute;
+            bottom: -6px;
+            right: -6px;
+            background: #ff6b35;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 800;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Custom org marker */
+        .org-marker {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2.5px solid #ff6b35;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .org-marker img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 3px;
+        }
+
+        /* Social icon SVG links */
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            transition: transform 0.2s, opacity 0.2s;
+            opacity: 0.85;
+        }
+        .social-icon:hover {
+            transform: scale(1.2);
+            opacity: 1;
+        }
+        .social-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+        /* Popup social icons need dark fill */
+        .org-popup .social-icon svg {
+            fill: #333;
+        }
+
+        /* Override default cluster styles */
+        .leaflet-default-icon-path { display: none; }
+        .marker-cluster div { display: none; }
     </style>
 </head>
 <body class="bg-white text-gray-900">
@@ -713,22 +844,54 @@
     </section>
 
     <!-- SECCIÓN 5: MAPA DE TERRITORIALIZACIÓN -->
-    <section id="mapa" class="bg-blue-50">
+    <section id="mapa" class="bg-zinc-900">
         <div class="w-full">
-            <div class="max-w-7xl mx-auto px-4 mb-8">
-                <h2 class="text-4xl md:text-5xl font-bold text-center mb-6 text-gray-900">Mapa de Nodos</h2>
-                <p class="text-center text-gray-600 max-w-2xl mx-auto">
-                    Visualiza la presencia territorial de las organizaciones que conforman la Red Intercultural Juvenil
-                </p>
+            <div class="max-w-7xl mx-auto px-4 mb-4">
+                <!-- Buscador del mapa -->
+                <div class="relative max-w-xl mx-auto mb-4">
+                    <input type="text" id="map-search" placeholder="Buscar organización..." class="w-full px-5 py-3 rounded-full bg-zinc-800 text-white border border-zinc-600 focus:border-orange-500 focus:outline-none placeholder-zinc-400 text-sm" autocomplete="off">
+                    <div id="map-search-results" class="absolute z-50 left-0 right-0 mt-1 bg-zinc-800 rounded-xl shadow-2xl border border-zinc-600 hidden max-h-60 overflow-y-auto"></div>
+                </div>
+                <!-- Filtros por sector -->
+                <div class="flex flex-wrap justify-center gap-2 mb-4" id="map-filters">
+                    <button class="filter-btn active" data-sector="all">Todas</button>
+                    <button class="filter-btn" data-sector="Audiovisual">Audiovisual</button>
+                    <button class="filter-btn" data-sector="Sonoro">Sonoro</button>
+                    <button class="filter-btn" data-sector="Letras">Letras</button>
+                    <button class="filter-btn" data-sector="Danza">Danza</button>
+                    <button class="filter-btn" data-sector="Plástica">Plástica</button>
+                    <button class="filter-btn" data-sector="Teatro">Teatro</button>
+                    <button class="filter-btn" data-sector="Multidisciplinar">Multidisciplinar</button>
+                    <button class="filter-btn" data-sector="Circo social">Circo</button>
+                    <button class="filter-btn" data-sector="Cerámica">Cerámica</button>
+                </div>
             </div>
             <div id="map"></div>
         </div>
     </section>
 
     <!-- SECCIÓN 6: DIRECTORIO DE ORGANIZACIONES -->
-    <section id="directorio" class="jaguar-pattern">
+    <section id="directorio" class="bg-gradient-to-br from-fuchsia-900 via-violet-900 to-indigo-900 text-white">
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-gray-900">Directorio Vivo de Organizaciones</h2>
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-8 text-white">Directorio Vivo de Organizaciones</h2>
+            <!-- Buscador del directorio -->
+            <div class="relative max-w-xl mx-auto mb-4">
+                <input type="text" id="dir-search" placeholder="Buscar organización..." class="w-full px-5 py-3 rounded-full bg-white/10 text-white border border-white/20 focus:border-orange-400 focus:outline-none placeholder-white/50 text-sm backdrop-blur" autocomplete="off">
+                <div id="dir-search-results" class="absolute z-50 left-0 right-0 mt-1 bg-zinc-800 rounded-xl shadow-2xl border border-zinc-600 hidden max-h-60 overflow-y-auto"></div>
+            </div>
+            <!-- Filtros por sector -->
+            <div class="flex flex-wrap justify-center gap-2 mb-8" id="dir-filters">
+                <button class="filter-btn-dir active" data-sector="all">Todas</button>
+                <button class="filter-btn-dir" data-sector="Audiovisual">Audiovisual</button>
+                <button class="filter-btn-dir" data-sector="Sonoro">Sonoro</button>
+                <button class="filter-btn-dir" data-sector="Letras">Letras</button>
+                <button class="filter-btn-dir" data-sector="Danza">Danza</button>
+                <button class="filter-btn-dir" data-sector="Plástica">Plástica</button>
+                <button class="filter-btn-dir" data-sector="Teatro">Teatro</button>
+                <button class="filter-btn-dir" data-sector="Multidisciplinar">Multidisciplinar</button>
+                <button class="filter-btn-dir" data-sector="Circo social">Circo</button>
+                <button class="filter-btn-dir" data-sector="Cerámica">Cerámica</button>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="directorio-grid">
                 <!-- Las fichas se cargarán dinámicamente aquí -->
             </div>
@@ -826,10 +989,10 @@
                 </div>
                 <div class="bg-white/5 backdrop-blur rounded-xl p-8">
                     <h3 class="text-xl font-bold mb-4">Redes Sociales</h3>
-                    <div class="flex justify-center gap-4 text-3xl">
-                        <a href="#" class="hover:text-orange-400">📷</a>
-                        <a href="#" class="hover:text-orange-400">📘</a>
-                        <a href="#" class="hover:text-orange-400">🐦</a>
+                    <div class="flex justify-center gap-5">
+                        <a href="#" class="social-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+                        <a href="#" class="social-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+                        <a href="#" class="social-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
                     </div>
                 </div>
             </div>
@@ -1141,40 +1304,175 @@
             }, 5000);
         }
 
-        // Inicializar mapa
+        // ========== SVG SOCIAL ICONS ==========
+        const socialSVGs = {
+            instagram: '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>',
+            facebook: '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>',
+            tiktok: '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>',
+            youtube: '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>',
+            twitter: '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>',
+            web: '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>'
+        };
+
+        function socialLink(type, url) {
+            if (!url || !socialSVGs[type]) return '';
+            return '<a href="' + url + '" target="_blank" class="social-icon" rel="noopener">' + socialSVGs[type] + '</a>';
+        }
+
+        function buildSocialLinks(org) {
+            let html = '';
+            if (org.web) html += socialLink('web', org.web.startsWith('http') ? org.web : 'https://' + org.web);
+            if (org.instagram) html += socialLink('instagram', org.instagram);
+            if (org.facebook) html += socialLink('facebook', org.facebook);
+            if (org.youtube) html += socialLink('youtube', org.youtube);
+            if (org.tiktok) html += socialLink('tiktok', org.tiktok);
+            if (org.twitter) html += socialLink('twitter', org.twitter);
+            return html;
+        }
+
+        // ========== MAPA ==========
+        let mapMarkers = [];
+        let mapClusterGroup = null;
+        let currentMapFilter = 'all';
+        let currentMapSearch = '';
+
         function initMap() {
-            const map = L.map('map').setView([4.5709, -74.2973], 6); // Colombia centrada
-            window.mapInstance = map; // Guardar referencia global
+            const map = L.map('map').setView([4.5709, -74.2973], 6);
+            window.mapInstance = map;
             
-            // Usar un tile layer colorido y gratuito
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors',
-                maxZoom: 18
+            // CartoDB Dark Matter - estilo oscuro con colores vibrantes
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://openstreetmap.org">OpenStreetMap</a>',
+                maxZoom: 20,
+                subdomains: 'abcd'
             }).addTo(map);
 
-            // Agregar marcadores de organizaciones
+            // Cluster group con icono RIJ
+            mapClusterGroup = L.markerClusterGroup({
+                maxClusterRadius: 55,
+                iconCreateFunction: function(cluster) {
+                    const count = cluster.getChildCount();
+                    return L.divIcon({
+                        html: '<div class="cluster-rij"><img src="assets/logos/RIJ_SIGLA.png" alt="RIJ"><span class="cluster-count">' + count + '</span></div>',
+                        className: 'marker-cluster-custom',
+                        iconSize: [52, 52],
+                        iconAnchor: [26, 26]
+                    });
+                },
+                spiderfyOnMaxZoom: true,
+                showCoverageOnHover: false,
+                zoomToBoundsOnClick: true
+            });
+
+            // Crear marcadores individuales con logo de organización
             organizaciones.forEach(org => {
-                if (org.lat && org.lng) {
-                    const marker = L.marker([org.lat, org.lng]).addTo(map);
-                    
-                    const socialLinks = [];
-                    if (org.instagram) socialLinks.push(`<a href="${org.instagram}" target="_blank" class="hover:scale-110 transition">📷</a>`);
-                    if (org.facebook) socialLinks.push(`<a href="${org.facebook}" target="_blank" class="hover:scale-110 transition">📘</a>`);
-                    if (org.tiktok) socialLinks.push(`<a href="${org.tiktok}" target="_blank" class="hover:scale-110 transition">🎵</a>`);
-                    if (org.youtube) socialLinks.push(`<a href="${org.youtube}" target="_blank" class="hover:scale-110 transition">📺</a>`);
-                    if (org.twitter) socialLinks.push(`<a href="${org.twitter}" target="_blank" class="hover:scale-110 transition">🐦</a>`);
-                    
-                    marker.bindPopup(`
-                        <div class="org-popup">
-                            ${org.logo ? `<img src="${org.logo}" alt="${org.nombre}" onerror="this.style.display='none'">` : ''}
-                            <h3 class="font-bold text-lg mt-2">${org.nombre}</h3>
-                            <p class="text-sm text-gray-600">${org.municipio}</p>
-                            <p class="text-sm mt-2"><strong>Contacto:</strong> ${org.representante}</p>
-                            <p class="text-sm">${org.email}</p>
-                            <p class="text-sm">${org.telefono}</p>
-                            ${socialLinks.length > 0 ? `<div class="flex gap-2 mt-2 text-xl">${socialLinks.join('')}</div>` : ''}
-                        </div>
-                    `);
+                if (!org.lat || !org.lng) return;
+                
+                const hasLogo = org.logo && org.logo.length > 0;
+                const icon = L.divIcon({
+                    html: '<div class="org-marker">' + (hasLogo ? '<img src="' + org.logo + '" alt="' + org.nombre + '" onerror="this.src=\'assets/logos/RIJ_SIGLA.png\'">' : '<img src="assets/logos/RIJ_SIGLA.png" alt="RIJ">') + '</div>',
+                    className: '',
+                    iconSize: [40, 40],
+                    iconAnchor: [20, 20],
+                    popupAnchor: [0, -22]
+                });
+                
+                const marker = L.marker([org.lat, org.lng], { icon: icon });
+                marker.orgData = org;
+                
+                const socials = buildSocialLinks(org);
+                marker.bindPopup(
+                    '<div class="org-popup">' +
+                    (hasLogo ? '<img src="' + org.logo + '" alt="' + org.nombre + '" onerror="this.style.display=\'none\'">' : '') +
+                    '<h3 class="font-bold text-lg mt-2">' + org.nombre + '</h3>' +
+                    '<p class="text-sm text-gray-600">' + org.municipio + '</p>' +
+                    '<p class="text-xs text-gray-500 mt-1">' + org.sectores.join(', ') + '</p>' +
+                    '<p class="text-sm mt-2"><strong>Contacto:</strong> ' + org.representante + '</p>' +
+                    '<p class="text-sm">' + org.email + '</p>' +
+                    '<p class="text-sm">' + org.telefono + '</p>' +
+                    (socials ? '<div class="flex gap-2 mt-2 justify-center">' + socials + '</div>' : '') +
+                    '</div>'
+                );
+                
+                mapMarkers.push(marker);
+            });
+
+            updateMapMarkers();
+            map.addLayer(mapClusterGroup);
+
+            // Search
+            const searchInput = document.getElementById('map-search');
+            const searchResults = document.getElementById('map-search-results');
+            
+            searchInput.addEventListener('input', function() {
+                const q = this.value.trim().toLowerCase();
+                currentMapSearch = q;
+                if (q.length < 1) {
+                    searchResults.classList.add('hidden');
+                    searchResults.innerHTML = '';
+                    updateMapMarkers();
+                    return;
+                }
+                const matches = organizaciones.filter(o => 
+                    o.nombre.toLowerCase().includes(q) || 
+                    (o.nombreCompleto && o.nombreCompleto.toLowerCase().includes(q)) ||
+                    o.municipio.toLowerCase().includes(q) ||
+                    o.departamento.toLowerCase().includes(q)
+                );
+                if (matches.length > 0) {
+                    searchResults.innerHTML = matches.map(o => 
+                        '<div class="search-result-item" data-org-id="' + o.id + '"><span class="sr-name">' + o.nombre + '</span><br><span class="sr-loc">' + o.municipio + '</span></div>'
+                    ).join('');
+                    searchResults.classList.remove('hidden');
+                    searchResults.querySelectorAll('.search-result-item').forEach(el => {
+                        el.addEventListener('click', function() {
+                            const orgId = parseInt(this.dataset.orgId);
+                            const org = organizaciones.find(o => o.id === orgId);
+                            if (org && org.lat && org.lng) {
+                                map.setView([org.lat, org.lng], 13);
+                                const m = mapMarkers.find(mk => mk.orgData && mk.orgData.id === orgId);
+                                if (m) setTimeout(() => m.openPopup(), 400);
+                            }
+                            searchInput.value = org ? org.nombre : '';
+                            searchResults.classList.add('hidden');
+                        });
+                    });
+                } else {
+                    searchResults.innerHTML = '<div class="search-result-item" style="opacity:0.4">Sin resultados</div>';
+                    searchResults.classList.remove('hidden');
+                }
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                    searchResults.classList.add('hidden');
+                }
+            });
+
+            // Filters
+            document.querySelectorAll('#map-filters .filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('#map-filters .filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentMapFilter = this.dataset.sector;
+                    updateMapMarkers();
+                });
+            });
+        }
+
+        function updateMapMarkers() {
+            if (!mapClusterGroup) return;
+            mapClusterGroup.clearLayers();
+            mapMarkers.forEach(m => {
+                const org = m.orgData;
+                if (!org) return;
+                const matchesSector = currentMapFilter === 'all' || org.sectores.includes(currentMapFilter);
+                const matchesSearch = !currentMapSearch || 
+                    org.nombre.toLowerCase().includes(currentMapSearch) ||
+                    (org.nombreCompleto && org.nombreCompleto.toLowerCase().includes(currentMapSearch)) ||
+                    org.municipio.toLowerCase().includes(currentMapSearch);
+                if (matchesSector && matchesSearch) {
+                    mapClusterGroup.addLayer(m);
                 }
             });
         }
@@ -1656,32 +1954,106 @@
         }
 
         // Cargar directorio
-        function loadDirectorio() {
+        let currentDirFilter = 'all';
+        let currentDirSearch = '';
+
+        function loadDirectorio(orgsToShow) {
             const grid = document.getElementById('directorio-grid');
+            const list = orgsToShow || organizaciones;
             
-            grid.innerHTML = organizaciones.map(org => {
-                const socialLinks = [];
-                if (org.instagram) socialLinks.push(`<a href="${org.instagram}" target="_blank" class="hover:scale-110 transition">📷</a>`);
-                if (org.facebook) socialLinks.push(`<a href="${org.facebook}" target="_blank" class="hover:scale-110 transition">📘</a>`);
-                if (org.tiktok) socialLinks.push(`<a href="${org.tiktok}" target="_blank" class="hover:scale-110 transition">🎵</a>`);
-                if (org.youtube) socialLinks.push(`<a href="${org.youtube}" target="_blank" class="hover:scale-110 transition">📺</a>`);
-                if (org.twitter) socialLinks.push(`<a href="${org.twitter}" target="_blank" class="hover:scale-110 transition">🐦</a>`);
+            grid.innerHTML = list.map(org => {
+                const socials = buildSocialLinks(org);
                 
                 return `
-                <div class="org-card">
-                    ${org.logo ? `<img src="${org.logo}" alt="${org.nombre}" class="org-logo" onerror="this.style.display='none'">` : '<div class="org-logo bg-gray-200 rounded-full flex items-center justify-center text-2xl">🎨</div>'}
+                <div class="org-card" data-org-id="${org.id}">
+                    ${org.logo ? `<img src="${org.logo}" alt="${org.nombre}" class="org-logo" onerror="this.style.display='none'">` : '<div class="org-logo bg-white/10 rounded-full flex items-center justify-center text-2xl">🎨</div>'}
                     <h3 class="font-bold text-lg text-center mb-2">${org.nombre}</h3>
-                    <p class="text-sm text-gray-600 text-center mb-3">${org.municipio}</p>
-                    ${org.lema ? `<p class="text-xs italic text-center text-gray-500 mb-3">"${org.lema}"</p>` : ''}
-                    <div class="text-xs text-gray-500 space-y-1">
-                        <p><strong>Contacto:</strong> ${org.representante}</p>
+                    <p class="text-sm text-white/60 text-center mb-3">${org.municipio}</p>
+                    ${org.lema ? `<p class="text-xs italic text-center text-white/40 mb-3">"${org.lema}"</p>` : ''}
+                    <div class="text-xs text-white/50 space-y-1">
+                        <p><strong class="text-white/70">Contacto:</strong> ${org.representante}</p>
                         <p class="truncate" title="${org.email}">${org.email}</p>
                         <p>${org.telefono}</p>
-                        <p class="text-blue-600 font-semibold">${org.beneficiarios} beneficiarios</p>
+                        <p class="text-orange-400 font-semibold">${org.beneficiarios} beneficiarios</p>
+                        <p class="text-white/40 text-xs">${org.sectores.join(' · ')}</p>
                     </div>
-                    ${socialLinks.length > 0 ? `<div class="flex justify-center gap-3 mt-4 text-xl">${socialLinks.join('')}</div>` : ''}
+                    ${socials ? `<div class="flex justify-center gap-3 mt-4">${socials}</div>` : ''}
                 </div>
             `}).join('');
+        }
+
+        function updateDirectorio() {
+            let filtered = organizaciones;
+            if (currentDirFilter !== 'all') {
+                filtered = filtered.filter(o => o.sectores.includes(currentDirFilter));
+            }
+            if (currentDirSearch) {
+                filtered = filtered.filter(o => 
+                    o.nombre.toLowerCase().includes(currentDirSearch) ||
+                    (o.nombreCompleto && o.nombreCompleto.toLowerCase().includes(currentDirSearch)) ||
+                    o.municipio.toLowerCase().includes(currentDirSearch) ||
+                    o.departamento.toLowerCase().includes(currentDirSearch)
+                );
+            }
+            loadDirectorio(filtered);
+        }
+
+        function initDirSearchAndFilters() {
+            const searchInput = document.getElementById('dir-search');
+            const searchResults = document.getElementById('dir-search-results');
+
+            searchInput.addEventListener('input', function() {
+                const q = this.value.trim().toLowerCase();
+                currentDirSearch = q;
+                
+                // Autocomplete
+                if (q.length >= 1) {
+                    const matches = organizaciones.filter(o => 
+                        o.nombre.toLowerCase().includes(q) || 
+                        (o.nombreCompleto && o.nombreCompleto.toLowerCase().includes(q)) ||
+                        o.municipio.toLowerCase().includes(q)
+                    );
+                    if (matches.length > 0 && matches.length < organizaciones.length) {
+                        searchResults.innerHTML = matches.map(o => 
+                            '<div class="search-result-item" data-org-id="' + o.id + '"><span class="sr-name">' + o.nombre + '</span><br><span class="sr-loc">' + o.municipio + '</span></div>'
+                        ).join('');
+                        searchResults.classList.remove('hidden');
+                        searchResults.querySelectorAll('.search-result-item').forEach(el => {
+                            el.addEventListener('click', function() {
+                                const orgId = parseInt(this.dataset.orgId);
+                                const org = organizaciones.find(o => o.id === orgId);
+                                if (org) {
+                                    searchInput.value = org.nombre;
+                                    currentDirSearch = org.nombre.toLowerCase();
+                                }
+                                searchResults.classList.add('hidden');
+                                updateDirectorio();
+                            });
+                        });
+                    } else {
+                        searchResults.classList.add('hidden');
+                    }
+                } else {
+                    searchResults.classList.add('hidden');
+                }
+                updateDirectorio();
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                    searchResults.classList.add('hidden');
+                }
+            });
+
+            // Filters
+            document.querySelectorAll('#dir-filters .filter-btn-dir').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('#dir-filters .filter-btn-dir').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentDirFilter = this.dataset.sector;
+                    updateDirectorio();
+                });
+            });
         }
 
         // Menu móvil
@@ -1733,6 +2105,7 @@
             loadAforismos();
             loadGallery();
             loadDirectorio();
+            initDirSearchAndFilters();
             initMap();
             initManifiestoTypewriter();
 
