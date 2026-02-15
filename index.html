@@ -119,37 +119,48 @@
             }
         }
 
-        /* Carrusel de aforismos */
-        .carousel-container {
+        /* Franja amarilla de aforismos rotantes */
+        .aforismos-banner {
+            background-color: var(--color-accent);
             overflow: hidden;
-            position: relative;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
-        .carousel-track {
+        .aforismos-banner .marquee-track {
             display: flex;
-            animation: scroll 30s linear infinite;
+            animation: marquee 40s linear infinite;
+            white-space: nowrap;
         }
 
-        .carousel-item {
-            min-width: 250px;
-            margin: 0 0.5rem;
-            padding: 1.5rem;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        .aforismos-banner .marquee-item {
+            flex-shrink: 0;
+            padding: 0.4rem 2rem;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
         }
 
-        @media (min-width: 640px) {
-            .carousel-item {
-                min-width: 300px;
-                margin: 0 1rem;
-                padding: 2rem;
-            }
+        .aforismos-banner .marquee-item::after {
+            content: '✦';
+            color: var(--color-primary);
+            font-size: 0.7rem;
         }
 
-        @keyframes scroll {
+        @keyframes marquee {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
+        }
+
+        .aforismos-banner:hover .marquee-track {
+            animation-play-state: paused;
         }
 
         /* Tarjetas de directorio */
@@ -212,6 +223,22 @@
             backdrop-filter: blur(10px);
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Asegurar que el botón hamburguesa no se salga */
+        nav .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            min-width: 0;
+        }
+
+        #menu-toggle {
+            flex-shrink: 0;
+            padding: 0.5rem;
+            margin-left: 0.5rem;
+            z-index: 1001;
         }
 
         nav a {
@@ -415,6 +442,14 @@
             .text-8xl {
                 font-size: 3rem !important;
             }
+            /* Asegurar hamburguesa visible en pantallas estrechas */
+            nav .max-w-7xl {
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+            nav img.h-12 {
+                height: 2.5rem;
+            }
         }
 
         /* Mejorar legibilidad en móviles */
@@ -435,16 +470,22 @@
 </head>
 <body class="bg-white text-gray-900">
 
+    <!-- Franja amarilla de aforismos rotantes -->
+    <div class="aforismos-banner" id="aforismos-banner">
+        <div class="marquee-track" id="marquee-track">
+            <!-- Se carga dinámicamente -->
+        </div>
+    </div>
+
     <!-- Navegación Fija -->
-    <nav class="py-3">
+    <nav class="py-3" id="main-nav">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center">
+            <div class="nav-inner">
+                <div class="flex items-center flex-shrink-0">
                     <img src="assets/logos/RIJ_SIGLA.png" alt="Red Intercultural Juvenil" class="h-12 md:h-16">
                 </div>
                 <ul class="hidden md:flex space-x-6 text-sm font-medium">
                     <li><a href="#inicio" class="hover:text-orange-500">Inicio</a></li>
-                    <li><a href="#aforismos" class="hover:text-orange-500">Aforismos</a></li>
                     <li><a href="#galeria" class="hover:text-orange-500">Galería</a></li>
                     <li><a href="#manifiesto" class="hover:text-orange-500">Manifiesto</a></li>
                     <li><a href="#mapa" class="hover:text-orange-500">Mapa</a></li>
@@ -481,18 +522,6 @@
                 <div class="bg-white/20 backdrop-blur px-8 py-4 rounded-full font-black text-lg md:text-xl" style="font-family: 'Work Sans', sans-serif;">27 Organizaciones</div>
                 <div class="bg-white/20 backdrop-blur px-8 py-4 rounded-full font-black text-lg md:text-xl" style="font-family: 'Work Sans', sans-serif;">15 Departamentos</div>
                 <div class="bg-white/20 backdrop-blur px-8 py-4 rounded-full font-black text-lg md:text-xl" style="font-family: 'Work Sans', sans-serif;">Una Red</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECCIÓN 2: AFORISMOS (Carrusel) -->
-    <section id="aforismos" class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">Mensajes Fuerza</h2>
-            <div class="carousel-container">
-                <div class="carousel-track" id="carousel-track">
-                    <!-- Los aforismos se cargarán dinámicamente aquí -->
-                </div>
             </div>
         </div>
     </section>
@@ -1157,16 +1186,29 @@
             });
         }
         function loadAforismos() {
-            const track = document.getElementById('carousel-track');
+            const track = document.getElementById('marquee-track');
+            if (!track) return;
             
-            // Duplicar para efecto infinito
+            // Duplicar para efecto infinito de marquesina
             const allAforismos = [...aforismos, ...aforismos];
             
             track.innerHTML = allAforismos.map(frase => `
-                <div class="carousel-item">
-                    <p class="text-xl font-semibold text-gray-800 italic">"${frase}"</p>
-                </div>
+                <span class="marquee-item">"${frase}"</span>
             `).join('');
+
+            // Ajustar la posición del nav debajo del banner
+            adjustNavPosition();
+        }
+
+        function adjustNavPosition() {
+            const banner = document.getElementById('aforismos-banner');
+            const nav = document.getElementById('main-nav');
+            if (banner && nav) {
+                const bannerHeight = banner.offsetHeight;
+                nav.style.top = bannerHeight + 'px';
+                // Ajustar padding-top del body para compensar banner + nav
+                document.body.style.paddingTop = (bannerHeight + nav.offsetHeight) + 'px';
+            }
         }
 
         // Cargar directorio
@@ -1207,7 +1249,6 @@
             mobileMenu.innerHTML = `
                 <ul class="flex flex-col space-y-2 px-4">
                     <li><a href="#inicio" class="block py-2 hover:text-orange-500">Inicio</a></li>
-                    <li><a href="#aforismos" class="block py-2 hover:text-orange-500">Aforismos</a></li>
                     <li><a href="#galeria" class="block py-2 hover:text-orange-500">Galería</a></li>
                     <li><a href="#manifiesto" class="block py-2 hover:text-orange-500">Manifiesto</a></li>
                     <li><a href="#mapa" class="block py-2 hover:text-orange-500">Mapa</a></li>
@@ -1248,6 +1289,9 @@
             loadGallery();
             loadDirectorio();
             initMap();
+
+            // Reajustar posiciones en resize
+            window.addEventListener('resize', adjustNavPosition);
         });
     </script>
 </body>
