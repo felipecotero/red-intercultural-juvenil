@@ -368,17 +368,27 @@
 
         @media (max-width: 767px) {
             .honeycomb {
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-                padding: 0 0.5rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 0;
+                overflow: hidden;
             }
             .hex-row {
-                display: contents;
+                display: flex;
+                justify-content: center;
+                margin-top: -25px;
+                width: 100%;
+            }
+            .hex-row:first-child {
+                margin-top: 0;
             }
             .hex-wrap {
-                width: 46%;
-                margin: -15px 2%;
+                width: 44%;
+                margin: 0 1.5%;
+            }
+            .hex-row-offset {
+                transform: translateX(8%);
             }
         }
 
@@ -574,6 +584,24 @@
         @media (max-width: 767px) {
             body {
                 font-size: 0.9rem;
+            }
+        }
+
+        /* Manifesto mobile optimization */
+        @media (max-width: 639px) {
+            .manifiesto-titulo {
+                font-size: 2.2rem !important;
+                margin-bottom: 0.8rem;
+            }
+            .manifiesto-cuerpo {
+                font-size: 0.92rem !important;
+                line-height: 1.4;
+            }
+            .manifiesto-content {
+                padding: 1.5rem 0 2rem;
+            }
+            .manifiesto-sticky {
+                overflow-y: hidden;
             }
         }
 
@@ -1189,27 +1217,44 @@
         let modalAutoplay = null;
 
         // Cargar galería como álbumes - grid responsivo según cantidad
+        let lastGalleryMode = null;
         function loadGallery() {
             const grid = document.getElementById('gallery-grid');
             const albums = getAlbums();
             const albumKeys = Object.keys(albums);
+            const isMobile = window.innerWidth < 768;
             
-            // Construir filas de panal: filas impares = 3, pares = 2
-            const cols = 3;
+            // Evitar reconstruir si el modo no cambió
+            const mode = isMobile ? 'mobile' : 'desktop';
+            if (mode === lastGalleryMode) return;
+            lastGalleryMode = mode;
+            
+            // Construir filas según tamaño de pantalla
             const rows = [];
             let i = 0;
-            let isOddRow = true;
-            while (i < albumKeys.length) {
-                const rowSize = isOddRow ? cols : Math.max(cols - 1, 1);
-                rows.push(albumKeys.slice(i, i + rowSize));
-                i += rowSize;
-                isOddRow = !isOddRow;
+            
+            if (isMobile) {
+                // Móvil: filas de 2 para honeycomb con offset
+                while (i < albumKeys.length) {
+                    rows.push(albumKeys.slice(i, i + 2));
+                    i += 2;
+                }
+            } else {
+                // Desktop: filas impares = 3, pares = 2
+                const cols = 3;
+                let isOddRow = true;
+                while (i < albumKeys.length) {
+                    const rowSize = isOddRow ? cols : Math.max(cols - 1, 1);
+                    rows.push(albumKeys.slice(i, i + rowSize));
+                    i += rowSize;
+                    isOddRow = !isOddRow;
+                }
             }
             
             grid.className = 'honeycomb';
             
             let idx = 0;
-            grid.innerHTML = rows.map(row => {
+            grid.innerHTML = rows.map((row, rowIndex) => {
                 const items = row.map(key => {
                     const album = albums[key];
                     const coverPhoto = album.photos[0];
@@ -1228,7 +1273,8 @@
                     idx++;
                     return html;
                 }).join('');
-                return `<div class="hex-row">${items}</div>`;
+                const offsetClass = (isMobile && rowIndex % 2 === 1) ? ' hex-row-offset' : '';
+                return `<div class="hex-row${offsetClass}">${items}</div>`;
             }).join('');
             
             // Iniciar slideshows en portadas de álbumes
@@ -1519,8 +1565,8 @@
             setStickyPosition();
 
             // Altura de sección: suficiente scroll para revelar todas las palabras
-            // ~20px de scroll por palabra (texto más pequeño = menos recorrido)
-            const scrollPerWord = 20;
+            // Menos scroll por palabra en móvil para no requerir demasiado desplazamiento
+            const scrollPerWord = window.innerWidth < 768 ? 10 : 20;
             function calcSectionHeight() {
                 // Medir alto real del contenido del manifiesto
                 const contentEl = section.querySelector('.manifiesto-content');
@@ -1543,6 +1589,7 @@
                     if (maxWordsRevealed > 0) {
                         maxWordsRevealed = 0;
                         allWords.forEach(w => w.classList.remove('vis'));
+                        stickyEl.scrollTop = 0;
                     }
                     return;
                 }
@@ -1571,6 +1618,20 @@
                         allWords[i].classList.add('vis');
                     } else {
                         allWords[i].classList.remove('vis');
+                    }
+                }
+
+                // Auto-scroll del contenedor sticky para mantener visible la última palabra revelada
+                if (maxWordsRevealed > 0 && stickyEl.scrollHeight > stickyEl.clientHeight) {
+                    const lastWord = allWords[Math.min(maxWordsRevealed - 1, totalWords - 1)];
+                    if (lastWord) {
+                        const wordRect = lastWord.getBoundingClientRect();
+                        const stickyRect = stickyEl.getBoundingClientRect();
+                        const wordRelativeTop = wordRect.top - stickyRect.top + stickyEl.scrollTop;
+                        const targetScroll = wordRelativeTop - stickyEl.clientHeight * 0.6;
+                        if (targetScroll > 0) {
+                            stickyEl.scrollTop = targetScroll;
+                        }
                     }
                 }
             }
@@ -1677,6 +1738,19 @@
 
             // Reajustar posiciones en resize
             window.addEventListener('resize', adjustNavPosition);
+            
+            // Reconstruir galería al cruzar el breakpoint móvil/desktop
+            let galleryResizeTimer;
+            window.addEventListener('resize', function() {
+                clearTimeout(galleryResizeTimer);
+                galleryResizeTimer = setTimeout(function() {
+                    const currentMode = window.innerWidth < 768 ? 'mobile' : 'desktop';
+                    if (currentMode !== lastGalleryMode) {
+                        lastGalleryMode = null;
+                        loadGallery();
+                    }
+                }, 250);
+            });
         });
     </script>
 </body>
