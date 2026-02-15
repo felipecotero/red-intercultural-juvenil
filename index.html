@@ -180,9 +180,8 @@
             }
         }
 
-        /* Manifiesto typewriter scroll */
+        /* Manifiesto line-by-line scroll */
         #manifiesto {
-            min-height: 700vh;
             display: block;
             padding: 0;
         }
@@ -190,10 +189,17 @@
         .manifiesto-sticky {
             position: sticky;
             top: 0;
-            min-height: 100vh;
+            height: 100vh;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
+            overflow: hidden;
+        }
+
+        .manifiesto-scroll-inner {
+            padding-top: 15vh;
+            padding-bottom: 20vh;
+            width: 100%;
         }
 
         .manifiesto-titulo {
@@ -203,30 +209,36 @@
             letter-spacing: -0.03em;
             line-height: 1.1;
             text-align: center;
-            margin-bottom: 1.5rem;
-            min-height: 0.5em;
+            margin-bottom: 2rem;
             color: white;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
 
-        .manifiesto-cuerpo {
+        .manifiesto-titulo.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .manifiesto-linea {
             font-weight: 400;
             font-size: clamp(1.15rem, 2.5vw, 2.5rem);
-            line-height: 1.6;
+            line-height: 1.7;
             text-align: left;
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(255, 255, 255, 0.0);
+            transition: color 0.5s ease, transform 0.5s ease;
+            transform: translateY(15px);
         }
 
-        .manifiesto-typing::after {
-            content: '\25CC';
-            display: inline;
-            color: rgba(255,255,255,0.8);
-            animation: blink-caret 0.6s step-end infinite;
-            font-weight: 400;
+        .manifiesto-linea.visible {
+            color: rgba(255, 255, 255, 0.92);
+            transform: translateY(0);
         }
 
-        @keyframes blink-caret {
-            from, to { opacity: 1; }
-            50% { opacity: 0; }
+        .manifiesto-linea.latest {
+            color: white;
+            font-weight: 500;
         }
 
         /* Tarjetas de directorio */
@@ -635,16 +647,18 @@
         <div class="modal-info" id="modal-info"></div>
     </div>
 
-    <!-- SECCIÓN 4: MANIFIESTO - TYPEWRITER SCROLL -->
+    <!-- SECCIÓN 4: MANIFIESTO - LINE-BY-LINE SCROLL -->
     <section id="manifiesto" class="relative bg-zinc-900 text-white">
         <div class="manifiesto-sticky">
             <div class="absolute inset-0 opacity-20" style="background-image: url('https://www.transparenttextures.com/patterns/asphalt-dark.png');"></div>
             <div class="absolute top-0 right-0 w-96 h-96 bg-pink-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
             <div class="absolute bottom-0 left-0 w-96 h-96 bg-cyan-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style="animation-delay: 1s;"></div>
 
-            <div class="max-w-5xl mx-auto px-6 relative z-10">
-                <div class="manifiesto-titulo" id="manifiesto-titulo"></div>
-                <div class="manifiesto-cuerpo" id="manifiesto-cuerpo"></div>
+            <div class="manifiesto-scroll-inner">
+                <div class="max-w-5xl mx-auto px-6 relative z-10">
+                    <div class="manifiesto-titulo" id="manifiesto-titulo">Lo que queremos...</div>
+                    <div id="manifiesto-lineas"></div>
+                </div>
             </div>
         </div>
     </section>
@@ -777,66 +791,81 @@
     </section>
 
     <script>
-        // Array de fotos de organizaciones (77 fotos totales)
+        // Array de fotos de organizaciones (92 fotos totales)
         const fotosOrgs = [
             'assets/photos_orgs/01_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/01_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/01_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/01_RED_CEPELA_2025.jpg',
+            'assets/photos_orgs/01_THE_GIANT_CORPORATION_2025.jpg',
             'assets/photos_orgs/02_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/02_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/02_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/02_RED_CEPELA_2025.jpg',
+            'assets/photos_orgs/02_THE_GIANT_CORPORATION_2025.jpg',
             'assets/photos_orgs/03_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/03_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/03_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/03_RED_CEPELA_2025.jpg',
+            'assets/photos_orgs/03_THE_GIANT_CORPORATION_2025.jpg',
             'assets/photos_orgs/04_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/04_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/04_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/04_RED_CEPELA_2025.jpg',
+            'assets/photos_orgs/04_THE_GIANT_CORPORATION_2025.jpg',
             'assets/photos_orgs/05_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/05_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/05_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/05_RED_CEPELA_2025.jpg',
+            'assets/photos_orgs/05_THE_GIANT_CORPORATION_2025.jpg',
             'assets/photos_orgs/06_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/06_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/06_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/06_RED_CEPELA_2025.jpg',
+            'assets/photos_orgs/06_THE_GIANT_CORPORATION_2025.jpg',
             'assets/photos_orgs/07_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/07_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/07_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/07_RED_CEPELA_2025.jpg',
+            'assets/photos_orgs/07_THE_GIANT_CORPORATION_2025.jpg',
             'assets/photos_orgs/08_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/08_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/08_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/08_RED_CEPELA_2025.jpg',
+            'assets/photos_orgs/08_THE_GIANT_CORPORATION_2025.jpg',
             'assets/photos_orgs/09_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/09_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/09_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/09_RED_CEPELA_2025.jpg',
+            'assets/photos_orgs/09_THE_GIANT_CORPORATION_2025.jpg',
             'assets/photos_orgs/10_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/10_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/10_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/10_RED_CEPELA_2025.jpg',
+            'assets/photos_orgs/10_THE_GIANT_CORPORATION_2025.jpg',
             'assets/photos_orgs/11_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/11_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/11_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/11_RED_CEPELA_2025.jpg',
+            'assets/photos_orgs/11_THE_GIANT_CORPORATION_2025.jpg',
             'assets/photos_orgs/12_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/12_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/12_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/12_RED_CEPELA_2025.jpg',
+            'assets/photos_orgs/12_THE_GIANT_CORPORATION_2025.jpg',
             'assets/photos_orgs/13_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/13_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/13_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/13_RED_CEPELA_2025.jpg',
+            'assets/photos_orgs/13_THE_GIANT_CORPORATION_2025.jpg',
             'assets/photos_orgs/14_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/14_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/14_RED_CEPELA_2025.jpg',
+            'assets/photos_orgs/14_THE_GIANT_CORPORATION_2025.jpg',
             'assets/photos_orgs/15_GUAQUE_SOPO_2025.jpg',
             'assets/photos_orgs/15_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/15_RED_CEPELA_2025.jpg',
+            'assets/photos_orgs/15_THE_GIANT_CORPORATION_2025.jpg',
             'assets/photos_orgs/16_GUAQUE_SOPO_2025.jpg',
             'assets/photos_orgs/16_RED_CEPELA_2025.jpg',
             'assets/photos_orgs/17_GUAQUE_SOPO_2025.jpg',
@@ -890,6 +919,10 @@
             if (filename.includes('CODIGO_ESTILO_CREW')) {
                 return organizaciones.find(org => 
                     org.nombre && org.nombre.toLowerCase().includes('código estilo')
+                );
+            } else if (filename.includes('THE_GIANT_CORPORATION')) {
+                return organizaciones.find(org => 
+                    org.nombre && org.nombre.toLowerCase().includes('giant')
                 );
             } else if (filename.includes('RED_CEPELA')) {
                 return organizaciones.find(org => 
@@ -1066,7 +1099,8 @@
                 'CUMBRE_CASA_CULTURAL': 'Cumbre Casa Cultural',
                 'MALOKA_JOVEN_2025': 'Maloka Joven 2025',
                 'GUAQUE_SOPO_2025': 'Guaque Sopó 2025',
-                'RED_CEPELA_2025': 'Red Cepela 2025'
+                'RED_CEPELA_2025': 'Red Cepela 2025',
+                'THE_GIANT_CORPORATION_2025': 'The Giant Corporation 2025'
             };
             
             fotosOrgs.forEach(foto => {
@@ -1267,6 +1301,8 @@
             const filename = photoPath.split('/').pop();
             if (filename.includes('CODIGO_ESTILO_CREW')) {
                 return 'Código Estilo Crew 2025';
+            } else if (filename.includes('THE_GIANT_CORPORATION')) {
+                return 'The Giant Corporation 2025';
             } else if (filename.includes('RED_CEPELA')) {
                 return 'Red Cepela 2025';
             } else if (filename.includes('CUMBRE_CASA_CULTURAL')) {
@@ -1379,45 +1415,91 @@
             }
         }
 
-        // ========== MANIFIESTO TYPEWRITER SCROLL ==========
+        // ========== MANIFIESTO LINE-BY-LINE SCROLL ==========
         function initManifiestoTypewriter() {
             const section = document.getElementById('manifiesto');
             const tituloEl = document.getElementById('manifiesto-titulo');
-            const cuerpoEl = document.getElementById('manifiesto-cuerpo');
+            const lineasContainer = document.getElementById('manifiesto-lineas');
+            const scrollInner = document.querySelector('.manifiesto-scroll-inner');
 
-            const titulo = 'Lo que queremos...';
             const cuerpo = 'Somos la cosecha del asfalto caliente, la generación que aprendió a florecer justo donde nos dijeron que no crecería nada. Nacimos del estallido, no para quedarnos en el grito, sino para organizar la esperanza y convertir la indignación en estructuras vivas. Desde la profundidad de la selva hasta la esquina del barrio, tejemos una red anfibia que conecta el remedio ancestral con el código urbano, entendiendo que la cultura no es un adorno, sino nuestra herramienta más afilada de defensa personal y colectiva. Aquí declaramos obsoleta la competencia: nuestra única política es la juntanza y nuestra venganza es la vida digna. No pedimos permiso para transformar el territorio; ya lo estamos haciendo, con la certeza de que nuestra rebeldía no es amarga, sino creadora, ruidosa y radicalmente alegre.';
 
-            const totalChars = titulo.length + cuerpo.length;
+            // Dividir en frases naturales por puntos y punto y coma
+            const lineas = cuerpo.split(/(?<=\. |; )/).map(s => s.trim()).filter(s => s.length > 0);
+            const totalItems = 1 + lineas.length; // título + líneas
 
-            function updateTypewriter() {
+            // Crear elementos de línea en el DOM
+            lineas.forEach(linea => {
+                const div = document.createElement('div');
+                div.className = 'manifiesto-linea';
+                div.textContent = linea;
+                lineasContainer.appendChild(div);
+            });
+
+            const lineaEls = lineasContainer.querySelectorAll('.manifiesto-linea');
+
+            // Calcular altura de sección: suficiente scroll para cada línea
+            const sectionPixels = totalItems * window.innerHeight * 0.45;
+            section.style.minHeight = sectionPixels + 'px';
+
+            let lastVisibleIndex = -1;
+
+            function updateLines() {
                 const rect = section.getBoundingClientRect();
                 const sectionHeight = section.offsetHeight;
                 const viewportHeight = window.innerHeight;
                 const scrollableDistance = sectionHeight - viewportHeight;
 
-                // Qué tanto hemos scrolleado dentro de la sección (0 a 1)
                 const scrolled = Math.max(0, -rect.top);
-                // Usar 88% del scroll para escribir, el resto mantiene el texto completo
-                const progress = Math.min(1, scrolled / (scrollableDistance * 0.88));
+                const progress = Math.min(1, scrolled / (scrollableDistance * 0.92));
 
-                const charsToShow = Math.floor(progress * totalChars);
+                // Cuántos items mostrar (título = ítem 0, líneas = ítems 1..N)
+                const itemsToShow = Math.floor(progress * (totalItems + 0.5));
 
-                // Quitar clase de typing de ambos
-                tituloEl.classList.remove('manifiesto-typing');
-                cuerpoEl.classList.remove('manifiesto-typing');
-
-                if (charsToShow <= 0) {
-                    tituloEl.textContent = '';
-                    cuerpoEl.textContent = '';
-                } else if (charsToShow <= titulo.length) {
-                    tituloEl.textContent = titulo.substring(0, charsToShow);
-                    cuerpoEl.textContent = '';
-                    if (progress < 1) tituloEl.classList.add('manifiesto-typing');
+                // Título
+                if (itemsToShow >= 1) {
+                    tituloEl.classList.add('visible');
                 } else {
-                    tituloEl.textContent = titulo;
-                    cuerpoEl.textContent = cuerpo.substring(0, charsToShow - titulo.length);
-                    if (progress < 1) cuerpoEl.classList.add('manifiesto-typing');
+                    tituloEl.classList.remove('visible');
+                }
+
+                // Líneas del cuerpo
+                let newLastVisible = -1;
+                lineaEls.forEach((el, i) => {
+                    if (i < itemsToShow - 1) {
+                        el.classList.add('visible');
+                        el.classList.remove('latest');
+                        newLastVisible = i;
+                    } else {
+                        el.classList.remove('visible', 'latest');
+                    }
+                });
+
+                // Marcar la última línea visible como "latest" (más brillante)
+                if (newLastVisible >= 0) {
+                    lineaEls[newLastVisible].classList.add('latest');
+                }
+
+                // Auto-scroll el contenedor para mantener visible la última línea
+                if (newLastVisible !== lastVisibleIndex && newLastVisible >= 0) {
+                    const latestEl = lineaEls[newLastVisible];
+                    const containerRect = scrollInner.getBoundingClientRect();
+                    const elRect = latestEl.getBoundingClientRect();
+                    const elBottom = elRect.bottom - containerRect.top;
+                    const containerVisible = window.innerHeight - containerRect.top;
+
+                    if (elBottom > containerVisible - 40) {
+                        const offset = elBottom - containerVisible + 60;
+                        scrollInner.style.transform = `translateY(-${offset}px)`;
+                        scrollInner.style.transition = 'transform 0.5s ease-out';
+                    }
+                    lastVisibleIndex = newLastVisible;
+                }
+
+                // Reset transform when scrolling back to top
+                if (itemsToShow <= 1) {
+                    scrollInner.style.transform = 'translateY(0)';
+                    lastVisibleIndex = -1;
                 }
             }
 
@@ -1425,14 +1507,20 @@
             window.addEventListener('scroll', function() {
                 if (!ticking) {
                     requestAnimationFrame(function() {
-                        updateTypewriter();
+                        updateLines();
                         ticking = false;
                     });
                     ticking = true;
                 }
             }, { passive: true });
 
-            updateTypewriter();
+            // Recalcular altura en resize
+            window.addEventListener('resize', function() {
+                const newHeight = totalItems * window.innerHeight * 0.45;
+                section.style.minHeight = newHeight + 'px';
+            });
+
+            updateLines();
         }
 
         // Cargar directorio
