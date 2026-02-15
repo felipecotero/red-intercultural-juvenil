@@ -224,8 +224,8 @@
 
         .manifiesto-cuerpo {
             font-weight: 400;
-            font-size: clamp(1.15rem, 2.5vw, 2.5rem);
-            line-height: 1.65;
+            font-size: clamp(0.95rem, 1.5vw, 1.25rem);
+            line-height: 1.35;
             text-align: left;
             color: rgba(255, 255, 255, 0.92);
         }
@@ -1445,10 +1445,15 @@
             setStickyPosition();
 
             // Altura de sección: suficiente scroll para revelar todas las palabras
-            // ~40px de scroll por palabra, mínimo 3 viewports
-            const scrollPerWord = 40;
+            // ~20px de scroll por palabra (texto más pequeño = menos recorrido)
+            const scrollPerWord = 20;
             function calcSectionHeight() {
-                const h = Math.max(totalWords * scrollPerWord + window.innerHeight, window.innerHeight * 3);
+                // Medir alto real del contenido del manifiesto
+                const contentEl = section.querySelector('.manifiesto-content');
+                const contentH = contentEl ? contentEl.scrollHeight : 0;
+                // Necesitamos al menos contentH + viewport para que todo sea scrolleable
+                // y suficiente scroll por palabra para el efecto
+                const h = Math.max(totalWords * scrollPerWord + window.innerHeight, contentH + window.innerHeight, window.innerHeight * 2);
                 section.style.minHeight = h + 'px';
             }
             calcSectionHeight();
