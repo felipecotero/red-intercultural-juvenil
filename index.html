@@ -180,7 +180,7 @@
             }
         }
 
-        /* Manifiesto line-by-line scroll */
+        /* Manifiesto word-by-word scroll */
         #manifiesto {
             display: block;
             padding: 0;
@@ -191,15 +191,9 @@
             top: 0;
             height: 100vh;
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             justify-content: center;
             overflow: hidden;
-        }
-
-        .manifiesto-scroll-inner {
-            padding-top: 15vh;
-            padding-bottom: 20vh;
-            width: 100%;
         }
 
         .manifiesto-titulo {
@@ -207,38 +201,36 @@
             font-size: clamp(3rem, 8vw, 6rem);
             text-transform: uppercase;
             letter-spacing: -0.03em;
-            line-height: 1.1;
+            line-height: 1.15;
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             color: white;
+        }
+
+        .manifiesto-titulo .mw {
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
+            transition: opacity 0.25s ease;
         }
 
-        .manifiesto-titulo.visible {
+        .manifiesto-titulo .mw.vis {
             opacity: 1;
-            transform: translateY(0);
         }
 
-        .manifiesto-linea {
+        .manifiesto-cuerpo {
             font-weight: 400;
             font-size: clamp(1.15rem, 2.5vw, 2.5rem);
-            line-height: 1.7;
+            line-height: 1.65;
             text-align: left;
-            color: rgba(255, 255, 255, 0.0);
-            transition: color 0.5s ease, transform 0.5s ease;
-            transform: translateY(15px);
-        }
-
-        .manifiesto-linea.visible {
             color: rgba(255, 255, 255, 0.92);
-            transform: translateY(0);
         }
 
-        .manifiesto-linea.latest {
-            color: white;
-            font-weight: 500;
+        .manifiesto-cuerpo .mw {
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .manifiesto-cuerpo .mw.vis {
+            opacity: 1;
         }
 
         /* Tarjetas de directorio */
@@ -647,18 +639,16 @@
         <div class="modal-info" id="modal-info"></div>
     </div>
 
-    <!-- SECCIÓN 4: MANIFIESTO - LINE-BY-LINE SCROLL -->
+    <!-- SECCIÓN 4: MANIFIESTO - WORD BY WORD SCROLL -->
     <section id="manifiesto" class="relative bg-zinc-900 text-white">
         <div class="manifiesto-sticky">
             <div class="absolute inset-0 opacity-20" style="background-image: url('https://www.transparenttextures.com/patterns/asphalt-dark.png');"></div>
             <div class="absolute top-0 right-0 w-96 h-96 bg-pink-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
             <div class="absolute bottom-0 left-0 w-96 h-96 bg-cyan-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style="animation-delay: 1s;"></div>
 
-            <div class="manifiesto-scroll-inner">
-                <div class="max-w-5xl mx-auto px-6 relative z-10">
-                    <div class="manifiesto-titulo" id="manifiesto-titulo">Lo que queremos...</div>
-                    <div id="manifiesto-lineas"></div>
-                </div>
+            <div class="max-w-5xl mx-auto px-6 relative z-10">
+                <div class="manifiesto-titulo" id="manifiesto-titulo"></div>
+                <div class="manifiesto-cuerpo" id="manifiesto-cuerpo"></div>
             </div>
         </div>
     </section>
@@ -1415,112 +1405,97 @@
             }
         }
 
-        // ========== MANIFIESTO LINE-BY-LINE SCROLL ==========
+        // ========== MANIFIESTO WORD-BY-WORD SCROLL ==========
         function initManifiestoTypewriter() {
             const section = document.getElementById('manifiesto');
             const tituloEl = document.getElementById('manifiesto-titulo');
-            const lineasContainer = document.getElementById('manifiesto-lineas');
-            const scrollInner = document.querySelector('.manifiesto-scroll-inner');
+            const cuerpoEl = document.getElementById('manifiesto-cuerpo');
 
-            const cuerpo = 'Somos la cosecha del asfalto caliente, la generación que aprendió a florecer justo donde nos dijeron que no crecería nada. Nacimos del estallido, no para quedarnos en el grito, sino para organizar la esperanza y convertir la indignación en estructuras vivas. Desde la profundidad de la selva hasta la esquina del barrio, tejemos una red anfibia que conecta el remedio ancestral con el código urbano, entendiendo que la cultura no es un adorno, sino nuestra herramienta más afilada de defensa personal y colectiva. Aquí declaramos obsoleta la competencia: nuestra única política es la juntanza y nuestra venganza es la vida digna. No pedimos permiso para transformar el territorio; ya lo estamos haciendo, con la certeza de que nuestra rebeldía no es amarga, sino creadora, ruidosa y radicalmente alegre.';
+            const tituloText = 'Lo que queremos...';
+            const cuerpoText = 'Somos la cosecha del asfalto caliente, la generación que aprendió a florecer justo donde nos dijeron que no crecería nada. Nacimos del estallido, no para quedarnos en el grito, sino para organizar la esperanza y convertir la indignación en estructuras vivas. Desde la profundidad de la selva hasta la esquina del barrio, tejemos una red anfibia que conecta el remedio ancestral con el código urbano, entendiendo que la cultura no es un adorno, sino nuestra herramienta más afilada de defensa personal y colectiva. Aquí declaramos obsoleta la competencia: nuestra única política es la juntanza y nuestra venganza es la vida digna. No pedimos permiso para transformar el territorio; ya lo estamos haciendo, con la certeza de que nuestra rebeldía no es amarga, sino creadora, ruidosa y radicalmente alegre.';
 
-            // Dividir en frases naturales por puntos y punto y coma
-            const lineas = cuerpo.split(/(?<=\. |; )/).map(s => s.trim()).filter(s => s.length > 0);
-            const totalItems = 1 + lineas.length; // título + líneas
+            // Crear spans para cada palabra
+            function wordsToSpans(text) {
+                return text.split(/\s+/).map(w => '<span class="mw">' + w + '</span>').join(' ');
+            }
 
-            // Crear elementos de línea en el DOM
-            lineas.forEach(linea => {
-                const div = document.createElement('div');
-                div.className = 'manifiesto-linea';
-                div.textContent = linea;
-                lineasContainer.appendChild(div);
-            });
+            tituloEl.innerHTML = wordsToSpans(tituloText);
+            cuerpoEl.innerHTML = wordsToSpans(cuerpoText);
 
-            const lineaEls = lineasContainer.querySelectorAll('.manifiesto-linea');
+            const allWords = section.querySelectorAll('.mw');
+            const totalWords = allWords.length;
 
-            // Calcular altura de sección: suficiente scroll para cada línea
-            const sectionPixels = totalItems * window.innerHeight * 0.45;
-            section.style.minHeight = sectionPixels + 'px';
+            // Altura de sección: ~35px de scroll por palabra
+            const scrollPerWord = 35;
+            const sectionHeight = Math.max(totalWords * scrollPerWord + window.innerHeight, window.innerHeight * 3);
+            section.style.minHeight = sectionHeight + 'px';
 
-            let lastVisibleIndex = -1;
+            let maxWordsRevealed = 0;
+            let sectionHasLeft = false;
 
-            function updateLines() {
+            function update() {
                 const rect = section.getBoundingClientRect();
-                const sectionHeight = section.offsetHeight;
-                const viewportHeight = window.innerHeight;
-                const scrollableDistance = sectionHeight - viewportHeight;
+                const vh = window.innerHeight;
 
-                const scrolled = Math.max(0, -rect.top);
-                const progress = Math.min(1, scrolled / (scrollableDistance * 0.92));
-
-                // Cuántos items mostrar (título = ítem 0, líneas = ítems 1..N)
-                const itemsToShow = Math.floor(progress * (totalItems + 0.5));
-
-                // Título
-                if (itemsToShow >= 1) {
-                    tituloEl.classList.add('visible');
-                } else {
-                    tituloEl.classList.remove('visible');
+                // ¿La sección está completamente fuera del viewport?
+                if (rect.bottom < 0 || rect.top > vh) {
+                    // Sección salió del viewport -> resetear
+                    if (maxWordsRevealed > 0) {
+                        sectionHasLeft = true;
+                        maxWordsRevealed = 0;
+                        allWords.forEach(w => w.classList.remove('vis'));
+                    }
+                    return;
                 }
 
-                // Líneas del cuerpo
-                let newLastVisible = -1;
-                lineaEls.forEach((el, i) => {
-                    if (i < itemsToShow - 1) {
-                        el.classList.add('visible');
-                        el.classList.remove('latest');
-                        newLastVisible = i;
+                sectionHasLeft = false;
+
+                // Trigger: sección entra en el tercio inferior de la pantalla
+                // Es decir, rect.top < vh * 2/3 (el top de la sección ya pasó el tercio inferior)
+                const triggerPoint = vh * (2 / 3);
+                if (rect.top > triggerPoint) {
+                    return; // Aún no ha llegado al tercio inferior
+                }
+
+                // Cuánto scroll hemos hecho desde el trigger
+                const scrollFromTrigger = Math.max(0, triggerPoint - rect.top);
+                const scrollableRange = section.offsetHeight - vh * 0.33;
+                const progress = Math.min(1, scrollFromTrigger / (scrollableRange * 0.85));
+
+                const wordsToReveal = Math.floor(progress * totalWords);
+
+                // Solo avanzar, nunca retroceder (hasta que la sección salga del viewport)
+                if (wordsToReveal > maxWordsRevealed) {
+                    maxWordsRevealed = wordsToReveal;
+                }
+
+                // Aplicar visibilidad
+                allWords.forEach((w, i) => {
+                    if (i < maxWordsRevealed) {
+                        w.classList.add('vis');
                     } else {
-                        el.classList.remove('visible', 'latest');
+                        w.classList.remove('vis');
                     }
                 });
-
-                // Marcar la última línea visible como "latest" (más brillante)
-                if (newLastVisible >= 0) {
-                    lineaEls[newLastVisible].classList.add('latest');
-                }
-
-                // Auto-scroll el contenedor para mantener visible la última línea
-                if (newLastVisible !== lastVisibleIndex && newLastVisible >= 0) {
-                    const latestEl = lineaEls[newLastVisible];
-                    const containerRect = scrollInner.getBoundingClientRect();
-                    const elRect = latestEl.getBoundingClientRect();
-                    const elBottom = elRect.bottom - containerRect.top;
-                    const containerVisible = window.innerHeight - containerRect.top;
-
-                    if (elBottom > containerVisible - 40) {
-                        const offset = elBottom - containerVisible + 60;
-                        scrollInner.style.transform = `translateY(-${offset}px)`;
-                        scrollInner.style.transition = 'transform 0.5s ease-out';
-                    }
-                    lastVisibleIndex = newLastVisible;
-                }
-
-                // Reset transform when scrolling back to top
-                if (itemsToShow <= 1) {
-                    scrollInner.style.transform = 'translateY(0)';
-                    lastVisibleIndex = -1;
-                }
             }
 
             let ticking = false;
             window.addEventListener('scroll', function() {
                 if (!ticking) {
                     requestAnimationFrame(function() {
-                        updateLines();
+                        update();
                         ticking = false;
                     });
                     ticking = true;
                 }
             }, { passive: true });
 
-            // Recalcular altura en resize
             window.addEventListener('resize', function() {
-                const newHeight = totalItems * window.innerHeight * 0.45;
+                const newHeight = Math.max(totalWords * scrollPerWord + window.innerHeight, window.innerHeight * 3);
                 section.style.minHeight = newHeight + 'px';
             });
 
-            updateLines();
+            update();
         }
 
         // Cargar directorio
