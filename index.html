@@ -344,36 +344,41 @@
         /* Estilos para álbumes de galería - Panal hexagonal */
         .honeycomb {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            max-width: 1100px;
+            flex-direction: column;
+            align-items: center;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 0 2rem;
+            padding: 0 1rem;
+        }
+
+        .hex-row {
+            display: flex;
+            justify-content: center;
+            margin-top: -40px;
+        }
+        .hex-row:first-child {
+            margin-top: 0;
         }
 
         .hex-wrap {
-            width: 280px;
-            margin: -20px 10px;
-            position: relative;
+            width: 300px;
+            flex-shrink: 0;
+            margin: 0 8px;
         }
 
-        /* Filas impares se desplazan */
-        .hex-wrap:nth-child(4n+3),
-        .hex-wrap:nth-child(4n+4) {
-            margin-left: 150px;
-        }
-
-        @media (max-width: 639px) {
-            .hex-wrap {
-                width: 220px;
-                margin: -15px 5px;
-            }
-            .hex-wrap:nth-child(4n+3),
-            .hex-wrap:nth-child(4n+4) {
-                margin-left: 5px;
-            }
+        @media (max-width: 767px) {
             .honeycomb {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
                 padding: 0 0.5rem;
+            }
+            .hex-row {
+                display: contents;
+            }
+            .hex-wrap {
+                width: 46%;
+                margin: -15px 2%;
             }
         }
 
@@ -403,56 +408,42 @@
         .album-card .album-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.1) 100%);
+            background: radial-gradient(ellipse at center, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.15) 70%);
             z-index: 1;
         }
 
         .album-card .album-info {
             position: absolute;
-            bottom: 0; left: 0; right: 0;
-            padding: 1.5rem;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
             z-index: 2;
             color: white;
+            width: 75%;
         }
 
         .album-card .album-info h3 {
-            font-size: 1.25rem;
+            font-size: 1.05rem;
             font-weight: 800;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.3rem;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.9);
+            line-height: 1.2;
         }
 
         @media (min-width: 1024px) {
             .album-card .album-info h3 {
-                font-size: 1.75rem;
+                font-size: 1.4rem;
             }
             .album-card .album-info p {
-                font-size: 1rem;
+                font-size: 0.85rem;
             }
         }
 
         .album-card .album-info p {
-            font-size: 0.85rem;
-            opacity: 0.8;
-        }
-
-        .album-card .album-count {
-            position: absolute;
-            top: 1rem; right: 1rem;
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-            padding: 0.3rem 0.8rem;
-            border-radius: 999px;
             font-size: 0.75rem;
-            font-weight: 700;
-            color: white;
-            z-index: 2;
-        }
-
-        @media (min-width: 1024px) {
-            .album-card .album-count {
-                font-size: 0.9rem;
-                padding: 0.4rem 1rem;
-            }
+            opacity: 0.9;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.9);
         }
 
         /* Modal lightbox */
@@ -655,7 +646,7 @@
     </section>
 
     <!-- SECCIÓN 3: GALERÍA -->
-    <section id="galeria" class="bg-gray-50">
+    <section id="galeria" class="bg-gray-50 py-16">
         <div class="max-w-7xl mx-auto w-full">
             <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-gray-900">Galería Visual</h2>
             <p class="text-center text-gray-500 mb-8 -mt-8">Haz clic en un álbum para ver las fotos</p>
@@ -821,7 +812,7 @@
     </section>
 
     <script>
-        // Array de fotos de organizaciones (92 fotos totales)
+        // Array de fotos de organizaciones (123 fotos totales)
         const fotosOrgs = [
             'assets/photos_orgs/01_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/01_CUMBRE_CASA_CULTURAL.jpg',
@@ -914,7 +905,38 @@
             'assets/photos_orgs/26_GUAQUE_SOPO_2025.jpg',
             'assets/photos_orgs/27_GUAQUE_SOPO_2025.jpg',
             'assets/photos_orgs/28_GUAQUE_SOPO_2025.jpg',
-            'assets/photos_orgs/29_GUAQUE_SOPO_2025.jpg'
+            'assets/photos_orgs/29_GUAQUE_SOPO_2025.jpg',
+            'assets/photos_orgs/01_ELEMENTS_2025.jpg',
+            'assets/photos_orgs/02_ELEMENTS_2025.jpg',
+            'assets/photos_orgs/03_ELEMENTS_2025.jpg',
+            'assets/photos_orgs/04_ELEMENTS_2025.jpg',
+            'assets/photos_orgs/05_ELEMENTS_2025.jpg',
+            'assets/photos_orgs/06_ELEMENTS_2025.jpg',
+            'assets/photos_orgs/07_ELEMENTS_2025.jpg',
+            'assets/photos_orgs/08_ELEMENTS_2025.jpg',
+            'assets/photos_orgs/09_ELEMENTS_2025.jpg',
+            'assets/photos_orgs/10_ELEMENTS_2025.jpg',
+            'assets/photos_orgs/11_ELEMENTS_2025.jpg',
+            'assets/photos_orgs/12_ELEMENTS_2025.jpg',
+            'assets/photos_orgs/13_ELEMENTS_2025.jpg',
+            'assets/photos_orgs/14_ELEMENTS_2025.jpg',
+            'assets/photos_orgs/15_ELEMENTS_2025.jpg',
+            'assets/photos_orgs/01_INFLUENCERS_ETNICOS_2025.jpg',
+            'assets/photos_orgs/02_INFLUENCERS_ETNICOS_2025.jpg',
+            'assets/photos_orgs/03_INFLUENCERS_ETNICOS_2025.jpg',
+            'assets/photos_orgs/04_INFLUENCERS_ETNICOS_2025.jpg',
+            'assets/photos_orgs/05_INFLUENCERS_ETNICOS_2025.jpg',
+            'assets/photos_orgs/06_INFLUENCERS_ETNICOS_2025.jpg',
+            'assets/photos_orgs/07_INFLUENCERS_ETNICOS_2025.jpg',
+            'assets/photos_orgs/08_INFLUENCERS_ETNICOS_2025.jpg',
+            'assets/photos_orgs/09_INFLUENCERS_ETNICOS_2025.jpg',
+            'assets/photos_orgs/10_INFLUENCERS_ETNICOS_2025.jpg',
+            'assets/photos_orgs/11_INFLUENCERS_ETNICOS_2025.jpg',
+            'assets/photos_orgs/12_INFLUENCERS_ETNICOS_2025.jpg',
+            'assets/photos_orgs/13_INFLUENCERS_ETNICOS_2025.jpg',
+            'assets/photos_orgs/14_INFLUENCERS_ETNICOS_2025.jpg',
+            'assets/photos_orgs/15_INFLUENCERS_ETNICOS_2025.jpg',
+            'assets/photos_orgs/16_INFLUENCERS_ETNICOS_2025.jpg'
         ];
 
         // Sistema de shuffle sin repeticiones
@@ -969,6 +991,14 @@
             } else if (filename.includes('GUAQUE') || filename.includes('SOPO')) {
                 return organizaciones.find(org => 
                     org.nombre && (org.nombre.toLowerCase().includes('guaque') || org.municipio.toLowerCase().includes('sopó'))
+                );
+            } else if (filename.includes('ELEMENTS')) {
+                return organizaciones.find(org => 
+                    org.nombre && org.nombre.toLowerCase().includes('elements')
+                );
+            } else if (filename.includes('INFLUENCERS_ETNICOS')) {
+                return organizaciones.find(org => 
+                    org.nombre && org.nombre.toLowerCase().includes('influencers')
                 );
             }
             
@@ -1130,7 +1160,9 @@
                 'MALOKA_JOVEN_2025': 'Maloka Joven 2025',
                 'GUAQUE_SOPO_2025': 'Guaque Sopó 2025',
                 'RED_CEPELA_2025': 'Red Cepela 2025',
-                'THE_GIANT_CORPORATION_2025': 'The Giant Corporation 2025'
+                'THE_GIANT_CORPORATION_2025': 'The Giant Corporation 2025',
+                'ELEMENTS_2025': 'Elements 2025',
+                'INFLUENCERS_ETNICOS_2025': 'Influencers Étnicos 2025'
             };
             
             fotosOrgs.forEach(foto => {
@@ -1162,24 +1194,41 @@
             const albums = getAlbums();
             const albumKeys = Object.keys(albums);
             
+            // Construir filas de panal: filas impares = 3, pares = 2
+            const cols = 3;
+            const rows = [];
+            let i = 0;
+            let isOddRow = true;
+            while (i < albumKeys.length) {
+                const rowSize = isOddRow ? cols : Math.max(cols - 1, 1);
+                rows.push(albumKeys.slice(i, i + rowSize));
+                i += rowSize;
+                isOddRow = !isOddRow;
+            }
+            
             grid.className = 'honeycomb';
             
-            grid.innerHTML = albumKeys.map((key, idx) => {
-                const album = albums[key];
-                const coverPhoto = album.photos[0];
-                return `
-                    <div class="hex-wrap">
-                        <div class="album-card" onclick="openAlbum('${key}')" id="album-${idx}">
-                            <div class="album-bg" style="background-image: url('${coverPhoto}'); opacity: 1;" data-album-key="${key}"></div>
-                            <div class="album-overlay"></div>
-                            <div class="album-count">📷 ${album.photos.length} fotos</div>
-                            <div class="album-info">
-                                <h3>${album.name}</h3>
-                                <p>Clic para ver el álbum</p>
+            let idx = 0;
+            grid.innerHTML = rows.map(row => {
+                const items = row.map(key => {
+                    const album = albums[key];
+                    const coverPhoto = album.photos[0];
+                    const html = `
+                        <div class="hex-wrap">
+                            <div class="album-card" onclick="openAlbum('${key}')" id="album-${idx}">
+                                <div class="album-bg" style="background-image: url('${coverPhoto}'); opacity: 1;" data-album-key="${key}"></div>
+                                <div class="album-overlay"></div>
+                                <div class="album-info">
+                                    <h3>${album.name}</h3>
+                                    <p>📷 ${album.photos.length} fotos</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                    idx++;
+                    return html;
+                }).join('');
+                return `<div class="hex-row">${items}</div>`;
             }).join('');
             
             // Iniciar slideshows en portadas de álbumes
@@ -1330,6 +1379,10 @@
                 return 'Maloka Joven 2025';
             } else if (filename.includes('GUAQUE_SOPO')) {
                 return 'Guaque Sopó 2025';
+            } else if (filename.includes('ELEMENTS')) {
+                return 'Elements 2025';
+            } else if (filename.includes('INFLUENCERS_ETNICOS')) {
+                return 'Influencers Étnicos 2025';
             }
             return 'Red Intercultural Juvenil';
         }
