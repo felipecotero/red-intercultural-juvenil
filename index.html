@@ -744,32 +744,45 @@
     </section>
 
     <script>
-        // Array de fotos de organizaciones (44 fotos totales)
+        // Array de fotos de organizaciones (57 fotos totales)
         const fotosOrgs = [
+            'assets/photos_orgs/01_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/01_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/01_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/02_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/02_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/02_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/03_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/03_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/03_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/04_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/04_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/04_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/05_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/05_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/05_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/06_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/06_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/06_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/07_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/07_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/07_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/08_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/08_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/08_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/09_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/09_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/09_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/10_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/10_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/10_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/11_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/11_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/11_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/12_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/12_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/12_MALOKA_JOVEN_2025.jpg',
+            'assets/photos_orgs/13_CODIGO_ESTILO_CREW_2025.jpg',
             'assets/photos_orgs/13_CUMBRE_CASA_CULTURAL.jpg',
             'assets/photos_orgs/13_MALOKA_JOVEN_2025.jpg',
             'assets/photos_orgs/14_CUMBRE_CASA_CULTURAL.jpg',
@@ -821,9 +834,11 @@
         function getOrgFromPhoto(photoPath) {
             const filename = photoPath.split('/').pop().toUpperCase();
             
-            // Buscar organización por nombre en la foto
-            if (filename.includes('CASA_CULTURAL')) {
-                // Buscar Casa Cultural en las organizaciones
+            if (filename.includes('CODIGO_ESTILO_CREW')) {
+                return organizaciones.find(org => 
+                    org.nombre && org.nombre.toLowerCase().includes('código estilo')
+                );
+            } else if (filename.includes('CASA_CULTURAL')) {
                 return organizaciones.find(org => 
                     org.nombre && org.nombre.toLowerCase().includes('casa cultural')
                 );
@@ -990,6 +1005,7 @@
         function getAlbums() {
             const albums = {};
             const albumNames = {
+                'CODIGO_ESTILO_CREW_2025': 'Código Estilo Crew 2025',
                 'CUMBRE_CASA_CULTURAL': 'Cumbre Casa Cultural',
                 'MALOKA_JOVEN_2025': 'Maloka Joven 2025',
                 'GUAQUE_SOPO_2025': 'Guaque Sopó 2025'
@@ -1191,7 +1207,9 @@
         // Extraer nombre de organización de la foto
         function getOrgNameFromPhoto(photoPath) {
             const filename = photoPath.split('/').pop();
-            if (filename.includes('CUMBRE_CASA_CULTURAL')) {
+            if (filename.includes('CODIGO_ESTILO_CREW')) {
+                return 'Código Estilo Crew 2025';
+            } else if (filename.includes('CUMBRE_CASA_CULTURAL')) {
                 return 'Cumbre Casa Cultural';
             } else if (filename.includes('MALOKA_JOVEN')) {
                 return 'Maloka Joven 2025';
