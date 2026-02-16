@@ -96,29 +96,83 @@
 
         /* Card de organización en mapa */
         .org-popup {
-            min-width: 240px;
-            max-width: 280px;
+            min-width: 200px;
+            max-width: 250px;
             text-align: center;
+            padding: 4px 2px;
         }
-
-        .org-popup img {
-            max-width: 80px;
-            max-height: 80px;
+        .org-popup .popup-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+        .org-popup .popup-header img {
+            width: 40px;
+            height: 40px;
             object-fit: contain;
-            display: block;
-            margin: 0 auto 10px;
             background: white;
-            padding: 8px;
-            border-radius: 8px;
+            padding: 3px;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+        .org-popup .popup-header .popup-title {
+            text-align: left;
+        }
+        .org-popup .popup-header .popup-title h3 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            line-height: 1.15;
+            margin: 0;
+        }
+        .org-popup .popup-header .popup-title p {
+            font-size: 0.7rem;
+            color: #666;
+            margin: 1px 0 0 0;
+        }
+        .org-popup .popup-details {
+            font-size: 0.72rem;
+            line-height: 1.3;
+            color: #555;
+            margin-top: 4px;
+            text-align: left;
+        }
+        .org-popup .popup-details p {
+            margin: 1px 0;
+        }
+        .org-popup .popup-socials {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            margin-top: 5px;
+        }
+        .org-popup .popup-socials .social-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+        .leaflet-popup-content-wrapper {
+            max-height: 55vh;
+            overflow-y: auto;
+            border-radius: 10px !important;
+        }
+        .leaflet-popup-content {
+            margin: 8px 10px !important;
         }
 
-        @media (min-width: 640px) {
+        @media (max-width: 639px) {
             .org-popup {
-                min-width: 280px;
+                min-width: 180px;
+                max-width: 220px;
             }
-            .org-popup img {
-                max-width: 100px;
-                max-height: 100px;
+            .org-popup .popup-header img {
+                width: 34px;
+                height: 34px;
+            }
+            .org-popup .popup-header .popup-title h3 {
+                font-size: 0.78rem;
+            }
+            .leaflet-popup-content-wrapper {
+                max-height: 45vh;
             }
         }
 
@@ -745,7 +799,7 @@
             fill: white;
         }
         /* Popup social icons need dark fill */
-        .org-popup .social-icon svg {
+        .org-popup .popup-socials .social-icon svg {
             fill: #333;
         }
 
@@ -1409,15 +1463,19 @@
                 const socials = buildSocialLinks(org);
                 marker.bindPopup(
                     '<div class="org-popup">' +
+                    '<div class="popup-header">' +
                     (hasLogo ? '<img src="' + org.logo + '" alt="' + org.nombre + '" onerror="this.style.display=\'none\'">' : '') +
-                    '<h3 class="font-bold text-lg mt-2">' + org.nombre + '</h3>' +
-                    '<p class="text-sm text-gray-600">' + org.municipio + '</p>' +
-                    '<p class="text-xs text-gray-500 mt-1">' + org.sectores.join(', ') + '</p>' +
-                    '<p class="text-sm mt-2"><strong>Contacto:</strong> ' + org.representante + '</p>' +
-                    '<p class="text-sm">' + org.email + '</p>' +
-                    '<p class="text-sm">' + org.telefono + '</p>' +
-                    (socials ? '<div class="flex gap-2 mt-2 justify-center">' + socials + '</div>' : '') +
-                    '</div>'
+                    '<div class="popup-title"><h3>' + org.nombre + '</h3><p>' + org.municipio + '</p></div>' +
+                    '</div>' +
+                    '<div class="popup-details">' +
+                    '<p style="color:#888;font-size:0.68rem;">' + org.sectores.join(' · ') + '</p>' +
+                    '<p><strong>' + org.representante + '</strong></p>' +
+                    '<p>' + org.email + '</p>' +
+                    '<p>' + org.telefono + '</p>' +
+                    '</div>' +
+                    (socials ? '<div class="popup-socials">' + socials + '</div>' : '') +
+                    '</div>',
+                    { autoPanPadding: [20, 20], maxWidth: 250 }
                 );
                 
                 mapMarkers.push(marker);
