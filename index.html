@@ -383,19 +383,25 @@
             .hex-row {
                 display: flex;
                 justify-content: center;
-                margin-top: -20px;
+                margin-top: -18px;
                 width: 100%;
-                gap: 4px;
+                gap: 3px;
             }
             .hex-row:first-child {
                 margin-top: 0;
             }
             .hex-wrap {
-                width: 44%;
+                width: 42%;
                 flex-shrink: 0;
             }
             .hex-row-offset {
-                transform: translateX(23%);
+                transform: translateX(21.5%);
+            }
+            .album-card .album-info h3 {
+                font-size: 0.82rem;
+            }
+            .album-card .album-info p {
+                font-size: 0.62rem;
             }
         }
 
@@ -802,10 +808,13 @@
             <p class="text-lg md:text-3xl font-light max-w-4xl mx-auto mb-6 px-4" style="margin-top: -40px; font-style: italic; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
                 Tejer identidades para fortalecer el territorio
             </p>
-            <div class="flex justify-center gap-4 flex-wrap px-4 pb-8" style="margin-top: -10px;">
-                <div class="bg-white/20 backdrop-blur px-6 py-3 rounded-full font-black text-base md:text-lg" style="font-family: 'Work Sans', sans-serif;">27 Organizaciones</div>
-                <div class="bg-white/20 backdrop-blur px-6 py-3 rounded-full font-black text-base md:text-lg" style="font-family: 'Work Sans', sans-serif;">15 Departamentos</div>
-                <div class="bg-white/20 backdrop-blur px-6 py-3 rounded-full font-black text-base md:text-lg" style="font-family: 'Work Sans', sans-serif;">Una Red</div>
+        </div>
+        <!-- Franja de indicadores -->
+        <div style="position:absolute;bottom:0;left:0;right:0;z-index:10;background:rgba(0,0,0,0.45);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:1.2rem 1rem;">
+            <div class="flex justify-center gap-6 md:gap-12 flex-wrap items-baseline">
+                <div class="text-center"><span style="font-size:2.2rem;font-weight:900;color:#ff6b35;text-shadow:0 2px 8px rgba(0,0,0,0.5);font-family:'Work Sans',sans-serif;">27</span><span style="font-size:1rem;font-weight:600;color:white;margin-left:0.4rem;text-shadow:0 1px 4px rgba(0,0,0,0.5);">Organizaciones</span></div>
+                <div class="text-center"><span style="font-size:2.2rem;font-weight:900;color:#ff6b35;text-shadow:0 2px 8px rgba(0,0,0,0.5);font-family:'Work Sans',sans-serif;">15</span><span style="font-size:1rem;font-weight:600;color:white;margin-left:0.4rem;text-shadow:0 1px 4px rgba(0,0,0,0.5);">Departamentos</span></div>
+                <div class="text-center"><span style="font-size:2.2rem;font-weight:900;color:#ff6b35;text-shadow:0 2px 8px rgba(0,0,0,0.5);font-family:'Work Sans',sans-serif;">1</span><span style="font-size:1rem;font-weight:600;color:white;margin-left:0.4rem;text-shadow:0 1px 4px rgba(0,0,0,0.5);">Red</span></div>
             </div>
         </div>
     </section>
@@ -1341,8 +1350,20 @@
         let currentMapSearch = '';
 
         function initMap() {
-            const map = L.map('map').setView([4.5709, -74.2973], 6);
+            const defaultCenter = [4.5709, -74.2973];
+            const defaultZoom = 6;
+            const map = L.map('map', {
+                dragging: false,
+                touchZoom: false,
+                scrollWheelZoom: false,
+                doubleClickZoom: false,
+                boxZoom: false,
+                keyboard: false,
+                zoomControl: false
+            }).setView(defaultCenter, defaultZoom);
             window.mapInstance = map;
+            window.mapDefaultCenter = defaultCenter;
+            window.mapDefaultZoom = defaultZoom;
             
             // CartoDB Voyager como base, con filtro CSS para tonos vibrantes
             L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
@@ -1365,7 +1386,8 @@
                 },
                 spiderfyOnMaxZoom: true,
                 showCoverageOnHover: false,
-                zoomToBoundsOnClick: true
+                zoomToBoundsOnClick: true,
+                animate: true
             });
 
             // Crear marcadores individuales con logo de organización
@@ -1404,6 +1426,20 @@
             updateMapMarkers();
             map.addLayer(mapClusterGroup);
 
+            // Al cerrar un popup, volver a vista por defecto
+            map.on('popupclose', function() {
+                setTimeout(function() {
+                    map.flyTo(defaultCenter, defaultZoom, { duration: 0.8 });
+                }, 300);
+            });
+
+            // Click en área vacía del mapa -> volver a vista por defecto
+            map.on('click', function(e) {
+                if (map.getZoom() !== defaultZoom) {
+                    map.flyTo(defaultCenter, defaultZoom, { duration: 0.8 });
+                }
+            });
+
             // Search
             const searchInput = document.getElementById('map-search');
             const searchResults = document.getElementById('map-search-results');
@@ -1433,9 +1469,9 @@
                             const orgId = parseInt(this.dataset.orgId);
                             const org = organizaciones.find(o => o.id === orgId);
                             if (org && org.lat && org.lng) {
-                                map.setView([org.lat, org.lng], 13);
+                                map.flyTo([org.lat, org.lng], 13, { duration: 0.8 });
                                 const m = mapMarkers.find(mk => mk.orgData && mk.orgData.id === orgId);
-                                if (m) setTimeout(() => m.openPopup(), 400);
+                                if (m) setTimeout(() => m.openPopup(), 900);
                             }
                             searchInput.value = org ? org.nombre : '';
                             searchResults.classList.add('hidden');
@@ -1466,6 +1502,17 @@
                         currentMapFilter = this.dataset.sector;
                     }
                     updateMapMarkers();
+                    // Zoom a los marcadores filtrados o volver a vista por defecto
+                    setTimeout(function() {
+                        if (currentMapFilter === 'all') {
+                            map.flyTo(window.mapDefaultCenter, window.mapDefaultZoom, { duration: 0.8 });
+                        } else if (mapClusterGroup.getLayers().length > 0) {
+                            var bounds = mapClusterGroup.getBounds();
+                            if (bounds.isValid()) {
+                                map.flyToBounds(bounds.pad(0.3), { duration: 0.8 });
+                            }
+                        }
+                    }, 100);
                 });
             });
         }
