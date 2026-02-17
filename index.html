@@ -1538,8 +1538,8 @@
                     '<div class="popup-details">' +
                     '<p style="color:#888;font-size:0.68rem;">' + org.sectores.join(' · ') + '</p>' +
                     '<p><strong>' + org.representante + '</strong></p>' +
-                    '<p>' + org.email + '</p>' +
-                    '<p>' + org.telefono + '</p>' +
+                    '<p><a href="mailto:' + org.email + '" style="color:#fb923c;text-decoration:underline;">' + org.email + '</a></p>' +
+                    '<p><a href="tel:' + org.telefono + '" style="color:#fb923c;text-decoration:underline;">' + org.telefono + '</a></p>' +
                     '</div>' +
                     (socials ? '<div class="popup-socials">' + socials + '</div>' : '') +
                     '</div>',
@@ -2156,8 +2156,8 @@
                     ${org.lema ? `<p class="text-xs italic text-center text-white/40 mb-3">"${org.lema}"</p>` : ''}
                     <div class="text-xs text-white/50 space-y-1">
                         <p><strong class="text-white/70">Contacto:</strong> ${org.representante}</p>
-                        <p class="truncate" title="${org.email}">${org.email}</p>
-                        <p>${org.telefono}</p>
+                        <p class="truncate" title="${org.email}"><a href="mailto:${org.email}" class="text-orange-400 hover:text-orange-300 underline">${org.email}</a></p>
+                        <p><a href="tel:${org.telefono}" class="text-orange-400 hover:text-orange-300 underline">${org.telefono}</a></p>
                         ${org.barrio ? `<p class="text-white/40"><strong class="text-white/60">Sede:</strong> ${org.barrio}</p>` : ''}
                         <p class="text-white/40 text-xs">${org.sectores.join(' · ')}</p>
                     </div>
