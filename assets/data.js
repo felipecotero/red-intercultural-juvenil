@@ -237,7 +237,7 @@ const organizaciones = [
         beneficiarios: 52,
         sectores: ["Audiovisual"],
         poblacion: ["Indígenas", "Mestizos", "Afro"],
-        logo: "",
+        logo: "assets/logos_orgs/PNG/comunicacion_visual_sin_fronteras_logo.png",
         lat: -3.7674,
         lng: -70.3833
     },
@@ -369,7 +369,7 @@ const organizaciones = [
         sectores: ["Audiovisual", "Letras", "Danza", "Plástica", "Multidisciplinar"],
         poblacion: ["Indígenas", "Mestizos", "Afro", "Campesino"],
         instagram: "https://www.instagram.com/fundafuturoguajira",
-        logo: "",
+        logo: "assets/logos_orgs/PNG/Futuro de la Guajira.png",
         lat: 11.5444,
         lng: -72.9072
     },
@@ -389,9 +389,9 @@ const organizaciones = [
         sectores: ["Danza"],
         poblacion: ["Afro"],
         web: "https://manglariadiversa.org/#inicio",
-        facebook: "https://www.facebook.com/share/v/1HQHMtdXSb/",
-        instagram: "https://www.instagram.com/manglariadiversa",
-        logo: "",
+        facebook: "https://www.facebook.com/Funmanglaria",
+        instagram: "https://www.instagram.com/funmanglaria/",
+        logo: "assets/logos_orgs/PNG/MANGLARIA_DIVERSA.jpg",
         lat: 1.8014,
         lng: -78.7658
     },
