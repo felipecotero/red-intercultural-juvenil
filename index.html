@@ -31,6 +31,47 @@
             overflow-x: hidden;
         }
 
+        /* Preloader */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s ease;
+        }
+        #preloader.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #preloader-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        #preloader-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+        }
+        #preloader-video {
+            position: relative;
+            z-index: 2;
+            width: 180px;
+            height: 180px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 30px rgba(0,0,0,0.7));
+        }
+        @media (min-width: 768px) {
+            #preloader-video {
+                width: 260px;
+                height: 260px;
+            }
+        }
+
         h1, h2, h3 {
             font-family: 'Work Sans', sans-serif;
             font-weight: 900;
@@ -863,6 +904,15 @@
     </style>
 </head>
 <body class="bg-white text-gray-900">
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div id="preloader-bg"></div>
+        <div id="preloader-overlay"></div>
+        <video id="preloader-video" autoplay loop muted playsinline>
+            <source src="assets/preload/reloj_jaguar.webm" type="video/webm">
+        </video>
+    </div>
 
     <!-- Navegación Fija (compacta) -->
     <nav class="py-1" id="main-nav">
@@ -2250,6 +2300,68 @@
             const allLogos = logos.join('') + logos.join('');
             track.innerHTML = allLogos;
         }
+
+        // Preloader logic
+        (function() {
+            const preloader = document.getElementById('preloader');
+            const preloaderBg = document.getElementById('preloader-bg');
+            const bgImages = [
+                'assets/backgrownd/01_MAPA_JAGUAR 2.jpg',
+                'assets/backgrownd/02_selva.jpg',
+                'assets/backgrownd/03_HERO.jpg',
+                'assets/backgrownd/04_Jaguar rojo 1.jpg',
+                'assets/backgrownd/05_Lomo IMPASTO.jpg'
+            ];
+            let bgIndex = 0;
+
+            // Set first background immediately
+            preloaderBg.style.backgroundImage = 'url("' + bgImages[0] + '")';
+
+            // Rotate backgrounds every 1.5s by hard cut
+            const bgInterval = setInterval(function() {
+                bgIndex = (bgIndex + 1) % bgImages.length;
+                preloaderBg.style.backgroundImage = 'url("' + bgImages[bgIndex] + '")';
+            }, 1500);
+
+            // Track resource loading progress
+            function checkLoaded() {
+                const allImages = Array.from(document.querySelectorAll('img'));
+                const allSections = document.querySelectorAll('section');
+                const totalResources = allImages.length + allSections.length;
+                let loaded = allSections.length; // sections are in DOM = loaded
+
+                allImages.forEach(function(img) {
+                    if (img.complete) loaded++;
+                });
+
+                return totalResources > 0 ? loaded / totalResources : 1;
+            }
+
+            function dismissPreloader() {
+                clearInterval(bgInterval);
+                preloader.classList.add('hide');
+                setTimeout(function() {
+                    preloader.remove();
+                }, 700);
+            }
+
+            // Poll until 70% loaded or max 8 seconds
+            const startTime = Date.now();
+            const pollInterval = setInterval(function() {
+                const progress = checkLoaded();
+                const elapsed = Date.now() - startTime;
+                if (progress >= 0.7 || elapsed > 8000) {
+                    clearInterval(pollInterval);
+                    dismissPreloader();
+                }
+            }, 300);
+
+            // Safety: also dismiss on window load
+            window.addEventListener('load', function() {
+                clearInterval(pollInterval);
+                dismissPreloader();
+            });
+        })();
 
         // Menu móvil
         document.addEventListener('DOMContentLoaded', function() {
