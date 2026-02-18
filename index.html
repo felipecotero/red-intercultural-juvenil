@@ -2303,7 +2303,7 @@
             track.innerHTML = allLogos;
         }
 
-        // Preloader logic
+        // Preloader logic — mínimo 5 segundos, espera a que TODO esté cargado
         (function() {
             const preloader = document.getElementById('preloader');
             const preloaderBg = document.getElementById('preloader-bg');
@@ -2325,21 +2325,13 @@
                 preloaderBg.style.backgroundImage = 'url("' + bgImages[bgIndex] + '")';
             }, 1500);
 
-            // Track resource loading progress
-            function checkLoaded() {
-                const allImages = Array.from(document.querySelectorAll('img'));
-                const allSections = document.querySelectorAll('section');
-                const totalResources = allImages.length + allSections.length;
-                let loaded = allSections.length; // sections are in DOM = loaded
-
-                allImages.forEach(function(img) {
-                    if (img.complete) loaded++;
-                });
-
-                return totalResources > 0 ? loaded / totalResources : 1;
-            }
+            const MIN_PRELOAD_MS = 5000;
+            const startTime = Date.now();
+            let dismissed = false;
 
             function dismissPreloader() {
+                if (dismissed) return;
+                dismissed = true;
                 clearInterval(bgInterval);
                 preloader.classList.add('hide');
                 setTimeout(function() {
@@ -2347,22 +2339,78 @@
                 }, 700);
             }
 
-            // Poll until 70% loaded or max 8 seconds
-            const startTime = Date.now();
-            const pollInterval = setInterval(function() {
-                const progress = checkLoaded();
-                const elapsed = Date.now() - startTime;
-                if (progress >= 0.7 || elapsed > 8000) {
-                    clearInterval(pollInterval);
-                    dismissPreloader();
-                }
-            }, 300);
+            // Precargar una imagen dada su URL (promesa)
+            function preloadSingleImage(src) {
+                return new Promise(function(resolve) {
+                    const img = new Image();
+                    img.onload = resolve;
+                    img.onerror = resolve; // no bloquear por errores
+                    img.src = src;
+                });
+            }
 
-            // Safety: also dismiss on window load
-            window.addEventListener('load', function() {
-                clearInterval(pollInterval);
-                dismissPreloader();
+            // Recopilar TODAS las URLs de imágenes que necesita la página
+            function collectAllImageURLs() {
+                var urls = [];
+                // 1. Fondos del preloader
+                bgImages.forEach(function(u) { urls.push(u); });
+                // 2. Fotos de organizaciones (slideshow)
+                if (typeof fotosOrgs !== 'undefined') {
+                    fotosOrgs.forEach(function(u) { urls.push(u); });
+                }
+                // 3. Logos de organizaciones desde data.js
+                if (typeof organizaciones !== 'undefined') {
+                    organizaciones.forEach(function(org) {
+                        if (org.logo) urls.push(org.logo);
+                    });
+                }
+                // 4. Logos estáticos de la página (RIJ_SIGLA, RIJ_COMP_NEG, etc.)
+                urls.push('assets/logos/RIJ_SIGLA.png');
+                urls.push('assets/logos/RIJ_COMP_NEG.png');
+                // 5. Todas las <img> ya presentes en el DOM
+                document.querySelectorAll('img').forEach(function(img) {
+                    if (img.src) urls.push(img.src);
+                });
+                // Deduplicar
+                return urls.filter(function(v, i, a) { return a.indexOf(v) === i; });
+            }
+
+            // Promesa del timer mínimo de 5 segundos
+            var timerPromise = new Promise(function(resolve) {
+                setTimeout(resolve, MIN_PRELOAD_MS);
             });
+
+            // Promesa de window.load (todo el DOM + recursos nativos)
+            var windowLoadPromise = new Promise(function(resolve) {
+                if (document.readyState === 'complete') {
+                    resolve();
+                } else {
+                    window.addEventListener('load', resolve);
+                }
+            });
+
+            // Promesa de precarga de TODAS las imágenes recopiladas
+            var allImagesPromise = new Promise(function(resolve) {
+                // Esperar a que el DOM esté parseado para recopilar URLs
+                function go() {
+                    var urls = collectAllImageURLs();
+                    if (urls.length === 0) { resolve(); return; }
+                    Promise.all(urls.map(preloadSingleImage)).then(resolve);
+                }
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', go);
+                } else {
+                    go();
+                }
+            });
+
+            // Esperar a que TODAS las condiciones se cumplan: timer + window.load + imágenes
+            Promise.all([timerPromise, windowLoadPromise, allImagesPromise]).then(dismissPreloader);
+
+            // Seguridad: si después de 15s algo falla, descartar de todas maneras
+            setTimeout(function() {
+                dismissPreloader();
+            }, 15000);
         })();
 
         // Menu móvil
