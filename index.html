@@ -577,14 +577,14 @@
         .hex-row {
             display: flex;
             justify-content: center;
-            margin-top: -40px;
+            margin-top: -20px;
         }
         .hex-row:first-child {
             margin-top: 0;
         }
 
         .hex-wrap {
-            width: 300px;
+            width: 210px;
             flex-shrink: 0;
             margin: 0 8px;
         }
@@ -600,7 +600,7 @@
             .hex-row {
                 display: flex;
                 justify-content: center;
-                margin-top: -18px;
+                margin-top: -10px;
                 width: 100%;
                 gap: 3px;
             }
@@ -608,11 +608,11 @@
                 margin-top: 0;
             }
             .hex-wrap {
-                width: 42%;
+                width: 29%;
                 flex-shrink: 0;
             }
             .hex-row-offset {
-                transform: translateX(21.5%);
+                transform: translateX(15%);
             }
             .album-card .album-info h3 {
                 font-size: 0.82rem;
@@ -2016,9 +2016,9 @@
                 // Esto cambia el ancho efectivo del contenedor para que se note en reposo
                 var variation = 0.85 + (Math.random() * 0.30); // 0.85 a 1.15
                 if (isMobile) {
-                    wrap.style.width = (42 * variation).toFixed(1) + '%';
+                    wrap.style.width = (29 * variation).toFixed(1) + '%';
                 } else {
-                    wrap.style.width = Math.round(300 * variation) + 'px';
+                    wrap.style.width = Math.round(210 * variation) + 'px';
                 }
                 // Pequeña rotación aleatoria para más organicidad (-3° a +3°)
                 var rotation = (Math.random() - 0.5) * 6;
