@@ -611,7 +611,7 @@ const organizaciones = [
         instagram: "https://www.instagram.com/guaque_col",
         youtube: "https://www.youtube.com/@GuaqueColombia",
         tiktok: "https://www.tiktok.com/@guaquecolombia",
-        logo: "",
+        logo: "assets/logos_orgs/LOGO_GUAQUECOL.png",
         lat: 4.9064,
         lng: -73.9417
     }
