@@ -348,8 +348,8 @@
             border-radius: 15px;
             padding: 1rem;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            height: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            cursor: pointer;
             display: flex;
             flex-direction: column;
         }
@@ -362,36 +362,101 @@
         }
 
         .org-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
             box-shadow: 0 10px 30px rgba(255,107,53,0.2);
             border-color: rgba(255,107,53,0.3);
         }
 
-        .org-logo {
-            width: 80px;
-            height: 80px;
+        /* Compact header: logo + info side by side */
+        .org-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            width: 100%;
+        }
+
+        .org-card-header .org-logo {
+            width: 56px;
+            height: 56px;
             object-fit: contain;
-            margin: 0 auto 0.75rem;
-            display: block;
+            flex-shrink: 0;
             background: white;
             padding: 2px;
             border-radius: 10px;
+            margin: 0;
         }
 
         @media (min-width: 640px) {
-            .org-logo {
-                width: 100px;
-                height: 100px;
+            .org-card-header .org-logo {
+                width: 64px;
+                height: 64px;
                 padding: 3px;
-                margin: 0 auto 1rem;
             }
         }
 
-        @media (min-width: 1024px) {
-            .org-logo {
-                width: 120px;
-                height: 120px;
-            }
+        .org-card-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .org-card-info h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 0.15rem;
+        }
+
+        .org-card-info .org-location {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .org-card-toggle {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.6);
+            font-size: 1.2rem;
+            font-weight: 300;
+            transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+            line-height: 1;
+        }
+
+        .org-card.expanded .org-card-toggle {
+            transform: rotate(45deg);
+            background: rgba(255,107,53,0.3);
+            color: #ff6b35;
+        }
+
+        .org-card-socials {
+            display: flex;
+            gap: 0.4rem;
+            margin-top: 0.35rem;
+        }
+
+        .org-card-socials a {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* Collapsible detail section */
+        .org-card-detail {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.3s ease;
+            opacity: 0;
+            margin-top: 0;
+        }
+
+        .org-card.expanded .org-card-detail {
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 0.75rem;
         }
 
         /* Navegación flotante */
@@ -921,7 +986,7 @@
         <div class="max-w-7xl mx-auto px-4">
             <div class="nav-inner">
                 <div class="flex items-center flex-shrink-0">
-                    <img src="assets/logos/RIJ_SIGLA.png" alt="Red Intercultural Juvenil" class="h-12 md:h-16">
+                    <img src="assets/logos/RIJ_SIGLA.png?v=20260218" alt="Red Intercultural Juvenil" class="h-12 md:h-16">
                 </div>
                 <ul class="hidden md:flex space-x-5 text-xs font-medium text-white/85">
                     <li><a href="#inicio" class="hover:text-yellow-400">Inicio</a></li>
@@ -960,7 +1025,7 @@
         <!-- Contenido sobre el slideshow -->
         <div class="max-w-7xl mx-auto text-center fade-in" style="position:relative;z-index:10;">
             <div class="mb-2 max-w-5xl mx-auto" style="margin-top: -20px;">
-                <img src="assets/logos/RIJ_COMP_NEG.png" alt="Red Intercultural Juvenil" class="w-full drop-shadow-2xl">
+                <img src="assets/logos/RIJ_COMP_NEG.png?v=20260218" alt="Red Intercultural Juvenil" class="w-full drop-shadow-2xl">
             </div>
             <p class="text-lg md:text-3xl font-light max-w-4xl mx-auto mb-6 px-4" style="margin-top: -10px; font-style: italic; text-shadow: 0 0 20px rgba(0,0,0,0.8), 2px 2px 6px rgba(0,0,0,0.6), 0 0 40px rgba(0,0,0,0.4);">
                 Tejer identidades para fortalecer el territorio
@@ -1052,7 +1117,7 @@
                 <button class="filter-btn-dir" data-sector="Multidisciplinar">Multidisciplinar</button>
                 <button class="filter-btn-dir" data-sector="Circo social">Circo</button>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="directorio-grid">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="directorio-grid">
                 <!-- Las fichas se cargarán dinámicamente aquí -->
             </div>
         </div>
@@ -1171,7 +1236,7 @@
                     <span class="hidden md:inline text-white/20">|</span>
                     <p><strong class="text-white/80">Realización Gráfica y Audiovisual:</strong> Felipe Camacho Otero</p>
                 </div>
-                <img src="assets/logos/RIJ_SIGLA.png" alt="RIJ" class="h-10 w-auto mx-auto mb-3 opacity-50">
+                <img src="assets/logos/RIJ_SIGLA.png?v=20260218" alt="RIJ" class="h-10 w-auto mx-auto mb-3 opacity-50">
                 <p class="text-white/30 text-xs">
                     © 2026 Red Intercultural Juvenil · Todos los derechos reservados
                 </p>
@@ -1493,7 +1558,7 @@
 
         function socialLink(type, url) {
             if (!url || !socialSVGs[type]) return '';
-            return '<a href="' + url + '" target="_blank" class="social-icon" rel="noopener">' + socialSVGs[type] + '</a>';
+            return '<a href="' + url + '" target="_blank" class="social-icon" rel="noopener" onclick="event.stopPropagation()">' + socialSVGs[type] + '</a>';
         }
 
         function buildSocialLinks(org) {
@@ -2193,21 +2258,32 @@
                 const socials = buildSocialLinks(org);
                 
                 return `
-                <div class="org-card" data-org-id="${org.id}">
-                    ${org.logo ? `<img src="${org.logo}" alt="${org.nombre}" class="org-logo" style="object-fit:contain;" onerror="this.style.display='none'">` : '<div class="org-logo bg-white/10 rounded-full flex items-center justify-center text-2xl">🎨</div>'}
-                    <h3 class="font-bold text-lg text-center mb-2">${org.nombre}</h3>
-                    <p class="text-sm text-white/60 text-center mb-3">${org.municipio}</p>
-                    ${org.lema ? `<p class="text-xs italic text-center text-white/40 mb-3">"${org.lema}"</p>` : ''}
-                    <div class="text-xs text-white/50 space-y-1">
-                        <p><strong class="text-white/70">Contacto:</strong> ${org.representante}</p>
-                        <p class="truncate" title="${org.email}"><a href="mailto:${org.email}" class="text-orange-400 hover:text-orange-300 underline">${org.email}</a></p>
-                        <p><a href="tel:${org.telefono}" class="text-orange-400 hover:text-orange-300 underline">${org.telefono}</a></p>
-                        ${org.barrio ? `<p class="text-white/40"><strong class="text-white/60">Sede:</strong> ${org.barrio}</p>` : ''}
-                        <p class="text-white/40 text-xs">${org.sectores.join(' · ')}</p>
+                <div class="org-card" data-org-id="${org.id}" onclick="toggleOrgCard(this)">
+                    <div class="org-card-header">
+                        ${org.logo ? `<img src="${org.logo}" alt="${org.nombre}" class="org-logo" onerror="this.style.display='none'">` : '<div class="org-logo bg-white/10 rounded-lg flex items-center justify-center text-xl" style="width:56px;height:56px;">🎨</div>'}
+                        <div class="org-card-info">
+                            <h3 class="text-white">${org.nombre}</h3>
+                            <p class="org-location">${org.municipio}</p>
+                            ${socials ? `<div class="org-card-socials">${socials}</div>` : ''}
+                        </div>
+                        <div class="org-card-toggle">+</div>
                     </div>
-                    ${socials ? `<div class="flex justify-center gap-3 mt-4">${socials}</div>` : ''}
+                    <div class="org-card-detail">
+                        ${org.lema ? `<p class="text-xs italic text-white/40 mb-2">"${org.lema}"</p>` : ''}
+                        <div class="text-xs text-white/50 space-y-1">
+                            <p><strong class="text-white/70">Contacto:</strong> ${org.representante}</p>
+                            <p class="truncate" title="${org.email}"><a href="mailto:${org.email}" class="text-orange-400 hover:text-orange-300 underline" onclick="event.stopPropagation()">${org.email}</a></p>
+                            <p><a href="tel:${org.telefono}" class="text-orange-400 hover:text-orange-300 underline" onclick="event.stopPropagation()">${org.telefono}</a></p>
+                            ${org.barrio ? `<p class="text-white/40"><strong class="text-white/60">Sede:</strong> ${org.barrio}</p>` : ''}
+                            <p class="text-white/40 text-xs">${org.sectores.join(' · ')}</p>
+                        </div>
+                    </div>
                 </div>
             `}).join('');
+        }
+
+        function toggleOrgCard(card) {
+            card.classList.toggle('expanded');
         }
 
         function updateDirectorio() {
