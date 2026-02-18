@@ -2023,6 +2023,12 @@
                 // Pequeña rotación aleatoria para más organicidad (-3° a +3°)
                 var rotation = (Math.random() - 0.5) * 6;
                 wrap.style.transform = 'rotate(' + rotation.toFixed(1) + 'deg)';
+                // Reducir 10% extra The Giant Corporation para evitar traslape
+                var bg = card.querySelector('[data-album-key="THE_GIANT_CORPORATION_2025"]');
+                if (bg) {
+                    var w = parseFloat(wrap.style.width);
+                    wrap.style.width = isMobile ? (w * 0.9).toFixed(1) + '%' : Math.round(w * 0.9) + 'px';
+                }
             });
         }
 
