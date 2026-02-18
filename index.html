@@ -101,7 +101,7 @@
             background-color: #f7e7ce;
         }
 
-        /* Divisores orgánicos entre secciones - falla geológica */
+        /* Divisores orgánicos entre secciones */
         .section-divider {
             position: relative;
             width: 100%;
@@ -113,24 +113,18 @@
         .section-divider svg {
             display: block;
             width: 100%;
-            height: 60px;
+            height: 30px;
             position: relative;
         }
-        .section-divider.top svg {
-            margin-top: -59px;
-        }
         .section-divider.bottom svg {
-            margin-bottom: -59px;
+            margin-bottom: -29px;
         }
         @media (min-width: 768px) {
             .section-divider svg {
-                height: 80px;
-            }
-            .section-divider.top svg {
-                margin-top: -79px;
+                height: 40px;
             }
             .section-divider.bottom svg {
-                margin-bottom: -79px;
+                margin-bottom: -39px;
             }
         }
 
@@ -259,7 +253,7 @@
             left: 0;
             width: 100%;
             z-index: 999;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            box-shadow: none;
             text-align: right;
             padding: 0.6rem 1.5rem;
             min-height: 0;
@@ -267,7 +261,20 @@
             flex-direction: column;
             justify-content: center;
             align-items: flex-end;
-            overflow: hidden;
+            overflow: visible;
+        }
+        .aforismos-banner::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--color-accent);
+            mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1200 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,0 Q200,5 400,2 T800,5 T1200,2 L1200,0 Z' fill='black'/%3E%3C/svg%3E");
+            -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1200 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,0 Q200,5 400,2 T800,5 T1200,2 L1200,0 Z' fill='black'/%3E%3C/svg%3E");
+            mask-size: 100% 100%;
+            -webkit-mask-size: 100% 100%;
         }
 
         .aforismo-flash {
@@ -501,7 +508,20 @@
             background: rgba(255, 107, 53, 0.95);
             backdrop-filter: blur(10px);
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            box-shadow: none;
+        }
+        nav::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 107, 53, 0.95);
+            mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1200 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,0 Q150,6 300,2 T600,4 T900,1 T1200,3 L1200,0 Z' fill='black'/%3E%3C/svg%3E");
+            -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1200 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,0 Q150,6 300,2 T600,4 T900,1 T1200,3 L1200,0 Z' fill='black'/%3E%3C/svg%3E");
+            mask-size: 100% 100%;
+            -webkit-mask-size: 100% 100%;
         }
 
         /* Asegurar que el botón hamburguesa no se salga */
@@ -1080,9 +1100,9 @@
 
     <!-- Divider: Inicio → Galería -->
     <div class="section-divider bottom">
-        <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0,0 L0,42 Q60,58 120,38 T240,50 T360,32 T480,52 T600,36 T720,54 T840,30 T960,48 T1080,34 T1200,44 L1200,0 Z" fill="#333"/>
-            <path d="M0,42 Q60,58 120,38 T240,50 T360,32 T480,52 T600,36 T720,54 T840,30 T960,48 T1080,34 T1200,44 L1200,80 L0,80 Z" fill="#facc15"/>
+        <svg viewBox="0 0 1200 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,0 L0,22 Q300,18 600,24 T1200,20 L1200,0 Z" fill="#333"/>
+            <path d="M0,22 Q300,18 600,24 T1200,20 L1200,40 L0,40 Z" fill="#facc15"/>
         </svg>
     </div>
 
@@ -1111,14 +1131,14 @@
 
     <!-- Divider: Galería → Manifiesto -->
     <div class="section-divider bottom">
-        <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0,0 L0,46 Q80,30 160,48 T320,36 T480,54 T640,32 T800,50 T960,38 T1120,52 T1200,40 L1200,0 Z" fill="#facc15"/>
-            <path d="M0,46 Q80,30 160,48 T320,36 T480,54 T640,32 T800,50 T960,38 T1120,52 T1200,40 L1200,80 L0,80 Z" fill="#18181b"/>
+        <svg viewBox="0 0 1200 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,0 L0,20 Q400,24 800,18 T1200,22 L1200,0 Z" fill="#facc15"/>
+            <path d="M0,20 Q400,24 800,18 T1200,22 L1200,40 L0,40 Z" fill="#2e1065"/>
         </svg>
     </div>
 
     <!-- SECCIÓN 4: MANIFIESTO - WORD BY WORD SCROLL -->
-    <section id="manifiesto" class="relative bg-zinc-900 text-white">
+    <section id="manifiesto" class="relative text-white" style="background-color: #2e1065;">
         <div class="manifiesto-sticky" id="manifiesto-sticky">
             <div class="absolute inset-0 opacity-20" style="background-image: url('https://www.transparenttextures.com/patterns/asphalt-dark.png');"></div>
             <div class="absolute top-0 right-0 w-96 h-96 bg-pink-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
@@ -1133,16 +1153,10 @@
         </div>
     </section>
 
-    <!-- Divider: Manifiesto → Mapa -->
-    <div class="section-divider bottom">
-        <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0,0 L0,38 Q100,56 200,34 T400,50 T600,30 T800,52 T1000,36 T1200,48 L1200,0 Z" fill="#18181b"/>
-            <path d="M0,38 Q100,56 200,34 T400,50 T600,30 T800,52 T1000,36 T1200,48 L1200,80 L0,80 Z" fill="#2e1065"/>
-        </svg>
-    </div>
+    <!-- Transición limpia: Manifiesto → Mapa (sin divider, mismo tono oscuro) -->
 
     <!-- SECCIÓN 5: MAPA DE TERRITORIALIZACIÓN -->
-    <section id="mapa" class="bg-gradient-to-br from-purple-950 via-fuchsia-950 to-violet-950">
+    <section id="mapa" style="background-color: #2e1065;">
         <div class="w-full">
             <div class="max-w-7xl mx-auto px-4 mb-4">
                 <!-- Buscador del mapa -->
@@ -1166,16 +1180,10 @@
         </div>
     </section>
 
-    <!-- Divider: Mapa → Directorio -->
-    <div class="section-divider bottom">
-        <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0,0 L0,44 Q70,28 140,50 T280,34 T420,52 T560,30 T700,54 T840,36 T980,50 T1120,38 T1200,46 L1200,0 Z" fill="#2e1065"/>
-            <path d="M0,44 Q70,28 140,50 T280,34 T420,52 T560,30 T700,54 T840,36 T980,50 T1120,38 T1200,46 L1200,80 L0,80 Z" fill="#701a75"/>
-        </svg>
-    </div>
+    <!-- Transición limpia: Mapa → Directorio (sin divider, mismo tono oscuro) -->
 
     <!-- SECCIÓN 6: DIRECTORIO DE ORGANIZACIONES -->
-    <section id="directorio" class="bg-gradient-to-br from-fuchsia-900 via-violet-900 to-indigo-900 text-white">
+    <section id="directorio" style="background-color: #2e1065;" class="text-white">
         <div class="max-w-7xl mx-auto">
             <h2 class="text-4xl md:text-5xl font-bold text-center mb-8 text-white">Directorio Vivo de Organizaciones</h2>
             <!-- Buscador del directorio -->
@@ -1202,9 +1210,9 @@
 
     <!-- Divider: Directorio → Articulaciones -->
     <div class="section-divider bottom">
-        <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0,0 L0,40 Q90,56 180,36 T360,52 T540,28 T720,50 T900,34 T1080,48 T1200,42 L1200,0 Z" fill="#701a75"/>
-            <path d="M0,40 Q90,56 180,36 T360,52 T540,28 T720,50 T900,34 T1080,48 T1200,42 L1200,80 L0,80 Z" fill="#f59e0b"/>
+        <svg viewBox="0 0 1200 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,0 L0,21 Q250,17 500,23 T1000,19 T1200,22 L1200,0 Z" fill="#2e1065"/>
+            <path d="M0,21 Q250,17 500,23 T1000,19 T1200,22 L1200,40 L0,40 Z" fill="#f59e0b"/>
         </svg>
     </div>
 
@@ -1235,9 +1243,9 @@
 
     <!-- Divider: Articulaciones → Salvaguarda -->
     <div class="section-divider bottom">
-        <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0,0 L0,48 Q75,32 150,50 T300,34 T450,54 T600,30 T750,52 T900,36 T1050,50 T1200,38 L1200,0 Z" fill="#f59e0b"/>
-            <path d="M0,48 Q75,32 150,50 T300,34 T450,54 T600,30 T750,52 T900,36 T1050,50 T1200,38 L1200,80 L0,80 Z" fill="#15803d"/>
+        <svg viewBox="0 0 1200 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,0 L0,19 Q350,24 700,18 T1200,21 L1200,0 Z" fill="#f59e0b"/>
+            <path d="M0,19 Q350,24 700,18 T1200,21 L1200,40 L0,40 Z" fill="#15803d"/>
         </svg>
     </div>
 
@@ -1263,9 +1271,9 @@
 
     <!-- Divider: Salvaguarda → Envolvente -->
     <div class="section-divider bottom">
-        <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0,0 L0,36 Q85,54 170,38 T340,52 T510,30 T680,50 T850,32 T1020,48 T1200,40 L1200,0 Z" fill="#15803d"/>
-            <path d="M0,36 Q85,54 170,38 T340,52 T510,30 T680,50 T850,32 T1020,48 T1200,40 L1200,80 L0,80 Z" fill="#4f46e5"/>
+        <svg viewBox="0 0 1200 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,0 L0,22 Q300,17 600,23 T1200,19 L1200,0 Z" fill="#15803d"/>
+            <path d="M0,22 Q300,17 600,23 T1200,19 L1200,40 L0,40 Z" fill="#4f46e5"/>
         </svg>
     </div>
 
@@ -1304,9 +1312,9 @@
 
     <!-- Divider: Envolvente → Footer -->
     <div class="section-divider bottom">
-        <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0,0 L0,42 Q65,28 130,48 T260,34 T390,52 T520,30 T650,50 T780,36 T910,52 T1040,38 T1200,44 L1200,0 Z" fill="#4f46e5"/>
-            <path d="M0,42 Q65,28 130,48 T260,34 T390,52 T520,30 T650,50 T780,36 T910,52 T1040,38 T1200,44 L1200,80 L0,80 Z" fill="#111827"/>
+        <svg viewBox="0 0 1200 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,0 L0,20 Q400,25 800,18 T1200,22 L1200,0 Z" fill="#4f46e5"/>
+            <path d="M0,20 Q400,25 800,18 T1200,22 L1200,40 L0,40 Z" fill="#111827"/>
         </svg>
     </div>
 
