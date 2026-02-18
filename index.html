@@ -2378,7 +2378,7 @@
 
         function loadDirectorio(orgsToShow) {
             const grid = document.getElementById('directorio-grid');
-            const list = orgsToShow || organizaciones;
+            const list = (orgsToShow || organizaciones).slice().sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
             
             grid.innerHTML = list.map(org => {
                 const socials = buildSocialLinks(org);
