@@ -591,6 +591,29 @@ const organizaciones = [
         logo: "assets/logos_orgs/PNG/LOGOTIPO KOMBILESA_Mesa de trabajo 1 copia 22 - Afroneto Music.png",
         lat: 10.3483,
         lng: -75.3683
+    },
+    {
+        id: 28,
+        nombre: "Guaque",
+        nombreCompleto: "Guaque Colombia",
+        municipio: "Cundinamarca - Sopó",
+        departamento: "Cundinamarca",
+        barrio: "Sopó",
+        representante: "Emerieth Daniela Casallas Gil",
+        telefono: "3013131543",
+        email: "guaque.col@gmail.com",
+        quehacer: "Nosotros nos organizamos para activar procesos de transformación territorial desde el arte público, metodologías creativas y la creación colectiva, a través de residencias artísticas, formación comunitaria, circulación cultural y encuentros interculturales, con el fin de dignificar las artes, democratizar el acceso a la cultura y fortalecer el tejido social en nuestros territorios.",
+        lema: "El espacio público se transforma cuando la comunidad crea",
+        beneficiarios: 2000,
+        sectores: ["Plástica", "Multidisciplinar"],
+        poblacion: ["Campesino"],
+        facebook: "https://www.facebook.com/share/18Kg49ZGdm/",
+        instagram: "https://www.instagram.com/guaque_col",
+        youtube: "https://www.youtube.com/@GuaqueColombia",
+        tiktok: "https://www.tiktok.com/@guaquecolombia",
+        logo: "",
+        lat: 4.9064,
+        lng: -73.9417
     }
 ];
 
@@ -619,7 +642,8 @@ const aforismos = [
     { frase: "Aquí los conflictos se resuelven en un 4x4: rima, respeto y paz", org: "Reyes de la Selva" },
     { frase: "El Macizo somos todos", org: "Macizo Arte y Cultura" },
     { frase: "Soy joven, soy paz, yo puedo ser capaz", org: "Kombilesa Mí" },
-    { frase: "La común-unidad como la cohesión de propuestas individuales con un fin colectivo", org: "Alternativo" }
+    { frase: "La común-unidad como la cohesión de propuestas individuales con un fin colectivo", org: "Alternativo" },
+    { frase: "El espacio público se transforma cuando la comunidad crea", org: "Guaque" }
 ];
 
 // Exportar datos
