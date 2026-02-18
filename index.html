@@ -2006,14 +2006,23 @@
 
         function applyJaguarSpots() {
             const wraps = document.querySelectorAll('.hex-wrap');
+            const isMobile = window.innerWidth < 768;
             wraps.forEach(function(wrap) {
                 var card = wrap.querySelector('.album-card');
                 if (!card) return;
                 // Forma única de jaguar
                 card.style.clipPath = generateJaguarSpot(22 + Math.floor(Math.random() * 8));
-                // Variación de tamaño 0-20%
-                var scale = 1.0 + (Math.random() * 0.2);
-                wrap.style.transform = 'scale(' + scale.toFixed(3) + ')';
+                // Variación real de tamaño: -15% a +15% respecto al tamaño base
+                // Esto cambia el ancho efectivo del contenedor para que se note en reposo
+                var variation = 0.85 + (Math.random() * 0.30); // 0.85 a 1.15
+                if (isMobile) {
+                    wrap.style.width = (42 * variation).toFixed(1) + '%';
+                } else {
+                    wrap.style.width = Math.round(300 * variation) + 'px';
+                }
+                // Pequeña rotación aleatoria para más organicidad (-3° a +3°)
+                var rotation = (Math.random() - 0.5) * 6;
+                wrap.style.transform = 'rotate(' + rotation.toFixed(1) + 'deg)';
             });
         }
 
