@@ -101,6 +101,39 @@
             background-color: #f7e7ce;
         }
 
+        /* Divisores orgánicos entre secciones - falla geológica */
+        .section-divider {
+            position: relative;
+            width: 100%;
+            height: 0;
+            z-index: 10;
+            line-height: 0;
+            overflow: visible;
+        }
+        .section-divider svg {
+            display: block;
+            width: 100%;
+            height: 60px;
+            position: relative;
+        }
+        .section-divider.top svg {
+            margin-top: -59px;
+        }
+        .section-divider.bottom svg {
+            margin-bottom: -59px;
+        }
+        @media (min-width: 768px) {
+            .section-divider svg {
+                height: 80px;
+            }
+            .section-divider.top svg {
+                margin-top: -79px;
+            }
+            .section-divider.bottom svg {
+                margin-bottom: -79px;
+            }
+        }
+
         /* Secciones con altura completa */
         section {
             min-height: 100vh;
@@ -229,11 +262,12 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
             text-align: right;
             padding: 0.6rem 1.5rem;
-            min-height: 3.2rem;
+            min-height: 0;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: flex-end;
+            overflow: hidden;
         }
 
         .aforismo-flash {
@@ -464,7 +498,7 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(88, 28, 135, 0.95);
+            background: rgba(255, 107, 53, 0.95);
             backdrop-filter: blur(10px);
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
@@ -573,8 +607,19 @@
             overflow: hidden;
             cursor: pointer;
             transition: transform 0.3s ease, filter 0.3s ease;
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            clip-path: polygon(48% 2%, 96% 22%, 100% 48%, 97% 78%, 52% 98%, 4% 80%, 0% 50%, 3% 24%);
             aspect-ratio: 1 / 1.15;
+        }
+
+        /* Variaciones de mancha de jaguar para cada celda */
+        .hex-wrap:nth-child(odd) .album-card {
+            clip-path: polygon(52% 1%, 98% 20%, 100% 52%, 95% 82%, 48% 99%, 2% 78%, 0% 46%, 5% 18%);
+        }
+        .hex-wrap:nth-child(3n) .album-card {
+            clip-path: polygon(46% 3%, 94% 24%, 100% 50%, 96% 76%, 54% 97%, 6% 82%, 1% 48%, 4% 22%);
+        }
+        .hex-wrap:nth-child(4n+1) .album-card {
+            clip-path: polygon(50% 1%, 97% 18%, 99% 54%, 94% 80%, 50% 100%, 3% 76%, 1% 44%, 6% 20%);
         }
 
         .album-card:hover {
@@ -1033,6 +1078,14 @@
         </div>
     </section>
 
+    <!-- Divider: Inicio → Galería -->
+    <div class="section-divider bottom">
+        <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,0 L0,42 Q60,58 120,38 T240,50 T360,32 T480,52 T600,36 T720,54 T840,30 T960,48 T1080,34 T1200,44 L1200,0 Z" fill="#333"/>
+            <path d="M0,42 Q60,58 120,38 T240,50 T360,32 T480,52 T600,36 T720,54 T840,30 T960,48 T1080,34 T1200,44 L1200,80 L0,80 Z" fill="#facc15"/>
+        </svg>
+    </div>
+
     <!-- SECCIÓN 3: GALERÍA -->
     <section id="galeria" class="py-16" style="background-color: #facc15;">
         <div class="max-w-7xl mx-auto w-full">
@@ -1056,6 +1109,14 @@
         <div class="modal-info" id="modal-info"></div>
     </div>
 
+    <!-- Divider: Galería → Manifiesto -->
+    <div class="section-divider bottom">
+        <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,0 L0,46 Q80,30 160,48 T320,36 T480,54 T640,32 T800,50 T960,38 T1120,52 T1200,40 L1200,0 Z" fill="#facc15"/>
+            <path d="M0,46 Q80,30 160,48 T320,36 T480,54 T640,32 T800,50 T960,38 T1120,52 T1200,40 L1200,80 L0,80 Z" fill="#18181b"/>
+        </svg>
+    </div>
+
     <!-- SECCIÓN 4: MANIFIESTO - WORD BY WORD SCROLL -->
     <section id="manifiesto" class="relative bg-zinc-900 text-white">
         <div class="manifiesto-sticky" id="manifiesto-sticky">
@@ -1071,6 +1132,14 @@
             </div>
         </div>
     </section>
+
+    <!-- Divider: Manifiesto → Mapa -->
+    <div class="section-divider bottom">
+        <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,0 L0,38 Q100,56 200,34 T400,50 T600,30 T800,52 T1000,36 T1200,48 L1200,0 Z" fill="#18181b"/>
+            <path d="M0,38 Q100,56 200,34 T400,50 T600,30 T800,52 T1000,36 T1200,48 L1200,80 L0,80 Z" fill="#2e1065"/>
+        </svg>
+    </div>
 
     <!-- SECCIÓN 5: MAPA DE TERRITORIALIZACIÓN -->
     <section id="mapa" class="bg-gradient-to-br from-purple-950 via-fuchsia-950 to-violet-950">
@@ -1096,6 +1165,14 @@
             <div id="map"></div>
         </div>
     </section>
+
+    <!-- Divider: Mapa → Directorio -->
+    <div class="section-divider bottom">
+        <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,0 L0,44 Q70,28 140,50 T280,34 T420,52 T560,30 T700,54 T840,36 T980,50 T1120,38 T1200,46 L1200,0 Z" fill="#2e1065"/>
+            <path d="M0,44 Q70,28 140,50 T280,34 T420,52 T560,30 T700,54 T840,36 T980,50 T1120,38 T1200,46 L1200,80 L0,80 Z" fill="#701a75"/>
+        </svg>
+    </div>
 
     <!-- SECCIÓN 6: DIRECTORIO DE ORGANIZACIONES -->
     <section id="directorio" class="bg-gradient-to-br from-fuchsia-900 via-violet-900 to-indigo-900 text-white">
@@ -1123,6 +1200,14 @@
         </div>
     </section>
 
+    <!-- Divider: Directorio → Articulaciones -->
+    <div class="section-divider bottom">
+        <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,0 L0,40 Q90,56 180,36 T360,52 T540,28 T720,50 T900,34 T1080,48 T1200,42 L1200,0 Z" fill="#701a75"/>
+            <path d="M0,40 Q90,56 180,36 T360,52 T540,28 T720,50 T900,34 T1080,48 T1200,42 L1200,80 L0,80 Z" fill="#f59e0b"/>
+        </svg>
+    </div>
+
     <!-- SECCIÓN 7: ARTICULACIONES -->
     <section id="articulaciones" class="bg-gradient-to-r from-amber-400 to-orange-500 text-white">
         <div class="max-w-6xl mx-auto">
@@ -1148,6 +1233,14 @@
         </div>
     </section>
 
+    <!-- Divider: Articulaciones → Salvaguarda -->
+    <div class="section-divider bottom">
+        <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,0 L0,48 Q75,32 150,50 T300,34 T450,54 T600,30 T750,52 T900,36 T1050,50 T1200,38 L1200,0 Z" fill="#f59e0b"/>
+            <path d="M0,48 Q75,32 150,50 T300,34 T450,54 T600,30 T750,52 T900,36 T1050,50 T1200,38 L1200,80 L0,80 Z" fill="#15803d"/>
+        </svg>
+    </div>
+
     <!-- SECCIÓN 8: SALVAGUARDA -->
     <section id="salvaguarda" class="bg-gradient-to-br from-green-700 to-teal-800 text-white">
         <div class="max-w-4xl mx-auto">
@@ -1167,6 +1260,14 @@
             </div>
         </div>
     </section>
+
+    <!-- Divider: Salvaguarda → Envolvente -->
+    <div class="section-divider bottom">
+        <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,0 L0,36 Q85,54 170,38 T340,52 T510,30 T680,50 T850,32 T1020,48 T1200,40 L1200,0 Z" fill="#15803d"/>
+            <path d="M0,36 Q85,54 170,38 T340,52 T510,30 T680,50 T850,32 T1020,48 T1200,40 L1200,80 L0,80 Z" fill="#4f46e5"/>
+        </svg>
+    </div>
 
     <!-- SECCIÓN 9: ENVOLVENTE -->
     <section id="envolvente" class="bg-gradient-to-r from-indigo-600 to-purple-700 text-white">
@@ -1200,6 +1301,14 @@
             </div>
         </div>
     </section>
+
+    <!-- Divider: Envolvente → Footer -->
+    <div class="section-divider bottom">
+        <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,0 L0,42 Q65,28 130,48 T260,34 T390,52 T520,30 T650,50 T780,36 T910,52 T1040,38 T1200,44 L1200,0 Z" fill="#4f46e5"/>
+            <path d="M0,42 Q65,28 130,48 T260,34 T390,52 T520,30 T650,50 T780,36 T910,52 T1040,38 T1200,44 L1200,80 L0,80 Z" fill="#111827"/>
+        </svg>
+    </div>
 
     <!-- FOOTER -->
     <footer id="contacto" class="bg-gray-900 text-white pt-12 pb-6">
@@ -2075,6 +2184,12 @@
             aforismoInterval = setInterval(showNextAforismo, 5000);
 
             adjustNavPosition();
+
+            // Watch banner for height changes to prevent white gaps
+            const bannerObs = document.getElementById('aforismos-banner');
+            if (bannerObs && window.ResizeObserver) {
+                new ResizeObserver(() => adjustNavPosition()).observe(bannerObs);
+            }
         }
 
         // ========== AFORISMOS FLASH ==========
@@ -2110,6 +2225,8 @@
                 orgEl.textContent = item.org;
                 // Fade in
                 flashEl.classList.add('visible');
+                // Recalcular posiciones al cambiar contenido del banner
+                requestAnimationFrame(adjustNavPosition);
             }, 800);
         }
 
@@ -2119,7 +2236,8 @@
             if (nav && banner) {
                 const navHeight = nav.offsetHeight;
                 banner.style.top = navHeight + 'px';
-                document.body.style.paddingTop = (navHeight + banner.offsetHeight) + 'px';
+                const totalFixed = navHeight + banner.offsetHeight;
+                document.body.style.paddingTop = totalFixed + 'px';
             }
         }
 
@@ -2495,7 +2613,7 @@
             const menuToggle = document.getElementById('menu-toggle');
             const mobileMenu = document.createElement('div');
             mobileMenu.className = 'hidden md:hidden absolute top-full left-0 right-0 shadow-lg py-4';
-            mobileMenu.style.background = 'rgba(88, 28, 135, 0.95)';
+            mobileMenu.style.background = 'rgba(255, 107, 53, 0.97)';
             mobileMenu.innerHTML = `
                 <ul class="flex flex-col space-y-2 px-4">
                     <li><a href="#inicio" class="block py-2 text-white/85 hover:text-yellow-400">Inicio</a></li>
