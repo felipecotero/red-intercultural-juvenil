@@ -584,7 +584,7 @@
         }
 
         .hex-wrap {
-            width: 210px;
+            width: 178px;
             flex-shrink: 0;
             margin: 0 8px;
         }
@@ -608,7 +608,7 @@
                 margin-top: 0;
             }
             .hex-wrap {
-                width: 29%;
+                width: 25%;
                 flex-shrink: 0;
             }
             .hex-row-offset {
@@ -2016,9 +2016,9 @@
                 // Esto cambia el ancho efectivo del contenedor para que se note en reposo
                 var variation = 0.85 + (Math.random() * 0.30); // 0.85 a 1.15
                 if (isMobile) {
-                    wrap.style.width = (29 * variation).toFixed(1) + '%';
+                    wrap.style.width = (25 * variation).toFixed(1) + '%';
                 } else {
-                    wrap.style.width = Math.round(210 * variation) + 'px';
+                    wrap.style.width = Math.round(178 * variation) + 'px';
                 }
                 // Pequeña rotación aleatoria para más organicidad (-3° a +3°)
                 var rotation = (Math.random() - 0.5) * 6;
