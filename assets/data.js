@@ -614,6 +614,30 @@ const organizaciones = [
         logo: "assets/logos_orgs/LOGO_GUAQUECOL.png",
         lat: 4.9064,
         lng: -73.9417
+    },
+    {
+        id: 29,
+        nombre: "Pacífica Cultural",
+        nombreCompleto: "Fundación Pacífica Cultural",
+        municipio: "Valle del Cauca - Cali",
+        departamento: "Valle del Cauca",
+        barrio: "Comuna 16",
+        representante: "Crisangi Giraldo Gómez",
+        telefono: "+573112580610",
+        email: "pacificacultural@gmail.com",
+        quehacer: "Nos organizamos para dignificar la labor artística y fortalecer el ejercicio cultural en el territorio, a través del proceso Cacerolazo Sinfónico, la circulación y valoración de músicas colombianas y latinoamericanas, y la creación de espacios formativos con metodologías pedagógicas alternativas y participativas, con el fin de garantizar el acceso efectivo a la cultura como derecho fundamental y dejar una huella de participación, identidad y transformación social en nuestra comunidad.",
+        lema: "Arte que dignifica, cultura que transforma y educación que inspira.",
+        beneficiarios: 121,
+        sectores: ["Audiovisual", "Sonoro"],
+        poblacion: ["Indígenas", "Mestizos", "Afro"],
+        facebook: "https://www.facebook.com/share/p/1af3oid4a5/",
+        instagram: "https://www.instagram.com/pacificacultural",
+        youtube: "https://www.youtube.com/@cacerolazosinfonico2428",
+        tiktok: "https://www.tiktok.com/@cacerolazoscali",
+        twitter: "https://x.com/calisinfonico",
+        logo: "assets/logos_orgs/logo_pacifica_cultural.png",
+        lat: 3.4052,
+        lng: -76.5225
     }
 ];
 
@@ -643,7 +667,8 @@ const aforismos = [
     { frase: "El Macizo somos todos", org: "Macizo Arte y Cultura" },
     { frase: "Soy joven, soy paz, yo puedo ser capaz", org: "Kombilesa Mí" },
     { frase: "La común-unidad como la cohesión de propuestas individuales con un fin colectivo", org: "Alternativo" },
-    { frase: "El espacio público se transforma cuando la comunidad crea", org: "Guaque" }
+    { frase: "El espacio público se transforma cuando la comunidad crea", org: "Guaque" },
+    { frase: "Arte que dignifica, cultura que transforma y educación que inspira", org: "Pacífica Cultural" }
 ];
 
 // Exportar datos

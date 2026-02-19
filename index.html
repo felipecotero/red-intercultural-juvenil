@@ -1742,6 +1742,12 @@
                 const marker = L.marker([org.lat, org.lng], { icon: icon });
                 marker.orgData = org;
                 
+                // Flag para evitar que el click del mapa resetee el zoom
+                marker.on('click', function() {
+                    window._markerClicked = true;
+                    setTimeout(function() { window._markerClicked = false; }, 500);
+                });
+                
                 const socials = buildSocialLinks(org);
                 marker.bindPopup(
                     '<div class="org-popup">' +
@@ -1766,16 +1772,26 @@
             updateMapMarkers();
             map.addLayer(mapClusterGroup);
 
-            // Al cerrar un popup, volver a vista por defecto
+            // Flag para saber si se hizo clic en un cluster
+            mapClusterGroup.on('clusterclick', function() {
+                window._markerClicked = true;
+                setTimeout(function() { window._markerClicked = false; }, 1000);
+            });
+
+            // Al cerrar un popup, volver a vista por defecto SOLO si no se está abriendo otro marcador
             map.on('popupclose', function() {
                 setTimeout(function() {
-                    map.flyTo(defaultCenter, defaultZoom, { duration: 0.8 });
-                }, 300);
+                    // No volver al zoom general si se acaba de hacer clic en otro marcador
+                    if (!window._markerClicked && !map._popup) {
+                        map.flyTo(defaultCenter, defaultZoom, { duration: 0.8 });
+                    }
+                }, 400);
             });
 
             // Click en área vacía del mapa -> volver a vista por defecto
             map.on('click', function(e) {
-                if (map.getZoom() !== defaultZoom) {
+                // Solo volver al zoom general si el clic NO fue en un marcador ni en un cluster
+                if (!window._markerClicked && map.getZoom() !== defaultZoom) {
                     map.flyTo(defaultCenter, defaultZoom, { duration: 0.8 });
                 }
             });
