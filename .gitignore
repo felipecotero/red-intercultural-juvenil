@@ -1,2 +1,5 @@
 .DS_Store
 **/.DS_Store
+temp_clone/
+git_pull.log
+backup_logos/
